@@ -5,19 +5,18 @@
   
   <title>hexo + github + 七牛运存储搭建简单的博客 | 剑客爱编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
-Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | sh">
+  <meta name="description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="hexo + github + 七牛运存储搭建简单的博客">
-<meta property="og:url" content="http://yoursite.com/2016/04/23/hexo_install/index.html">
+<meta property="og:url" content="https://iskylove.github.io/2016/04/23/hexo_install/index.html">
 <meta property="og:site_name" content="剑客爱编程">
-<meta property="og:description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
-Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | sh">
-<meta property="og:updated_time" content="2016-04-23T14:53:59.618Z">
+<meta property="og:description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headbg1.jpg">
+<meta property="og:updated_time" content="2016-04-23T15:56:46.234Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo + github + 七牛运存储搭建简单的博客">
-<meta name="twitter:description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
-Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | sh">
+<meta name="twitter:description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux">
+<meta name="twitter:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headbg1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
   
@@ -28,9 +27,11 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
       <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
   
   
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
   
       <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
-      <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
   
   <link rel="stylesheet" href="/css/style.css">
   
@@ -51,7 +52,7 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
           isArchive: false,
           isTag: false,
           isCategory: false,
-          open_in_new: true,
+          open_in_new: false,
           fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
           scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
       }
@@ -223,7 +224,7 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
   
     <div class="article-meta">
       <a href="/2016/04/23/hexo_install/" class="article-date">
-      <time datetime="2016-04-23T14:53:59.762Z" itemprop="datePublished">2016-04-23</time>
+      <time datetime="2016-04-23T15:56:46.386Z" itemprop="datePublished">2016-04-23</time>
 </a>
     </div>
   
@@ -244,6 +245,10 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
       
       <div class="article-info article-info-post">
         
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/install/">install</a>
+    </div>
+
 
         
     <div class="article-tag tagcloud">
@@ -258,13 +263,14 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
       
           
         <h4 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h4><pre><code>Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
-</code></pre><h4 id="Node-js安装"><a href="#Node-js安装" class="headerlink" title="Node.js安装"></a>Node.js安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | sh</span><br><span class="line">$ nvm install 4</span><br></pre></td></tr></table></figure>
+</code></pre><a id="more"></a>
+<h4 id="Node-js安装"><a href="#Node-js安装" class="headerlink" title="Node.js安装"></a>Node.js安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | sh</span><br><span class="line">$ nvm install 4</span><br></pre></td></tr></table></figure>
 <h4 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> apt-get install git-core</span><br></pre></td></tr></table></figure>
 <h4 id="hexo-安装"><a href="#hexo-安装" class="headerlink" title="hexo 安装"></a>hexo 安装</h4><p>npm是hexo的资源管理器，安装过程会比较慢，请耐心等待<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
 <p>安装完hexo后，到指定文件夹中新建需要的文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &lt;folder&gt;</span><br><span class="line">$ <span class="built_in">cd</span> &lt;folder&gt;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure></p>
 <p>新建完成后，指定文件夹里面的目录结构如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml   <span class="comment">#网站的主要属性配置文件</span></span><br><span class="line">├── package.json  </span><br><span class="line">├── scaffolds     <span class="comment">#静态页面模板</span></span><br><span class="line">├── <span class="built_in">source</span>        <span class="comment">#页面资源</span></span><br><span class="line">|   ├── _drafts    <span class="comment">#草稿</span></span><br><span class="line">|   └── _posts     <span class="comment">#页面md文件</span></span><br><span class="line">└── themes    <span class="comment">#网站主题</span></span><br></pre></td></tr></table></figure></p>
 <h4 id="图床搭建"><a href="#图床搭建" class="headerlink" title="图床搭建"></a>图床搭建</h4><p>图床主要借助七牛运存储，把大部分图片资源放在云存储，参考的地址为<a href="http://www.jianshu.com/p/3c7ddd48bfa9" target="_blank" rel="external">如何写一篇hexo博客</a></p>
-<h5 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h5><p><a href="http://www.jianshu.com/p/05289a4bc8b2" target="_blank" rel="external">如何搭建一个独立博客——简明Github Pages与Hexo教程</a><br><a href="https://hexo.io/" target="_blank" rel="external">hexo</a><br><a href="https://hexo.io/themes/" target="_blank" rel="external">themes</a><br><a href="http://www.jianshu.com/p/3c7ddd48bfa9" target="_blank" rel="external">如何写一篇hexo博客</a><br><a href="http://www.cognize.me/2015/08/03/tuchuang2/" target="_blank" rel="external">Hexo图床管理(二)</a><br><a href="https://git-scm.com/" target="_blank" rel="external">Git</a></p>
+<h5 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h5><p><a href="http://www.jianshu.com/p/05289a4bc8b2" target="_blank" rel="external">如何搭建一个独立博客——简明Github Pages与Hexo教程</a><br><a href="https://hexo.io/" target="_blank" rel="external">hexo</a><br><a href="https://hexo.io/themes/" target="_blank" rel="external">themes</a><br><a href="http://www.jianshu.com/p/3c7ddd48bfa9" target="_blank" rel="external">如何写一篇hexo博客</a><br><a href="http://www.cognize.me/2015/08/03/tuchuang2/" target="_blank" rel="external">Hexo图床管理(二)</a><br><a href="https://git-scm.com/" target="_blank" rel="external">Git</a><br><a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">hexo你的博客</a></p>
 
       
     </div>
@@ -275,11 +281,11 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
     <div class="copyright">
         <p><span>本文标题:</span><a href="/2016/04/23/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
-        <p><span>发布时间:</span>2016-04-23, 22:53:59</p>
-        <p><span>最后更新:</span>2016-04-23, 22:53:59</p>
+        <p><span>发布时间:</span>2016-04-23, 23:56:46</p>
+        <p><span>最后更新:</span>2016-04-23, 23:56:46</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/04/23/hexo_install/" title="hexo + github + 七牛运存储搭建简单的博客">http://yoursite.com/2016/04/23/hexo_install/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2016/04/23/hexo_install/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2016/04/23/hexo_install/" title="hexo + github + 七牛运存储搭建简单的博客">https://iskylove.github.io/2016/04/23/hexo_install/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/04/23/hexo_install/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -291,12 +297,12 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
+        
+            <div id="article-nav-older" class="article-nav-title">
                 <a href="/2016/04/23/begin_blog/">
                     剑客爱编程--启动篇
                 </a>
             </div>
-        
         
     </nav>
 
@@ -382,19 +388,19 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2016/04/23/begin_blog/" title="上一篇: 剑客爱编程--启动篇">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+            <a href="/2016/04/23/begin_blog/" title="下一篇: 剑客爱编程--启动篇">
+                <i class="fa fa-angle-right"></i>
+            </a>
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/04/23/begin_blog/">剑客爱编程--启动篇</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/23/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/04/23/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/23/begin_blog/">剑客爱编程--启动篇</a></li></ul>
 
 
 
@@ -448,6 +454,8 @@ Node.js安装12$ wget -qO- https://raw.github.com/creationix/nvm/master/install.
     <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
     <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
 </div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
 
 <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
 </script>

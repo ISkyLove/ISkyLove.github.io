@@ -5,16 +5,16 @@
   
   <title>svnchecker 适配安装以及踩过的坑 | 剑客爱编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="原理在SVN所在服务器安装checkstyle(一个开源的著名代码检查工具，可以自定义规则)进行代码检查。运用svn的hook功能。Svn内置了钩子功能，当有事件发生的时候将自动调起一个程序。我们可以定制这段程序以实现自己的想要的功能。可以接受的事件包括：提交、加锁、解锁、改变等。以“提交”事件举例，当提交事件发生之前将执行hooks中的pre-commit脚本，提交事件之后将执行hooks中的p">
+  <meta name="description" content="原理在SVN所在服务器安装checkstyle(一个开源的著名代码检查工具，可以自定义规则)进行代码检查。运用svn的hook功能。Svn内置了钩子功能，当有事件发生的时候将自动调起一个程序。我们可以定制这段程序以实现自己的想要的功能。可以接受的事件包括：提交、加锁、解锁、改变等。以“提交”事件举例，当提交事件发生之前将执行hooks中的pre-commit脚本，提交事件之">
 <meta property="og:type" content="article">
 <meta property="og:title" content="svnchecker 适配安装以及踩过的坑">
 <meta property="og:url" content="https://iskylove.github.io/2016/04/27/svnchecker_install/index.html">
 <meta property="og:site_name" content="剑客爱编程">
-<meta property="og:description" content="原理在SVN所在服务器安装checkstyle(一个开源的著名代码检查工具，可以自定义规则)进行代码检查。运用svn的hook功能。Svn内置了钩子功能，当有事件发生的时候将自动调起一个程序。我们可以定制这段程序以实现自己的想要的功能。可以接受的事件包括：提交、加锁、解锁、改变等。以“提交”事件举例，当提交事件发生之前将执行hooks中的pre-commit脚本，提交事件之后将执行hooks中的p">
-<meta property="og:updated_time" content="2016-04-27T14:56:23.205Z">
+<meta property="og:description" content="原理在SVN所在服务器安装checkstyle(一个开源的著名代码检查工具，可以自定义规则)进行代码检查。运用svn的hook功能。Svn内置了钩子功能，当有事件发生的时候将自动调起一个程序。我们可以定制这段程序以实现自己的想要的功能。可以接受的事件包括：提交、加锁、解锁、改变等。以“提交”事件举例，当提交事件发生之前将执行hooks中的pre-commit脚本，提交事件之">
+<meta property="og:updated_time" content="2016-04-27T14:59:50.101Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="svnchecker 适配安装以及踩过的坑">
-<meta name="twitter:description" content="原理在SVN所在服务器安装checkstyle(一个开源的著名代码检查工具，可以自定义规则)进行代码检查。运用svn的hook功能。Svn内置了钩子功能，当有事件发生的时候将自动调起一个程序。我们可以定制这段程序以实现自己的想要的功能。可以接受的事件包括：提交、加锁、解锁、改变等。以“提交”事件举例，当提交事件发生之前将执行hooks中的pre-commit脚本，提交事件之后将执行hooks中的p">
+<meta name="twitter:description" content="原理在SVN所在服务器安装checkstyle(一个开源的著名代码检查工具，可以自定义规则)进行代码检查。运用svn的hook功能。Svn内置了钩子功能，当有事件发生的时候将自动调起一个程序。我们可以定制这段程序以实现自己的想要的功能。可以接受的事件包括：提交、加锁、解锁、改变等。以“提交”事件举例，当提交事件发生之前将执行hooks中的pre-commit脚本，提交事件之">
   
     <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
   
@@ -222,7 +222,7 @@
   
     <div class="article-meta">
       <a href="/2016/04/27/svnchecker_install/" class="article-date">
-      <time datetime="2016-04-27T14:56:48.229Z" itemprop="datePublished">2016-04-27</time>
+      <time datetime="2016-04-27T14:59:50.253Z" itemprop="datePublished">2016-04-27</time>
 </a>
     </div>
   
@@ -260,7 +260,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>在SVN所在服务器安装checkstyle(一个开源的著名代码检查工具，可以自定义规则)进行代码检查。运用svn的hook功能。Svn内置了钩子功能，当有事件发生的时候将自动调起一个程序。我们可以定制这段程序以实现自己的想要的功能。可以接受的事件包括：提交、加锁、解锁、改变等。以“提交”事件举例，当提交事件发生之前将执行hooks中的pre-commit脚本，提交事件之后将执行hooks中的post-commit脚本。于是我们就可以在pre-commit脚本里加入执行checkstyle的命令。此处我们再扩展一下，不直接执行checkstyle，而是先执行一个叫SVNChecker的工具，借助SVNChecker执行CheckStyle。SVNChecker是一个开源的检查框架，他可以做各种检查(不仅仅是代码规范性)，并针对各种检查匹配处理模块。也就是说目前虽然只是进行“代码规范性检查”，但是加入SVNChecker后，今后若想进行其他检查，就可以轻而易举的扩展了。</p>
+        <h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>在SVN所在服务器安装checkstyle(一个开源的著名代码检查工具，可以自定义规则)进行代码检查。运用svn的hook功能。Svn内置了钩子功能，当有事件发生的时候将自动调起一个程序。我们可以定制这段程序以实现自己的想要的功能。可以接受的事件包括：提交、加锁、解锁、改变等。以“提交”事件举例，当提交事件发生之前将执行hooks中的pre-commit脚本，提交事件之<a id="more"></a>后将执行hooks中的post-commit脚本。于是我们就可以在pre-commit脚本里加入执行checkstyle的命令。此处我们再扩展一下，不直接执行checkstyle，而是先执行一个叫SVNChecker的工具，借助SVNChecker执行CheckStyle。SVNChecker是一个开源的检查框架，他可以做各种检查(不仅仅是代码规范性)，并针对各种检查匹配处理模块。也就是说目前虽然只是进行“代码规范性检查”，但是加入SVNChecker后，今后若想进行其他检查，就可以轻而易举的扩展了。</p>
 <h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>1、下载checkstyle,官网：<a href="http://checkstyle.sourceforge.net/" target="_blank" rel="external">http://checkstyle.sourceforge.net/</a><br>下载checkstyle-version-bin.zip的压缩包，里面有一堆文件，但主要用到的文件是checkstyle-version-all.jar,这是代码检查的核心包，配置的代码检查规矩就是由该包去进行，但反编译该包，查看里面的Main.java文件，发现有一个不太好的问题，源代码是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (filesToProcess.isEmpty()) &#123;</span><br><span class="line">	 result.add(<span class="string">"Files to process must be specified, found 0."</span>);</span><br><span class="line">	 &#125;</span><br></pre></td></tr></table></figure></p>
 <p>草泥马啊，提交的文件列表如果为空，就不让提交了，也就是说如果删除一个文件，提交代码，会提示错误：Files to process must be specified, found 0.  没办法，BOSS要改，下载源码一看，又是一个坑，该项目已经停止维护了。。。而且是Maven构建的项目，搭建这个项目总是编译不过，报的异常主要是依赖包找不多，好吧，时间比较紧，不费时间调包了，直接强行插入修改的类，下载checkstyle-version-bin.zip，再下载该version相关的源码，修改完后直接转成class文件，本人修改的Main,java,生成Main.class,然后解压checkstyle-version-all.jar，替换里面的Main.class，运行，结果报异常：NoSuchMethodError:Main$CliOptions,原来CliOptions是Main.java里面的内嵌类，生成class文件的时候会独立成一个Main$CliOptions.class文件，两者有唯一的识别联系，所以Main$CliOptions.class也要替换原来的，OK，运行，成功。</p>
 <p>2、下载svnchecker，官网：<a href="http://svnchecker.sourceforge.net/overview.php" target="_blank" rel="external">http://svnchecker.sourceforge.net/overview.php</a><br>svnchecker是一个python项目，里面主要对检查文件列表前的处理，比如过滤，设置java运行环境参数，调用checkstyle.jar包对代码文件进行规范检查。BOSS提出了新需求：对之前提交的代码文件过滤，只对从现在起创建的代码文件进行代码规范检查，好吧，找了一个Python语法的网站：<a href="http://www.runoob.com/python/python-files-io.html，然后就对着这个网站边看svnchecker的源码边查Python语法。Python语法还是挺人性化的，比较好上手，svnchecker的目录：Main.py,setup.py,checks(代码检查的核心)，modules(配置相关的核心)，handlers。写了两个Python脚本,一个扫描过滤名单脚本，一个对提交的文件列表进行过滤的脚本，如下：" target="_blank" rel="external">http://www.runoob.com/python/python-files-io.html，然后就对着这个网站边看svnchecker的源码边查Python语法。Python语法还是挺人性化的，比较好上手，svnchecker的目录：Main.py,setup.py,checks(代码检查的核心)，modules(配置相关的核心)，handlers。写了两个Python脚本,一个扫描过滤名单脚本，一个对提交的文件列表进行过滤的脚本，如下：</a></p>
@@ -285,8 +285,8 @@
     <div class="copyright">
         <p><span>本文标题:</span><a href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
-        <p><span>发布时间:</span>2016-04-27, 22:56:48</p>
-        <p><span>最后更新:</span>2016-04-27, 22:56:23</p>
+        <p><span>发布时间:</span>2016-04-27, 22:59:50</p>
+        <p><span>最后更新:</span>2016-04-27, 22:59:50</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2016/04/27/svnchecker_install/" title="svnchecker 适配安装以及踩过的坑">https://iskylove.github.io/2016/04/27/svnchecker_install/</a>
             <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/04/27/svnchecker_install/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>

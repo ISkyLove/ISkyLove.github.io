@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: python | 剑客爱编程</title>
+  <title>android引导用户开启应用权限及系统apk反编译分析 | 剑客爱编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？">
-<meta property="og:type" content="website">
-<meta property="og:title" content="剑客爱编程">
-<meta property="og:url" content="https://iskylove.github.io/tags/python/index.html">
+  <meta name="description" content="1、使用kingRoot取得手机root权限2、获取引导的acitivity启动方式，权限引导需要引导到当前应用的权限管理界面，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android引导用户开启应用权限及系统apk反编译分析">
+<meta property="og:url" content="https://iskylove.github.io/2016/06/04/android_mobile_apk_decompile/index.html">
 <meta property="og:site_name" content="剑客爱编程">
-<meta property="og:description" content="武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？">
+<meta property="og:description" content="1、使用kingRoot取得手机root权限2、获取引导的acitivity启动方式，权限引导需要引导到当前应用的权限管理界面，">
+<meta property="og:updated_time" content="2016-06-04T03:42:39.865Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="剑客爱编程">
-<meta name="twitter:description" content="武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？">
+<meta name="twitter:title" content="android引导用户开启应用权限及系统apk反编译分析">
+<meta name="twitter:description" content="1、使用kingRoot取得手机root权限2、获取引导的acitivity启动方式，权限引导需要引导到当前应用的权限管理界面，">
   
     <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
   
@@ -45,9 +46,9 @@
           fancybox: true,
           animate: true,
           isHome: false,
-          isPost: false,
+          isPost: true,
           isArchive: false,
-          isTag: true,
+          isTag: false,
           isCategory: false,
           open_in_new: false,
           fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
@@ -217,58 +218,187 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-android_mobile_apk_decompile" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2016/04/27/svnchecker_install/" class="archive-article-date">
-      <time datetime="2016-04-27T15:01:49.445Z" itemprop="datePublished">04-27</time>
+    <div class="article-meta">
+      <a href="/2016/06/04/android_mobile_apk_decompile/" class="article-date">
+      <time datetime="2016-06-04T03:42:39.997Z" itemprop="datePublished">2016-06-04</time>
 </a>
-        </div>
-         
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      android引导用户开启应用权限及系统apk反编译分析
     </h1>
   
 
-        <div class="article-info info-on-archive">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/svn/">svn</a>
+    <a class="article-category-link" href="/categories/android/">android</a>
     </div>
 
 
-          
+        
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/svnchecker/">svnchecker</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/apktool/">apktool</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/decompile/">decompile</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/jd-gui/">jd-gui</a></li></ul>
     </div>
 
-        </div>
         <div class="clearfix"></div>
-    </header>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>1、使用kingRoot取得手机root权限<br>2、获取引导的acitivity启动方式，权限引导需要引导到当前应用的权限管理界面，<a id="more"></a>以魅蓝手机为例，需要启动的activity为：com.meizu.safe.security.AppSecActivity,通过logcat过滤字段ActivityManager观察当前的activity类名，或者通过DDMS查看当前显示的activity包，结合adb shell dumpsys activity acitivities 获取当前的acitivity名<br>3、获取系统应用apk，在/system/app/目录下获取相应的apk，通过root权限，迁移apk到/sdcard/目录，迁移命令：dd if=MzSecurity.apk  of=/sdcard/MzSecurity.apk,再通过adb pull把apk相应的包拉出来<br>4、用apktool反编译改apk，获取到的文件是smali文件，如果不熟悉smali语法，可以通过dex2jar把classes.dex文件转换成jar文件，再通过jd-GUI软件读取该jar文件转换成java文件<br>5、查看里面的com.meizu.safe.security.AppSecActivity，获取需要发送的extra参数为：packageName</p>
+<h5 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h5><p>Android APK反编译就这么简单 详解（附图） [<a href="http://blog.csdn.net/vipzjyno1/article/details/21039349/" target="_blank" rel="external">http://blog.csdn.net/vipzjyno1/article/details/21039349/</a>]<br>APKTOOL的使用心得[<a href="http://www.cnblogs.com/CuriosityWzk/archive/2012/01/06/2315150.html" target="_blank" rel="external">http://www.cnblogs.com/CuriosityWzk/archive/2012/01/06/2315150.html</a>]</p>
+
+      
+    </div>
+    
   </div>
+  
+    
+    <div class="copyright">
+        <p><span>Title:</span><a href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></p>
+        <p><span>Author:</span><a href="/" title="Back to Homepage">剑客爱编程</a></p>
+        <p><span>Created:</span>2016-06-04, 11:42:39</p>
+        <p><span>Updated:</span>2016-06-04, 11:42:39</p>
+        <p>
+            <span>Full URL:</span><a class="post-url" href="/2016/06/04/android_mobile_apk_decompile/" title="android引导用户开启应用权限及系统apk反编译分析">https://iskylove.github.io/2016/06/04/android_mobile_apk_decompile/</a>
+            <span class="copy-path" data-clipboard-text="From https://iskylove.github.io/2016/06/04/android_mobile_apk_decompile/　　By 剑客爱编程" title="Copy Article&#39;s Link &amp; Author"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>License:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"CC BY-NC-SA 4.0"</a> Keep Link &amp; Author if Distribute.
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/04/27/svnchecker_install/">
+                    svnchecker 适配安装以及踩过的坑
+                </a>
+            </div>
+        
+    </nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#参考文章"><span class="toc-number">1.</span> <span class="toc-text">参考文章</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="Hide"  title="Show or Hide Table of Contents">
+<script>
+    var valueHide = "Hide";
+    var valueShow = "Show";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"android引导用户开启应用权限及系统apk反编译分析　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
 
     
 
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="Back to Homepage"><i class="fa fa-home"></i></a>
+        
+
+        <a title="Mini Archives"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/04/27/svnchecker_install/" title="Next: svnchecker 适配安装以及踩过的坑">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">

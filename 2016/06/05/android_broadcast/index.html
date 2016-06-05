@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>android broadcast不能静态注册的广播 | 剑客爱编程</title>
+  <title>android broadcast 学习 | 剑客爱编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="广播注册介绍android中的广播是android的四大组件之一，广播的注册主要有两种方式：静态注册和动态注册，静态注册就是在AndroidManifest.xml文件中定于，动态注册就是通过Context.registerReceiver注册。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="android broadcast不能静态注册的广播">
+<meta property="og:title" content="android broadcast 学习">
 <meta property="og:url" content="https://iskylove.github.io/2016/06/05/android_broadcast/index.html">
 <meta property="og:site_name" content="剑客爱编程">
 <meta property="og:description" content="广播注册介绍android中的广播是android的四大组件之一，广播的注册主要有两种方式：静态注册和动态注册，静态注册就是在AndroidManifest.xml文件中定于，动态注册就是通过Context.registerReceiver注册。">
-<meta property="og:updated_time" content="2016-06-05T10:11:24.707Z">
+<meta property="og:updated_time" content="2016-06-05T11:01:40.611Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="android broadcast不能静态注册的广播">
+<meta name="twitter:title" content="android broadcast 学习">
 <meta name="twitter:description" content="广播注册介绍android中的广播是android的四大组件之一，广播的注册主要有两种方式：静态注册和动态注册，静态注册就是在AndroidManifest.xml文件中定于，动态注册就是通过Context.registerReceiver注册。">
   
     <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
@@ -222,7 +222,7 @@
   
     <div class="article-meta">
       <a href="/2016/06/05/android_broadcast/" class="article-date">
-      <time datetime="2016-06-05T10:11:24.867Z" itemprop="datePublished">2016-06-05</time>
+      <time datetime="2016-06-05T11:01:40.827Z" itemprop="datePublished">2016-06-05</time>
 </a>
     </div>
   
@@ -235,7 +235,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      android broadcast不能静态注册的广播
+      android broadcast 学习
     </h1>
   
 
@@ -244,7 +244,7 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/android/">android</a>
+    <a class="article-category-link" href="/categories/andorid/">andorid</a>
     </div>
 
 
@@ -261,7 +261,7 @@
       
           
         <h4 id="广播注册介绍"><a href="#广播注册介绍" class="headerlink" title="广播注册介绍"></a>广播注册介绍</h4><p>android中的广播是android的四大组件之一，广播的注册主要有两种方式：<strong>静态注册</strong>和<strong>动态注册</strong>，静态注册就是在AndroidManifest.xml文件中定于，动态注册就是通过Context.registerReceiver注册。<a id="more"></a><br>静态注册的广播在应用安装的时候，系统解析安装的apk里面的AndroidManifest.xml文件时自动注册，所以静态注册的广播在应用安装的时候就生效，静态注册的广播适合轻量级的，监听量不是特别巨大的，不然容易影响系统的运行效率。<br>动态注册的广播，只有运行了Context.registerReceiver的代码才完成注册，运行Context.unregisterReceiver或者其所在的实例被回收了就解除注册，动态注册的广播优先级高于静态注册的广播。</p>
-<h4 id="不能静态注册的广播"><a href="#不能静态注册的广播" class="headerlink" title="不能静态注册的广播"></a>不能静态注册的广播</h4><p>考虑到系统效率以及有序广播的影响，系统广播定义了部分广播的监听只能动态注册才有效，一方面提高系统效率，另一方面动态注册的广播优先级比静态广播的优先级高，部分有序广播容易被系统阻止向下传播，动态注册可以优先获取该广播。不能静态注册的广播包括：<br>android.intent.action.BATTERY_CHANGED<br>android.intent.action.CONFIGURATION_CHANGED<br>android.intent.action.TIME_TICK<br>android.intent.action.SCREEN_OFF<br>android.intent.action.SCREEN_ON</p>
+<h4 id="不能静态注册的广播"><a href="#不能静态注册的广播" class="headerlink" title="不能静态注册的广播"></a>不能静态注册的广播</h4><p>考虑到系统效率以及有序广播的影响，系统广播定义了部分广播的监听只能动态注册才有效，一方面提高系统效率，另一方面动态注册的广播优先级比静态广播的优先级高，部分有序广播容易被系统阻止向下传播，动态注册可以优先获取该广播。不能静态注册的部分广播包括：<br>android.intent.action.BATTERY_CHANGED<br>android.intent.action.CONFIGURATION_CHANGED<br>android.intent.action.TIME_TICK<br>android.intent.action.SCREEN_OFF<br>android.intent.action.SCREEN_ON<br>Intent.ACTION_CLOSE_SYSTEM_DIALOGS<br>其中Intent.ACTION_CLOSE_SYSTEM_DIALOGS可以通过注册它来监听Home按键消息。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">String action = intent.getAction();</span><br><span class="line">        <span class="keyword">if</span> (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)) &#123;</span><br><span class="line">            String data = intent.getStringExtra(<span class="string">"reason"</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">"homekey"</span>.equals(reason)) &#123;</span><br><span class="line">                <span class="comment">// 按下HOME健</span></span><br><span class="line">               </span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"recentapps"</span>.equals(reason)) &#123;</span><br><span class="line">                <span class="comment">// 长按HOME键,广播会连续返回若干条recentapps广播</span></span><br><span class="line">               </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -270,12 +270,12 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/06/05/android_broadcast/">android broadcast不能静态注册的广播</a></p>
+        <p><span>本文标题:</span><a href="/2016/06/05/android_broadcast/">android broadcast 学习</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
-        <p><span>发布时间:</span>2016-06-05, 18:11:24</p>
-        <p><span>最后更新:</span>2016-06-05, 18:11:24</p>
+        <p><span>发布时间:</span>2016-06-05, 19:01:40</p>
+        <p><span>最后更新:</span>2016-06-05, 19:01:40</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/06/05/android_broadcast/" title="android broadcast不能静态注册的广播">https://iskylove.github.io/2016/06/05/android_broadcast/</a>
+            <span>原始链接:</span><a class="post-url" href="/2016/06/05/android_broadcast/" title="android broadcast 学习">https://iskylove.github.io/2016/06/05/android_broadcast/</a>
             <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/06/05/android_broadcast/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
@@ -359,7 +359,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"android broadcast不能静态注册的广播　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"android broadcast 学习　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -391,7 +391,7 @@
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast不能静态注册的广播</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
 
 
 

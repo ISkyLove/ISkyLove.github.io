@@ -3,18 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>android broadcast 学习 | 剑客爱编程</title>
+  <title>android AppOpsManager 检查应用权限 | 剑客爱编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="广播注册介绍android中的广播是android的四大组件之一，广播的注册主要有两种方式：静态注册和动态注册，静态注册就是在AndroidManifest.xml文件中定于，动态注册就是通过Context.registerReceiver注册。">
+  <meta name="description" content="AppOpsManager 介绍AppOpsManager 是其他模块获取应用程序的操作（权限）的管理类，核心实现类为AppOpsService，由AppOpsManager对外提供可使用的API，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="android broadcast 学习">
-<meta property="og:url" content="https://iskylove.github.io/2016/06/05/android_broadcast/index.html">
+<meta property="og:title" content="android AppOpsManager 检查应用权限">
+<meta property="og:url" content="https://iskylove.github.io/2016/06/06/android_appopsmanager/index.html">
 <meta property="og:site_name" content="剑客爱编程">
-<meta property="og:description" content="广播注册介绍android中的广播是android的四大组件之一，广播的注册主要有两种方式：静态注册和动态注册，静态注册就是在AndroidManifest.xml文件中定于，动态注册就是通过Context.registerReceiver注册。">
-<meta property="og:updated_time" content="2016-06-05T11:01:40.611Z">
+<meta property="og:description" content="AppOpsManager 介绍AppOpsManager 是其他模块获取应用程序的操作（权限）的管理类，核心实现类为AppOpsService，由AppOpsManager对外提供可使用的API，">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headandroid_appopsmanager.png">
+<meta property="og:updated_time" content="2016-06-06T14:15:35.894Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="android broadcast 学习">
-<meta name="twitter:description" content="广播注册介绍android中的广播是android的四大组件之一，广播的注册主要有两种方式：静态注册和动态注册，静态注册就是在AndroidManifest.xml文件中定于，动态注册就是通过Context.registerReceiver注册。">
+<meta name="twitter:title" content="android AppOpsManager 检查应用权限">
+<meta name="twitter:description" content="AppOpsManager 介绍AppOpsManager 是其他模块获取应用程序的操作（权限）的管理类，核心实现类为AppOpsService，由AppOpsManager对外提供可使用的API，">
+<meta name="twitter:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headandroid_appopsmanager.png">
   
     <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
   
@@ -218,11 +220,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-android_broadcast" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-android_appopsmanager" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/06/05/android_broadcast/" class="article-date">
-      <time datetime="2016-06-05T11:01:40.827Z" itemprop="datePublished">2016-06-05</time>
+      <a href="/2016/06/06/android_appopsmanager/" class="article-date">
+      <time datetime="2016-06-06T14:15:36.142Z" itemprop="datePublished">2016-06-06</time>
 </a>
     </div>
   
@@ -235,7 +237,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      android broadcast 学习
+      android AppOpsManager 检查应用权限
     </h1>
   
 
@@ -244,13 +246,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/andorid/">andorid</a>
+    <a class="article-category-link" href="/categories/android/">android</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/broadcast/">broadcast</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -260,8 +262,10 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="广播注册介绍"><a href="#广播注册介绍" class="headerlink" title="广播注册介绍"></a>广播注册介绍</h4><p>android中的广播是android的四大组件之一，广播的注册主要有两种方式：<strong>静态注册</strong>和<strong>动态注册</strong>，静态注册就是在AndroidManifest.xml文件中定于，动态注册就是通过Context.registerReceiver注册。<a id="more"></a><br>静态注册的广播在应用安装的时候，系统解析安装的apk里面的AndroidManifest.xml文件时自动注册，所以静态注册的广播在应用安装的时候就生效，静态注册的广播适合轻量级的，监听量不是特别巨大的，不然容易影响系统的运行效率。<br>动态注册的广播，只有运行了Context.registerReceiver的代码才完成注册，运行Context.unregisterReceiver或者其所在的实例被回收了就解除注册，动态注册的广播优先级高于静态注册的广播。</p>
-<h4 id="不能静态注册的广播"><a href="#不能静态注册的广播" class="headerlink" title="不能静态注册的广播"></a>不能静态注册的广播</h4><p>考虑到系统效率以及有序广播的影响，系统广播定义了部分广播的监听只能动态注册才有效，一方面提高系统效率，另一方面动态注册的广播优先级比静态广播的优先级高，部分有序广播容易被系统阻止向下传播，动态注册可以优先获取该广播。不能静态注册的部分广播包括：<br>android.intent.action.BATTERY_CHANGED<br>android.intent.action.CONFIGURATION_CHANGED<br>android.intent.action.TIME_TICK<br>android.intent.action.SCREEN_OFF<br>android.intent.action.SCREEN_ON<br>Intent.ACTION_CLOSE_SYSTEM_DIALOGS<br>其中Intent.ACTION_CLOSE_SYSTEM_DIALOGS可以通过注册它来监听Home按键消息。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">String action = intent.getAction();</span><br><span class="line">        <span class="keyword">if</span> (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)) &#123;</span><br><span class="line">            String data = intent.getStringExtra(<span class="string">"reason"</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">"homekey"</span>.equals(reason)) &#123;</span><br><span class="line">                <span class="comment">// 按下HOME健</span></span><br><span class="line">               </span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"recentapps"</span>.equals(reason)) &#123;</span><br><span class="line">                <span class="comment">// 长按HOME键,广播会连续返回若干条recentapps广播</span></span><br><span class="line">               </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+        <h4 id="AppOpsManager-介绍"><a href="#AppOpsManager-介绍" class="headerlink" title="AppOpsManager 介绍"></a>AppOpsManager 介绍</h4><p>AppOpsManager 是其他模块获取应用程序的操作（权限）的管理类，核心实现类为AppOpsService，由AppOpsManager对外提供可使用的API，<a id="more"></a>其基本工作框架为：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headandroid_appopsmanager.png" alt="appops 工作原理框架"><br>AppOpsManager是Android 4.3开始谷歌将权限管理功能集成系统里而提供的外部类，所以对于低于4.3版本将不提供该类的实现。</p>
+<h4 id="通过反射AppOpsManager检查应用权限"><a href="#通过反射AppOpsManager检查应用权限" class="headerlink" title="通过反射AppOpsManager检查应用权限"></a>通过反射AppOpsManager检查应用权限</h4><p>下面提供的方法通过反射使用AppOpsManager检查应用程序的权限，反射方法可以不考虑向下兼容问题，同时面对国内各种碎片化的机型以及自定义的属性可以很好的避开crash，因为国内的部门机型对权限的授予结果不同，比如有的机型获取悬浮窗权限的标志为1，有的手机标志为0，通过反射直接获取AppOpsManager类里面定义的获取权限标志MODE_ALLOWED的值来比较结果。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">CheckePermission</span><span class="params">(Context context,<span class="keyword">int</span> op)</span></span>&#123;</span><br><span class="line">     <span class="keyword">try</span>&#123;</span><br><span class="line">         <span class="comment">//在Context里面定义的AppOpsManager提供的服务，若没有该字段，则没有该服务</span></span><br><span class="line">         <span class="keyword">final</span> String APP_OPS_SERVICE = <span class="string">"appops"</span>;</span><br><span class="line">         <span class="comment">//加载Context类</span></span><br><span class="line">         Class context_class = Class.forName(<span class="string">"android.content.Context"</span>);</span><br><span class="line">         <span class="comment">//加载AppOpsManager类</span></span><br><span class="line">         Class op_class = Class.forName(<span class="string">"android.app.AppOpsManager"</span>);</span><br><span class="line">         <span class="comment">//获取AppOpsManager服务字段</span></span><br><span class="line">         Field op_str_field = context_class.getDeclaredField(<span class="string">"APP_OPS_SERVICE"</span>);</span><br><span class="line">         op_str_field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">         Object op_service_obj = op_str_field.get(context_class);</span><br><span class="line">         <span class="comment">//若有AppOpsManager服务字段则继续执行</span></span><br><span class="line">         <span class="keyword">if</span>(op_service_obj !=<span class="keyword">null</span> &amp;&amp; op_service_obj <span class="keyword">instanceof</span>  String)&#123;</span><br><span class="line">             String op_service_str = (String)op_service_obj;</span><br><span class="line">             Method getSysService = context_class.getDeclaredMethod(<span class="string">"getSystemService"</span>,String.class);</span><br><span class="line">             <span class="comment">//获取AppOpsManager服务</span></span><br><span class="line">             Object op_service = getSysService.invoke(context,op_service_str);</span><br><span class="line">             <span class="comment">//获取AppOpsManager定于的权限获取，没获取，错误字段</span></span><br><span class="line">             Field allowed_field = op_class.getDeclaredField(<span class="string">"MODE_ALLOWED"</span>);</span><br><span class="line">             Field ignored_field = op_class.getDeclaredField(<span class="string">"MODE_IGNORED"</span>);</span><br><span class="line">             Field errored_field = op_class.getDeclaredField(<span class="string">"MODE_ERRORED"</span>);</span><br><span class="line"></span><br><span class="line">             <span class="keyword">final</span> <span class="keyword">int</span> ALLOW = (Integer) allowed_field.get(op_class);</span><br><span class="line">             <span class="keyword">final</span> <span class="keyword">int</span> IGNORE = (Integer) ignored_field.get(op_class);</span><br><span class="line">             <span class="keyword">final</span> <span class="keyword">int</span> ERROR = (Integer) errored_field.get(op_class);</span><br><span class="line">             </span><br><span class="line">             Method op_check = op_class.getDeclaredMethod(<span class="string">"checkOp"</span>,<span class="keyword">int</span>.class,<span class="keyword">int</span>.class,String.class);</span><br><span class="line">             <span class="comment">//检查app是否获取响应的权限</span></span><br><span class="line">             Object result_obj = op_check.invoke(op_service,op, Binder.getCallingUid(),context.getPackageName());</span><br><span class="line">             <span class="keyword">int</span> result_int = (Integer)result_obj;</span><br><span class="line">             <span class="comment">//若获取指定权限，则返回true</span></span><br><span class="line">             <span class="keyword">if</span>(result_int == ALLOW)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="AppOpsManager提供的部分权限字段"><a href="#AppOpsManager提供的部分权限字段" class="headerlink" title="AppOpsManager提供的部分权限字段"></a>AppOpsManager提供的部分权限字段</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//大概定位</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OP_COARSE_LOCATION = <span class="number">0</span>;</span><br><span class="line"><span class="comment">//精准定位</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OP_FINE_LOCATION = <span class="number">1</span>;</span><br><span class="line"><span class="comment">//gps权限</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OP_GPS = <span class="number">2</span>;</span><br><span class="line"><span class="comment">//悬浮窗权限</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> OP_SYSTEM_ALERT_WINDOW = <span class="number">24</span>;</span><br></pre></td></tr></table></figure>
+<p>具体请前往AppOpsManager的类文件查看：<br><a href="http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/5.1.1_r1/android/app/AppOpsManager.java#AppOpsManager" target="_blank" rel="external">AppOpsManager</a></p>
 
       
     </div>
@@ -270,13 +274,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/06/05/android_broadcast/">android broadcast 学习</a></p>
+        <p><span>本文标题:</span><a href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
-        <p><span>发布时间:</span>2016-06-05, 19:01:40</p>
-        <p><span>最后更新:</span>2016-06-05, 19:01:40</p>
+        <p><span>发布时间:</span>2016-06-06, 22:15:36</p>
+        <p><span>最后更新:</span>2016-06-06, 22:15:35</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/06/05/android_broadcast/" title="android broadcast 学习">https://iskylove.github.io/2016/06/05/android_broadcast/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/06/05/android_broadcast/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2016/06/06/android_appopsmanager/" title="android AppOpsManager 检查应用权限">https://iskylove.github.io/2016/06/06/android_appopsmanager/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/06/06/android_appopsmanager/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -288,16 +292,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2016/06/06/android_appopsmanager/">
-                    android AppOpsManager 检查应用权限
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/06/05/android_animator_favor/">
-                    android动画研究
+                <a href="/2016/06/05/android_broadcast/">
+                    android broadcast 学习
                 </a>
             </div>
         
@@ -308,7 +306,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#广播注册介绍"><span class="toc-number">1.</span> <span class="toc-text">广播注册介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#不能静态注册的广播"><span class="toc-number">2.</span> <span class="toc-text">不能静态注册的广播</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#AppOpsManager-介绍"><span class="toc-number">1.</span> <span class="toc-text">AppOpsManager 介绍</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#通过反射AppOpsManager检查应用权限"><span class="toc-number">2.</span> <span class="toc-text">通过反射AppOpsManager检查应用权限</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AppOpsManager提供的部分权限字段"><span class="toc-number">3.</span> <span class="toc-text">AppOpsManager提供的部分权限字段</span></a></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -365,7 +363,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"android broadcast 学习　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"android AppOpsManager 检查应用权限　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -385,15 +383,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2016/06/06/android_appopsmanager/" title="上一篇: android AppOpsManager 检查应用权限">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2016/06/05/android_animator_favor/" title="下一篇: android动画研究">
+            <a href="/2016/06/05/android_broadcast/" title="下一篇: android broadcast 学习">
                 <i class="fa fa-angle-right"></i>
             </a>
         

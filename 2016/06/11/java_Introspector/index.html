@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>(转)深入理解Java：内省(Introspector) | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="原文地址：http://www.cnblogs.com/peida/archive/2013/06/03/3090842.html
+深入理解Java：内省(Introspector)一些概念：内省(Introspector) 是Java 语言对 JavaBean 类属性、事件的一种缺省处理方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(转)深入理解Java：内省(Introspector)">
+<meta property="og:url" content="https://iskylove.github.io/2016/06/11/java_Introspector/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="原文地址：http://www.cnblogs.com/peida/archive/2013/06/03/3090842.html
+深入理解Java：内省(Introspector)一些概念：内省(Introspector) 是Java 语言对 JavaBean 类属性、事件的一种缺省处理方法。">
+<meta property="og:updated_time" content="2016-06-11T15:30:34.354Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(转)深入理解Java：内省(Introspector)">
+<meta name="twitter:description" content="原文地址：http://www.cnblogs.com/peida/archive/2013/06/03/3090842.html
+深入理解Java：内省(Introspector)一些概念：内省(Introspector) 是Java 语言对 JavaBean 类属性、事件的一种缺省处理方法。">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>Menu</li>
+                        <li>Tags</li>
+                        
+                        <li>Friends</li>
+                        
+                        
+                        <li>About Me</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-java_Introspector" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/06/11/java_Introspector/" class="article-date">
+      <time datetime="2016-06-11T15:30:34.518Z" itemprop="datePublished">2016-06-11</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (转)深入理解Java：内省(Introspector)
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/java/">java</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>原文地址：<a href="http://www.cnblogs.com/peida/archive/2013/06/03/3090842.html" target="_blank" rel="external">http://www.cnblogs.com/peida/archive/2013/06/03/3090842.html</a></p>
+<h4 id="深入理解Java：内省-Introspector"><a href="#深入理解Java：内省-Introspector" class="headerlink" title="深入理解Java：内省(Introspector)"></a>深入理解Java：内省(Introspector)</h4><h5 id="一些概念："><a href="#一些概念：" class="headerlink" title="一些概念："></a>一些概念：</h5><p><strong>内省(Introspector)</strong> 是Java 语言对 JavaBean 类属性、事件的一种缺省处理方法。<a id="more"></a><br>JavaBean是一种特殊的类，主要用于传递数据信息，这种类中的方法主要用于访问私有的字段，且方法名符合某种命名规则。如果在两个模块之间传递信息，可以将信息封装进JavaBean中，这种对象称为“值对象”(Value Object)，或“VO”。方法比较少。这些信息储存在类的私有变量中，通过set()、get()获得。<br>例如类UserInfo :<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.peidasoft.Introspector;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">long</span> userId;</span><br><span class="line">    <span class="keyword">private</span> String userName;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> String emailAddress;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getUserId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userId;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUserId</span><span class="params">(<span class="keyword">long</span> userId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.userId = userId;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUserName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUserName</span><span class="params">(String userName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.userName = userName;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getEmailAddress</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> emailAddress;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setEmailAddress</span><span class="params">(String emailAddress)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.emailAddress = emailAddress;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　在类UserInfo中有属性 userName, 那我们可以通过 getUserName,setUserName来得到其值或者设置新的值。通过 getUserName/setUserName来访问 userName属性，这就是默认的规则。 Java JDK中提供了一套 API 用来访问某个属性的 getter/setter 方法，这就是内省。</p>
+<h5 id="JDK内省类库："><a href="#JDK内省类库：" class="headerlink" title="JDK内省类库："></a>JDK内省类库：</h5><p>　　PropertyDescriptor类:<br>　　PropertyDescriptor类表示JavaBean类通过存储器导出一个属性。主要方法：<br>    　　1. getPropertyType()，获得属性的Class对象;<br>    　　2. getReadMethod()，获得用于读取属性值的方法；getWriteMethod()，获得用于写入属性值的方法;<br>    　　3. hashCode()，获取对象的哈希值;<br>    　　4. setReadMethod(Method readMethod)，设置用于读取属性值的方法;<br>    　　5. setWriteMethod(Method writeMethod)，设置用于写入属性值的方法。</p>
+<p>　　实例代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.peidasoft.Introspector;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.beans.BeanInfo;</span><br><span class="line"><span class="keyword">import</span> java.beans.Introspector;</span><br><span class="line"><span class="keyword">import</span> java.beans.PropertyDescriptor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanInfoUtil</span> </span>&#123;  </span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setProperty</span><span class="params">(UserInfo userInfo,String userName)</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        PropertyDescriptor propDesc=<span class="keyword">new</span> PropertyDescriptor(userName,UserInfo.class);</span><br><span class="line">        Method methodSetUserName=propDesc.getWriteMethod();</span><br><span class="line">        methodSetUserName.invoke(userInfo, <span class="string">"wong"</span>);</span><br><span class="line">        System.out.println(<span class="string">"set userName:"</span>+userInfo.getUserName());</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getProperty</span><span class="params">(UserInfo userInfo,String userName)</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        PropertyDescriptor proDescriptor =<span class="keyword">new</span> PropertyDescriptor(userName,UserInfo.class);</span><br><span class="line">        Method methodGetUserName=proDescriptor.getReadMethod();</span><br><span class="line">        Object objUserName=methodGetUserName.invoke(userInfo);</span><br><span class="line">        System.out.println(<span class="string">"get userName:"</span>+objUserName.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>#####Introspector类:<br>　　将JavaBean中的属性封装起来进行操作。在程序把一个类当做JavaBean来看，就是调用Introspector.getBeanInfo()方法，得到的BeanInfo对象封装了把这个类当做JavaBean看的结果信息，即属性的信息。<br>　　getPropertyDescriptors()，获得属性的描述，可以采用遍历BeanInfo的方法，来查找、设置类的属性。具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.peidasoft.Introspector;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.beans.BeanInfo;</span><br><span class="line"><span class="keyword">import</span> java.beans.Introspector;</span><br><span class="line"><span class="keyword">import</span> java.beans.PropertyDescriptor;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanInfoUtil</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">setPropertyByIntrospector</span><span class="params">(UserInfo userInfo,String userName)</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        BeanInfo beanInfo=Introspector.getBeanInfo(UserInfo.class);</span><br><span class="line">        PropertyDescriptor[] proDescrtptors=beanInfo.getPropertyDescriptors();</span><br><span class="line">        <span class="keyword">if</span>(proDescrtptors!=<span class="keyword">null</span>&amp;&amp;proDescrtptors.length&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(PropertyDescriptor propDesc:proDescrtptors)&#123;</span><br><span class="line">                <span class="keyword">if</span>(propDesc.getName().equals(userName))&#123;</span><br><span class="line">                    Method methodSetUserName=propDesc.getWriteMethod();</span><br><span class="line">                    methodSetUserName.invoke(userInfo, <span class="string">"alan"</span>);</span><br><span class="line">                    System.out.println(<span class="string">"set userName:"</span>+userInfo.getUserName());</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">getPropertyByIntrospector</span><span class="params">(UserInfo userInfo,String userName)</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        BeanInfo beanInfo=Introspector.getBeanInfo(UserInfo.class);</span><br><span class="line">        PropertyDescriptor[] proDescrtptors=beanInfo.getPropertyDescriptors();</span><br><span class="line">        <span class="keyword">if</span>(proDescrtptors!=<span class="keyword">null</span>&amp;&amp;proDescrtptors.length&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(PropertyDescriptor propDesc:proDescrtptors)&#123;</span><br><span class="line">                <span class="keyword">if</span>(propDesc.getName().equals(userName))&#123;</span><br><span class="line">                    Method methodGetUserName=propDesc.getReadMethod();</span><br><span class="line">                    Object objUserName=methodGetUserName.invoke(userInfo);</span><br><span class="line">                    System.out.println(<span class="string">"get userName:"</span>+objUserName.toString());</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code>通过这两个类的比较可以看出，都是需要获得PropertyDescriptor，只是方式不一样：前者通过创建对象直接获得，后者需要遍历，所以使用PropertyDescriptor类更加方便。
+</code></pre><p>使用实例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.peidasoft.Introspector;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanInfoTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * <span class="doctag">@param</span> args</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        UserInfo userInfo=<span class="keyword">new</span> UserInfo();</span><br><span class="line">        userInfo.setUserName(<span class="string">"peida"</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            BeanInfoUtil.getProperty(userInfo, <span class="string">"userName"</span>);</span><br><span class="line">            </span><br><span class="line">            BeanInfoUtil.setProperty(userInfo, <span class="string">"userName"</span>);</span><br><span class="line">            </span><br><span class="line">            BeanInfoUtil.getProperty(userInfo, <span class="string">"userName"</span>);</span><br><span class="line">            </span><br><span class="line">            BeanInfoUtil.setPropertyByIntrospector(userInfo, <span class="string">"userName"</span>);            </span><br><span class="line">            </span><br><span class="line">            BeanInfoUtil.getPropertyByIntrospector(userInfo, <span class="string">"userName"</span>);</span><br><span class="line">            </span><br><span class="line">            BeanInfoUtil.setProperty(userInfo, <span class="string">"age"</span>);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>输出：<br>get userName:peida<br>set userName:wong<br>get userName:wong<br>set userName:alan<br>get userName:alan<br>java.lang.IllegalArgumentException: argument type mismatch<br>    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)<br>    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)<br>    at java.lang.reflect.Method.invoke(Method.java:597)<br>    at com.peidasoft.Introspector.BeanInfoUtil.setProperty(BeanInfoUtil.java:14)<br>    at com.peidasoft.Introspector.BeanInfoTest.main(BeanInfoTest.java:22)　</p>
+</blockquote>
+<p>说明：BeanInfoUtil.setProperty(userInfo, “age”);报错是应为age属性是int数据类型，而setProperty方法里面默认给age属性赋的值是String类型。所以会爆出argument type mismatch参数类型不匹配的错误信息。</p>
+<h5 id="BeanUtils工具包："><a href="#BeanUtils工具包：" class="headerlink" title="BeanUtils工具包："></a>BeanUtils工具包：</h5><p>由上述可看出，内省操作非常的繁琐，所以Apache开发了一套简单、易用的API来操作Bean的属性——BeanUtils工具包。<br>BeanUtils工具包：下载：<a href="http://commons.apache.org/beanutils/" target="_blank" rel="external">http://commons.apache.org/beanutils/</a>　注意：应用的时候还需要一个logging包 <a href="http://commons.apache.org/logging/" target="_blank" rel="external">http://commons.apache.org/logging/</a><br>使用BeanUtils工具包完成上面的测试代码:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.peidasoft.Beanutil;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.beanutils.BeanUtils;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.beanutils.PropertyUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.peidasoft.Introspector.UserInfo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanUtilTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        UserInfo userInfo=<span class="keyword">new</span> UserInfo();</span><br><span class="line">         <span class="keyword">try</span> &#123;</span><br><span class="line">            BeanUtils.setProperty(userInfo, <span class="string">"userName"</span>, <span class="string">"peida"</span>);</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">"set userName:"</span>+userInfo.getUserName());</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">"get userName:"</span>+BeanUtils.getProperty(userInfo, <span class="string">"userName"</span>));</span><br><span class="line">            </span><br><span class="line">            BeanUtils.setProperty(userInfo, <span class="string">"age"</span>, <span class="number">18</span>);</span><br><span class="line">            System.out.println(<span class="string">"set age:"</span>+userInfo.getAge());</span><br><span class="line">            </span><br><span class="line">            System.out.println(<span class="string">"get age:"</span>+BeanUtils.getProperty(userInfo, <span class="string">"age"</span>));</span><br><span class="line">             </span><br><span class="line">            System.out.println(<span class="string">"get userName type:"</span>+BeanUtils.getProperty(userInfo, <span class="string">"userName"</span>).getClass().getName());</span><br><span class="line">            System.out.println(<span class="string">"get age type:"</span>+BeanUtils.getProperty(userInfo, <span class="string">"age"</span>).getClass().getName());</span><br><span class="line">            </span><br><span class="line">            PropertyUtils.setProperty(userInfo, <span class="string">"age"</span>, <span class="number">8</span>);</span><br><span class="line">            System.out.println(PropertyUtils.getProperty(userInfo, <span class="string">"age"</span>));</span><br><span class="line">            </span><br><span class="line">            System.out.println(PropertyUtils.getProperty(userInfo, <span class="string">"age"</span>).getClass().getName());</span><br><span class="line">                  </span><br><span class="line">            PropertyUtils.setProperty(userInfo, <span class="string">"age"</span>, <span class="string">"8"</span>);   </span><br><span class="line">        &#125; </span><br><span class="line">         <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; </span><br><span class="line">         <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　</p>
+<blockquote>
+<p>运行结果：<br>set userName:peida<br>get userName:peida<br>set age:18<br>get age:18<br>get userName type:java.lang.String<br>get age type:java.lang.String<br>8<br>java.lang.Integer<br>Exception in thread “main” java.lang.IllegalArgumentException: Cannot invoke com.peidasoft.Introspector.UserInfo.setAge<br>on bean class ‘class com.peidasoft.Introspector.UserInfo’ - argument type mismatch - had objects of type “java.lang.String”<br>but expected signature “int”<br>    at org.apache.commons.beanutils.PropertyUtilsBean.invokeMethod(PropertyUtilsBean.java:2235)<br>    at org.apache.commons.beanutils.PropertyUtilsBean.setSimpleProperty(PropertyUtilsBean.java:2151)<br>    at org.apache.commons.beanutils.PropertyUtilsBean.setNestedProperty(PropertyUtilsBean.java:1957)<br>    at org.apache.commons.beanutils.PropertyUtilsBean.setProperty(PropertyUtilsBean.java:2064)<br>    at org.apache.commons.beanutils.PropertyUtils.setProperty(PropertyUtils.java:858)<br>    at com.peidasoft.orm.Beanutil.BeanUtilTest.main(BeanUtilTest.java:38)<br>Caused by: java.lang.IllegalArgumentException: argument type mismatch<br>    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)<br>    at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)<br>    at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)<br>    at java.lang.reflect.Method.invoke(Method.java:597)<br>    at org.apache.commons.beanutils.PropertyUtilsBean.invokeMethod(PropertyUtilsBean.java:2170)<br>    … 5 more</p>
+</blockquote>
+<p>说明：<br>　　1.获得属性的值，例如，BeanUtils.getProperty(userInfo,”userName”)，返回字符串<br>　　2.设置属性的值，例如，BeanUtils.setProperty(userInfo,”age”,8)，参数是字符串或基本类型自动包装。设置属性的值是字符串，获得的值也是字符串，不是基本类型。　　　3.BeanUtils的特点：<br>　　　　1). 对基本数据类型的属性的操作：在WEB开发、使用中，录入和显示时，值会被转换成字符串，但底层运算用的是基本类型，这些类型转到动作由BeanUtils自动完成。<br>　　　　2）. 对引用数据类型的属性的操作：首先在类中必须有对象，不能是null，例如，private Date birthday=new Date();。操作的是对象的属性而不是整个对象，例如，BeanUtils.setProperty(userInfo,”birthday.time”,111111);　　　<br>　　3.PropertyUtils类和BeanUtils不同在于，运行getProperty、setProperty操作时，没有类型转换，使用属性的原有类型或者包装类。由于age属性的数据类型是int，所以方法PropertyUtils.setProperty(userInfo, “age”, “8”)会爆出数据类型不匹配，无法将值赋给属性。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.peidasoft.Introspector;</span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserInfo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Date birthday = <span class="keyword">new</span> Date();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBirthday</span><span class="params">(Date birthday)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.birthday = birthday;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Date <span class="title">getBirthday</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> birthday;</span><br><span class="line">    &#125;      </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.peidasoft.Beanutil;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationTargetException;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.beanutils.BeanUtils;</span><br><span class="line"><span class="keyword">import</span> com.peidasoft.Introspector.UserInfo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanUtilTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        UserInfo userInfo=<span class="keyword">new</span> UserInfo();</span><br><span class="line">         <span class="keyword">try</span> &#123;</span><br><span class="line">            BeanUtils.setProperty(userInfo, <span class="string">"birthday.time"</span>,<span class="string">"111111"</span>);  </span><br><span class="line">            Object obj = BeanUtils.getProperty(userInfo, <span class="string">"birthday.time"</span>);  </span><br><span class="line">            System.out.println(obj);          </span><br><span class="line">        &#125; </span><br><span class="line">         <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; </span><br><span class="line">         <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>　　参考资料：<br>　　1.<a href="http://www.cnblogs.com/avenwu/archive/2012/02/28/2372586.html" target="_blank" rel="external">http://www.cnblogs.com/avenwu/archive/2012/02/28/2372586.html</a><br>　　2.<a href="http://blog.csdn.net/zhuruoyun/article/details/8219333" target="_blank" rel="external">http://blog.csdn.net/zhuruoyun/article/details/8219333</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>Title:</span><a href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></p>
+        <p><span>Author:</span><a href="/" title="Back to Homepage">剑客爱编程</a></p>
+        <p><span>Created:</span>2016-06-11, 23:30:34</p>
+        <p><span>Updated:</span>2016-06-11, 23:30:34</p>
+        <p>
+            <span>Full URL:</span><a class="post-url" href="/2016/06/11/java_Introspector/" title="(转)深入理解Java：内省(Introspector)">https://iskylove.github.io/2016/06/11/java_Introspector/</a>
+            <span class="copy-path" data-clipboard-text="From https://iskylove.github.io/2016/06/11/java_Introspector/　　By 剑客爱编程" title="Copy Article&#39;s Link &amp; Author"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>License:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"CC BY-NC-SA 4.0"</a> Keep Link &amp; Author if Distribute.
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/06/06/android_appopsmanager/">
+                    android AppOpsManager 检查应用权限
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#深入理解Java：内省-Introspector"><span class="toc-number">1.</span> <span class="toc-text">深入理解Java：内省(Introspector)</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#一些概念："><span class="toc-number">1.1.</span> <span class="toc-text">一些概念：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#JDK内省类库："><span class="toc-number">1.2.</span> <span class="toc-text">JDK内省类库：</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#BeanUtils工具包："><span class="toc-number">1.3.</span> <span class="toc-text">BeanUtils工具包：</span></a></li></ol></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="Hide"  title="Show or Hide Table of Contents">
+<script>
+    var valueHide = "Hide";
+    var valueShow = "Show";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"(转)深入理解Java：内省(Introspector)　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="Back to Homepage"><i class="fa fa-home"></i></a>
+        
+
+        <a title="Mini Archives"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/06/06/android_appopsmanager/" title="Next: android AppOpsManager 检查应用权限">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2016 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="A fast, simple &amp; powerful blog framework">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="Another simple and elegant theme for Hexo">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >Site Visitors: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">Page Hits: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="Back to Top"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="Comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="Go to Bottom"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

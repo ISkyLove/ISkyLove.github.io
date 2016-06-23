@@ -3,20 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>hexo + github + 七牛运存储搭建简单的博客 | 剑客爱编程</title>
+  <title>android view measure方法 | 剑客爱编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux">
+  <meta name="description" content="最近项目需要，一位同事架构RecyclerView嵌套RecyclerView实现一个需求，而且哇啦啦啦写了一整天，结果显示一看，嵌套的RecyclerView不显示，不管怎么调试也不显示。。。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hexo + github + 七牛运存储搭建简单的博客">
-<meta property="og:url" content="https://iskylove.github.io/2016/04/26/hexo_install/index.html">
+<meta property="og:title" content="android view measure方法">
+<meta property="og:url" content="https://iskylove.github.io/2016/06/24/android_view_measure/index.html">
 <meta property="og:site_name" content="剑客爱编程">
-<meta property="og:description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux">
-<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headbg1.jpg">
-<meta property="og:updated_time" content="2016-04-26T15:31:25.233Z">
+<meta property="og:description" content="最近项目需要，一位同事架构RecyclerView嵌套RecyclerView实现一个需求，而且哇啦啦啦写了一整天，结果显示一看，嵌套的RecyclerView不显示，不管怎么调试也不显示。。。">
+<meta property="og:updated_time" content="2016-06-23T16:11:11.216Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hexo + github + 七牛运存储搭建简单的博客">
-<meta name="twitter:description" content="安装环境Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux">
-<meta name="twitter:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headbg1.jpg">
+<meta name="twitter:title" content="android view measure方法">
+<meta name="twitter:description" content="最近项目需要，一位同事架构RecyclerView嵌套RecyclerView实现一个需求，而且哇啦啦啦写了一整天，结果显示一看，嵌套的RecyclerView不显示，不管怎么调试也不显示。。。">
   
     <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
   
@@ -220,11 +218,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-hexo_install" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-android_view_measure" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/04/26/hexo_install/" class="article-date">
-      <time datetime="2016-04-26T15:31:25.389Z" itemprop="datePublished">2016-04-26</time>
+      <a href="/2016/06/24/android_view_measure/" class="article-date">
+      <time datetime="2016-06-23T16:11:50.696Z" itemprop="datePublished">2016-06-24</time>
 </a>
     </div>
   
@@ -237,7 +235,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      hexo + github + 七牛运存储搭建简单的博客
+      android view measure方法
     </h1>
   
 
@@ -246,13 +244,13 @@
       <div class="article-info article-info-post">
         
     <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/install/">install</a>
+    <a class="article-category-link" href="/categories/android/">android</a>
     </div>
 
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -262,16 +260,11 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h4 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h4><pre><code>Linux ubuntu 4.2.0-35-generic #40~14.04.1-Ubuntu SMP Fri Mar 18 16:37:35 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
-</code></pre><a id="more"></a>
-<h4 id="Node-js安装"><a href="#Node-js安装" class="headerlink" title="Node.js安装"></a>Node.js安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ wget -qO- https://raw.github.com/creationix/nvm/master/install.sh | sh</span><br><span class="line">$ nvm install 4</span><br></pre></td></tr></table></figure>
-<h4 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$sudo</span> apt-get install git-core</span><br></pre></td></tr></table></figure>
-<h4 id="hexo-安装"><a href="#hexo-安装" class="headerlink" title="hexo 安装"></a>hexo 安装</h4><p>npm是hexo的资源管理器，安装过程会比较慢，请耐心等待<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure></p>
-<p>安装完hexo后，到指定文件夹中新建需要的文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &lt;folder&gt;</span><br><span class="line">$ <span class="built_in">cd</span> &lt;folder&gt;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure></p>
-<p>新建完成后，指定文件夹里面的目录结构如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml   <span class="comment">#网站的主要属性配置文件</span></span><br><span class="line">├── package.json  </span><br><span class="line">├── scaffolds     <span class="comment">#静态页面模板</span></span><br><span class="line">├── <span class="built_in">source</span>        <span class="comment">#页面资源</span></span><br><span class="line">|   ├── _drafts    <span class="comment">#草稿</span></span><br><span class="line">|   └── _posts     <span class="comment">#页面md文件</span></span><br><span class="line">└── themes    <span class="comment">#网站主题</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="图床搭建"><a href="#图床搭建" class="headerlink" title="图床搭建"></a>图床搭建</h4><p>图床主要借助七牛运存储，把大部分图片资源放在云存储，参考的地址为<a href="http://www.jianshu.com/p/3c7ddd48bfa9" target="_blank" rel="external">如何写一篇hexo博客</a></p>
-<h5 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h5><p><a href="http://www.jianshu.com/p/05289a4bc8b2" target="_blank" rel="external">如何搭建一个独立博客——简明Github Pages与Hexo教程</a><br><a href="https://hexo.io/" target="_blank" rel="external">hexo</a><br><a href="https://hexo.io/themes/" target="_blank" rel="external">themes</a><br><a href="http://www.jianshu.com/p/3c7ddd48bfa9" target="_blank" rel="external">如何写一篇hexo博客</a><br><a href="http://www.cognize.me/2015/08/03/tuchuang2/" target="_blank" rel="external">Hexo图床管理(二)</a><br><a href="https://git-scm.com/" target="_blank" rel="external">Git</a><br><a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">hexo你的博客</a></p>
-<p>玩～～～</p>
+        <p>最近项目需要，一位同事架构RecyclerView嵌套RecyclerView实现一个需求，而且哇啦啦啦写了一整天，结果显示一看，嵌套的RecyclerView不显示，不管怎么调试也不显示。。。<a id="more"></a>这个问题其实和我们之前ListView嵌套ListView不显示一样，就是在建立的View嵌套树中，嵌套的ListView测量没有明确的测量依据，导致测量的大小直接返回0了，所以需要让RecyclerView重新测量一下，关键代码是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> widthtSpecTitle=View.MeasureSpec.makeMeasureSpec(Interge.MAXVALUE &gt;&gt; <span class="number">2</span>,View.MeasureSpec.AT_MOST);</span><br><span class="line">holder.itemView.measure(widthtSpecTitle,View.MeasureSpec.UNSPECIFIED);</span><br></pre></td></tr></table></figure></p>
+<p>意思就是告诉测量的View，对于宽width，尽量自己测量吧，对与长，我没有限制，你是多少就给多少吧。同时采用的测量是结合DataAdapter一起对itemView进行测量的，主要代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getItemHeight</span><span class="params">(Context context, ItemData data, <span class="keyword">int</span> viewType)</span> </span>&#123;</span><br><span class="line">     RelativeLayout parent = <span class="keyword">new</span> RelativeLayout(context);</span><br><span class="line">     DataAdapter mAdapter = <span class="keyword">new</span> DataAdapter();</span><br><span class="line"></span><br><span class="line">     ItemHolder holder;</span><br><span class="line">     holder = (ItemHolder) mAdapter.onCreateViewHolder(parent, viewType);</span><br><span class="line">     mAdapter.onBindViewHolder(holder,data.get(position));</span><br><span class="line">     <span class="keyword">int</span>  measureHeight = <span class="number">0</span>;</span><br><span class="line">      WindowManager wm=(WindowManager)context.getSystemService(Context.WINDOW_SERVICE);</span><br><span class="line">     <span class="keyword">int</span> width = wm.getDefaultDisplay().getWidth();</span><br><span class="line">     <span class="keyword">int</span> widthSpecTitle=View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.AT_MOST);</span><br><span class="line">     holder.itemView.measure(widthSpecTitle,View.MeasureSpec.UNSPECIFIED);</span><br><span class="line">     measureHeight = holder.itemView.getMeasuredHeight();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> measureHeight;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用View的measure会简介调用ViewGroup的onMeasure，View的measure的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">measure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">          。。。。</span><br><span class="line">          <span class="keyword">if</span> (cacheIndex &lt; <span class="number">0</span> || sIgnoreMeasureCache) &#123;</span><br><span class="line">              <span class="comment">// measure ourselves, this should set the measured dimension flag back</span></span><br><span class="line">              <span class="comment">// 重点onMeasure方法</span></span><br><span class="line">              onMeasure(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">              mPrivateFlags3 &amp;= ~PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="keyword">long</span> value = mMeasureCache.valueAt(cacheIndex);</span><br><span class="line">              <span class="comment">// Casting a long to int drops the high 32 bits, no mask needed</span></span><br><span class="line">              setMeasuredDimensionRaw((<span class="keyword">int</span>) (value &gt;&gt; <span class="number">32</span>), (<span class="keyword">int</span>) value);</span><br><span class="line">              mPrivateFlags3 |= PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">         。。。。</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是测量的结果总是不对，要不太大了，要不太小了，总结如下：<br>1 如果对于子视图的显示主要依赖负空间的大小然后按照比例计算的，Measure方法的调用需要添加适当的大小。<br>2 对于ImageView，如果没有设置默认的图片，等待网络加载在显示，默认的大小是为0的，源码如下，所以对于ImageVIew的测量需要特殊处理一下，单独做测量处理。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">     。。。。</span><br><span class="line">     resolveUri();</span><br><span class="line">     <span class="keyword">int</span> w;</span><br><span class="line">     <span class="keyword">int</span> h;</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// Desired aspect ratio of the view's contents (not including padding)</span></span><br><span class="line">     <span class="keyword">float</span> desiredAspect = <span class="number">0.0f</span>;</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// We are allowed to change the view's width</span></span><br><span class="line">     <span class="keyword">boolean</span> resizeWidth = <span class="keyword">false</span>;</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// We are allowed to change the view's height</span></span><br><span class="line">     <span class="keyword">boolean</span> resizeHeight = <span class="keyword">false</span>;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">final</span> <span class="keyword">int</span> widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);</span><br><span class="line">     <span class="keyword">final</span> <span class="keyword">int</span> heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span> (mDrawable == <span class="keyword">null</span>) &#123;</span><br><span class="line">         <span class="comment">// If no drawable, its intrinsic size is 0.</span></span><br><span class="line">         mDrawableWidth = -<span class="number">1</span>;</span><br><span class="line">         mDrawableHeight = -<span class="number">1</span>;</span><br><span class="line">         w = h = <span class="number">0</span>;   <span class="comment">//没有图片就直接返回大小为0</span></span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         w = mDrawableWidth;</span><br><span class="line">         h = mDrawableHeight;</span><br><span class="line">         <span class="keyword">if</span> (w &lt;= <span class="number">0</span>) w = <span class="number">1</span>;</span><br><span class="line">         <span class="keyword">if</span> (h &lt;= <span class="number">0</span>) h = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">         <span class="comment">// We are supposed to adjust view bounds to match the aspect</span></span><br><span class="line">         <span class="comment">// ratio of our drawable. See if that is possible.</span></span><br><span class="line">         <span class="keyword">if</span> (mAdjustViewBounds) &#123;</span><br><span class="line">             resizeWidth = widthSpecMode != MeasureSpec.EXACTLY;</span><br><span class="line">             resizeHeight = heightSpecMode != MeasureSpec.EXACTLY;</span><br><span class="line">             </span><br><span class="line">             desiredAspect = (<span class="keyword">float</span>) w / (<span class="keyword">float</span>) h;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">    。。。。。</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>～～～本人能力有限，难免有理解不透彻的地方，有什么问题欢迎指出，感谢～～～</p>
 
       
     </div>
@@ -280,13 +273,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></p>
+        <p><span>本文标题:</span><a href="/2016/06/24/android_view_measure/">android view measure方法</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
-        <p><span>发布时间:</span>2016-04-26, 23:31:25</p>
-        <p><span>最后更新:</span>2016-04-26, 23:31:25</p>
+        <p><span>发布时间:</span>2016-06-24, 00:11:50</p>
+        <p><span>最后更新:</span>2016-06-24, 00:11:11</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/04/26/hexo_install/" title="hexo + github + 七牛运存储搭建简单的博客">https://iskylove.github.io/2016/04/26/hexo_install/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/04/26/hexo_install/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2016/06/24/android_view_measure/" title="android view measure方法">https://iskylove.github.io/2016/06/24/android_view_measure/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/06/24/android_view_measure/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -298,16 +291,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2016/04/27/svnchecker_install/">
-                    svnchecker 适配安装以及踩过的坑
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/04/26/begin_blog/">
-                    剑客爱编程--启动篇
+                <a href="/2016/06/19/android_surface/">
+                    (转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView
                 </a>
             </div>
         
@@ -318,7 +305,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装环境"><span class="toc-number">1.</span> <span class="toc-text">安装环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Node-js安装"><span class="toc-number">2.</span> <span class="toc-text">Node.js安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Git安装"><span class="toc-number">3.</span> <span class="toc-text">Git安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hexo-安装"><span class="toc-number">4.</span> <span class="toc-text">hexo 安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#图床搭建"><span class="toc-number">5.</span> <span class="toc-text">图床搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#参考文章"><span class="toc-number">5.1.</span> <span class="toc-text">参考文章</span></a></li></ol></li></ol>
+    
 </div>
 <style>
     .left-col .switch-btn {
@@ -375,7 +362,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"hexo + github + 七牛运存储搭建简单的博客　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"android view measure方法　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -395,15 +382,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2016/04/27/svnchecker_install/" title="上一篇: svnchecker 适配安装以及踩过的坑">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2016/04/26/begin_blog/" title="下一篇: 剑客爱编程--启动篇">
+            <a href="/2016/06/19/android_surface/" title="下一篇: (转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView">
                 <i class="fa fa-angle-right"></i>
             </a>
         

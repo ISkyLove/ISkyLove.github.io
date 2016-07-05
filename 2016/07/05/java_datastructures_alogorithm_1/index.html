@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>(数据结构与算法分析笔记)第二章  算法分析 | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述算法是为求解一个问题需要遵循的,被清楚指定的简单指令的集合。对于一个问题，一旦某种算法给定并且被确定是正确的，那么最重要的一步是确定该算法将需要多少时间和空间等资源量的问题.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(数据结构与算法分析笔记)第二章  算法分析">
+<meta property="og:url" content="https://iskylove.github.io/2016/07/05/java_datastructures_alogorithm_1/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="概述算法是为求解一个问题需要遵循的,被清楚指定的简单指令的集合。对于一个问题，一旦某种算法给定并且被确定是正确的，那么最重要的一步是确定该算法将需要多少时间和空间等资源量的问题.">
+<meta property="og:updated_time" content="2016-07-05T14:20:07.775Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(数据结构与算法分析笔记)第二章  算法分析">
+<meta name="twitter:description" content="概述算法是为求解一个问题需要遵循的,被清楚指定的简单指令的集合。对于一个问题，一旦某种算法给定并且被确定是正确的，那么最重要的一步是确定该算法将需要多少时间和空间等资源量的问题.">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-java_datastructures_alogorithm_1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/05/java_datastructures_alogorithm_1/" class="article-date">
+      <time datetime="2016-07-05T14:20:09.047Z" itemprop="datePublished">2016-07-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (数据结构与算法分析笔记)第二章  算法分析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/java/">java</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h5 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h5><p><strong>算法</strong>是为求解一个问题需要遵循的,被清楚指定的简单指令的集合。对于一个问题，一旦某种算法给定并且被确定是正确的，那么最重要的一步是确定该算法将需要多少时间和空间等资源量的问题.<a id="more"></a></p>
+<h5 id="数学基础"><a href="#数学基础" class="headerlink" title="数学基础"></a><strong>数学基础</strong></h5><p>$$ 定义1：如果存在正常数c和n_0使得当N \geq n_0时 T(N) \leq cf(N),则记为： T(N) = O(f(N))$$</p>
+<p>$$ 定义2：如果存在正常数c和n_0使得当N \geq n时 T(N) \geq cf(N),则记为： T(N) = \Omega(f(N))$$</p>
+<p>$$ 定义3：T(N) = \Theta(h(N))当且仅当T(N) = O(h(N))和T(N) = \Omega(h(N))$$</p>
+<p>$$ 定义4:如果对每一正常数c都存在常数n_0使得当N&gt;n_0时T(N) &lt; cp(N),则T(N) = o(p(N))。有时也说如果T(N) = O(P)且 T(N) \neq \Theta(N) $$</p>
+<p>一般而言，对给定的两个函数，我们需要比较的是<strong>相对增长率</strong></p>
+<p>$$ 法则1：如果T_1(N) = O(f(N))且T_2(N) = O(g(N))，那么T_1(N)+T_2(N) = O(f(N))+O(g(N))或者T_1(N)<em>T_2(N) = O(f(N)</em>g(N))$$ </p>
+<p>$$  法则2：如果T(N)是一个k次多项式，则T(N) = \Theta(N^k) $$</p>
+<p>$$  法则3：对任意常数k，\log^kN = O(N) $$</p>
+<h5 id="运行时间计算"><a href="#运行时间计算" class="headerlink" title="运行时间计算"></a><strong>运行时间计算</strong></h5><p>法则1：for循环—-一个for循环的运行时间至多是该for循环内部那些语句的运行时间乘以迭代的次数<br>法则二：嵌套for循环—-从里向外，在一组嵌套环内部的一条语句总的运行时间为该语句的运行时间乘上该组所有for循环的大小的乘积<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( j = <span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">     <span class="keyword">for</span>( k = <span class="number">0</span>;k&lt;n;k++ )&#123;</span><br><span class="line">           a[k] = i;</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>法则三 : 顺序语句—-将各个语句的运行时间求和<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( i = <span class="number">0</span>;i&lt;n;i++ )&#123;</span><br><span class="line">     a[i] = i;   </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>( j = <span class="number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">   <span class="keyword">for</span>( k = <span class="number">0</span>;k&lt;n;k++ )&#123;</span><br><span class="line">         a[k] = i;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>法则四 : if/else语句—-一个if/else语句运行时间总不超过判断的运行时间再加上S1和S2Z中运行时间长者的总的运行时间<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(condition)&#123;</span><br><span class="line">   S1</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">   S2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="要分析的问题"><a href="#要分析的问题" class="headerlink" title="要分析的问题"></a><strong>要分析的问题</strong></h5><p>分析算法的运行时间，算法最坏情形的性能最能代表对任何可能的输入的性能的一种保证</p>
+<h5 id="最大子序列和问题"><a href="#最大子序列和问题" class="headerlink" title="最大子序列和问题"></a><strong>最大子序列和问题</strong></h5><p>$$ 问题：给定(可能为负)整数A_1,A_2,A_3 \cdots A<em>N,求\sum</em>{k=i}^jA_k的最大值，并假设所有的整数均为负数时，则最大子序列和为0 $$</p>
+<p>$$ 解法一： 运算时间： T(N) = O(N^3) $$</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//int[] test = new int[] &#123; 4, -3, 5, -2, -1, 2, 6, -2 &#125;;</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSum1</span><span class="params">(<span class="keyword">int</span> [] a)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>;j&lt;a.length;j++)&#123;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">int</span> childMax = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> k = i;k&lt;=j;k++)&#123;</span><br><span class="line">				childMax += a[k];</span><br><span class="line">			&#125;</span><br><span class="line">			</span><br><span class="line">			<span class="keyword">if</span>(childMax &gt; max)&#123;</span><br><span class="line">				max = childMax;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>$$ 解法二： 运算时间： T(N) = O(N^2) $$</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//int[] test = new int[] &#123; 4, -3, 5, -2, -1, 2, 6, -2 &#125;;</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSum2</span><span class="params">(<span class="keyword">int</span> [] a)</span></span>&#123;</span><br><span class="line">		<span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">			<span class="keyword">int</span> childMax = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">for</span>(<span class="keyword">int</span> j = i;j&lt;a.length;j++)&#123;</span><br><span class="line">				childMax += a[j];</span><br><span class="line">				<span class="keyword">if</span>(childMax &gt; max)&#123;</span><br><span class="line">					max = childMax;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> max;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>$$ 解法三： 运算时间： T(N) = O(N \log N) $$</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment">//int[] test = new int[] &#123; 4, -3, 5, -2, -1, 2, 6, -2 &#125;;</span></span><br><span class="line">   <span class="comment">//maxSum3(test,0,test.length-1)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSum3</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> left, <span class="keyword">int</span> right)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (left == right) &#123;</span><br><span class="line">		<span class="keyword">if</span> (a[left] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> a[left];</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> center = (left + right) / <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">int</span> maxLeftSum = maxSum3(a, left, center);</span><br><span class="line">	<span class="keyword">int</span> maxRightSUm = maxSum3(a, center + <span class="number">1</span>, right);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> maxLeftBorderSum = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> LeftBorderSum = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = center; i &gt;= left; i--) &#123;</span><br><span class="line">		LeftBorderSum += a[i];</span><br><span class="line">		<span class="keyword">if</span> (LeftBorderSum &gt; maxLeftBorderSum) &#123;</span><br><span class="line">			maxLeftBorderSum = LeftBorderSum;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> maxRightBorderSum = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> RightBorderSum = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = center + <span class="number">1</span>; i &lt;= right; i++) &#123;</span><br><span class="line">		RightBorderSum += a[i];</span><br><span class="line">		<span class="keyword">if</span> (RightBorderSum &gt; maxRightBorderSum) &#123;</span><br><span class="line">			maxRightBorderSum = RightBorderSum;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> max3(maxLeftBorderSum, maxRightBorderSum, maxLeftBorderSum + maxRightBorderSum);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">max3</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> max = a;</span><br><span class="line">	<span class="keyword">if</span> (b &gt; max) &#123;</span><br><span class="line">		max = b;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (c &gt; max) &#123;</span><br><span class="line">		max = c;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解法四：只对数据进行一次扫面，一旦a[i]被读入并被处理就不在需要记忆。在任何时刻，算法都能对他读入的数据给予子序列问题的正确的答案，以上三种算法都不具备这个性能，具有这种特性的算法也叫做<strong>联机算法</strong>，仅需要常量的空间并以线性时间运行的联机算法几乎是完美的算法。</p>
+<p>$$ 运算时间： T(N) = O(N) $$</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//int[] test = new int[] &#123; 4, -3, 5, -2, -1, 2, 6, -2 &#125;;</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxSum4</span><span class="params">(<span class="keyword">int</span>[] a)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">int</span> childMax = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; a.length; i++) &#123;</span><br><span class="line">			childMax += a[i];</span><br><span class="line">			<span class="keyword">if</span> (childMax &gt; max) &#123;</span><br><span class="line">				max = childMax;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> max;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="运行时间中的对数"><a href="#运行时间中的对数" class="headerlink" title="运行时间中的对数"></a><strong>运行时间中的对数</strong></h5><p>$$ 如果一个算法用常数时间O(1)将问题的大小削减为其一部分（通常为1/2），那么该算法就是O( \log N)。另一方面，如果使用常数时间只是把问题减少一个常数的数量，那么这种算法就是O(N) $$</p>
+<p><strong>折半查找</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JavaTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		List&lt;BinarySearch&gt; mdatas = <span class="keyword">new</span> ArrayList&lt;BinarySearch&gt;();</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000000</span>; i++) &#123;</span><br><span class="line">			mdatas.add(<span class="keyword">new</span> BinarySearch(i));</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println(binarySearch(mdatas, <span class="keyword">new</span> BinarySearch(<span class="number">556</span>)));</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">BinarySearch</span> <span class="keyword">implements</span> <span class="title">Comparable</span> </span>&#123;</span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">int</span> mNum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">BinarySearch</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">			mNum = num;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getNum</span><span class="params">()</span></span>&#123;</span><br><span class="line">			<span class="keyword">return</span> mNum;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">			<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">			<span class="keyword">int</span> target = ((BinarySearch) o).getNum();</span><br><span class="line">			<span class="keyword">if</span> (target &gt; mNum) &#123;</span><br><span class="line">				<span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (target &lt; mNum) &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&gt; <span class="function"><span class="keyword">int</span> <span class="title">binarySearch</span><span class="params">(List&lt;T&gt; datas, T data)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> mark = -<span class="number">1</span>;</span><br><span class="line">		<span class="keyword">int</span> low = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">int</span> hight = datas.size() - <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span> (low &lt;= hight) &#123;</span><br><span class="line">			<span class="keyword">int</span> mid = (low + hight) / <span class="number">2</span>;</span><br><span class="line">			<span class="keyword">if</span> (datas.get(mid).compareTo(data) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">				hight = mid;</span><br><span class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (datas.get(mid).compareTo(data) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">				low = mid;</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				<span class="keyword">return</span> mid;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> mark;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>欧几里得算法</strong><br>欧几里得算法是计算最大公因子的算法，两个整数的最大公因子是同时整除二者的最大整数</p>
+<blockquote>
+<blockquote>
+<p>定理： 如果M &gt; N , 则 M mod N &lt; M/2<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">gcd</span><span class="params">(<span class="keyword">long</span> m, <span class="keyword">long</span> n)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">while</span> (n != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">long</span> rem  = m % n;</span><br><span class="line">            m = n;</span><br><span class="line">            n =rem;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">return</span> m;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<p><strong>幂运算</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> <span class="title">pow</span><span class="params">(<span class="keyword">long</span> x, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(n == <span class="number">1</span>)&#123;</span><br><span class="line">		<span class="keyword">return</span> x;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ((n % <span class="number">2</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> pow(x * x, n / <span class="number">2</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> ((n % <span class="number">2</span>) == <span class="number">1</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> pow(x * x, n / <span class="number">2</span>) * x;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0L</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/07/05/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2016-07-05, 22:20:09</p>
+        <p><span>最后更新:</span>2016-07-05, 22:20:07</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/07/05/java_datastructures_alogorithm_1/" title="(数据结构与算法分析笔记)第二章  算法分析">https://iskylove.github.io/2016/07/05/java_datastructures_alogorithm_1/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/07/05/java_datastructures_alogorithm_1/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/07/04/java_methohandler/">
+                    java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#数学基础"><span class="toc-number">2.</span> <span class="toc-text">数学基础</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#运行时间计算"><span class="toc-number">3.</span> <span class="toc-text">运行时间计算</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#要分析的问题"><span class="toc-number">4.</span> <span class="toc-text">要分析的问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#最大子序列和问题"><span class="toc-number">5.</span> <span class="toc-text">最大子序列和问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#运行时间中的对数"><span class="toc-number">6.</span> <span class="toc-text">运行时间中的对数</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"(数据结构与算法分析笔记)第二章  算法分析　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/07/04/java_methohandler/" title="下一篇: java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/07/05/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2016 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

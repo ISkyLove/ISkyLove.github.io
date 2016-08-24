@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>android view measure方法 | 剑客爱编程</title>
+  <title>技术网站分享(持续更新中~~) | 剑客爱编程</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近项目需要，一位同事架构RecyclerView嵌套RecyclerView实现一个需求，而且哇啦啦啦写了一整天，结果显示一看，嵌套的RecyclerView不显示，不管怎么调试也不显示。。。">
+  <meta name="description" content="–致力于挖掘并分享有价值的技术网站">
 <meta property="og:type" content="article">
-<meta property="og:title" content="android view measure方法">
-<meta property="og:url" content="https://iskylove.github.io/2016/06/24/android_view_measure/index.html">
+<meta property="og:title" content="技术网站分享(持续更新中~~)">
+<meta property="og:url" content="https://iskylove.github.io/2016/08/24/website_share/index.html">
 <meta property="og:site_name" content="剑客爱编程">
-<meta property="og:description" content="最近项目需要，一位同事架构RecyclerView嵌套RecyclerView实现一个需求，而且哇啦啦啦写了一整天，结果显示一看，嵌套的RecyclerView不显示，不管怎么调试也不显示。。。">
-<meta property="og:updated_time" content="2016-06-23T16:11:11.216Z">
+<meta property="og:description" content="–致力于挖掘并分享有价值的技术网站">
+<meta property="og:updated_time" content="2016-08-24T15:24:57.249Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="android view measure方法">
-<meta name="twitter:description" content="最近项目需要，一位同事架构RecyclerView嵌套RecyclerView实现一个需求，而且哇啦啦啦写了一整天，结果显示一看，嵌套的RecyclerView不显示，不管怎么调试也不显示。。。">
+<meta name="twitter:title" content="技术网站分享(持续更新中~~)">
+<meta name="twitter:description" content="–致力于挖掘并分享有价值的技术网站">
   
     <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
   
@@ -218,11 +218,11 @@
         </header>                
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-android_view_measure" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-website_share" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/06/24/android_view_measure/" class="article-date">
-      <time datetime="2016-06-23T16:11:50.696Z" itemprop="datePublished">2016-06-24</time>
+      <a href="/2016/08/24/website_share/" class="article-date">
+      <time datetime="2016-08-24T15:24:57.421Z" itemprop="datePublished">2016-08-24</time>
 </a>
     </div>
   
@@ -235,7 +235,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      android view measure方法
+      技术网站分享(持续更新中~~)
     </h1>
   
 
@@ -243,14 +243,10 @@
       
       <div class="article-info article-info-post">
         
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/android/">android</a>
-    </div>
-
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/all/">all</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -260,12 +256,8 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>最近项目需要，一位同事架构RecyclerView嵌套RecyclerView实现一个需求，而且哇啦啦啦写了一整天，结果显示一看，嵌套的RecyclerView不显示，不管怎么调试也不显示。。。<a id="more"></a>这个问题其实和我们之前ListView嵌套ListView不显示一样，就是在建立的View嵌套树中，嵌套的ListView测量没有明确的测量依据，导致测量的大小直接返回0了，所以需要让RecyclerView重新测量一下，关键代码是：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> widthtSpecTitle=View.MeasureSpec.makeMeasureSpec(Interge.MAXVALUE &gt;&gt; <span class="number">2</span>,View.MeasureSpec.AT_MOST);</span><br><span class="line">holder.itemView.measure(widthtSpecTitle,View.MeasureSpec.UNSPECIFIED);</span><br></pre></td></tr></table></figure></p>
-<p>意思就是告诉测量的View，对于宽width，尽量自己测量吧，对与长，我没有限制，你是多少就给多少吧。同时采用的测量是结合DataAdapter一起对itemView进行测量的，主要代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getItemHeight</span><span class="params">(Context context, ItemData data, <span class="keyword">int</span> viewType)</span> </span>&#123;</span><br><span class="line">     RelativeLayout parent = <span class="keyword">new</span> RelativeLayout(context);</span><br><span class="line">     DataAdapter mAdapter = <span class="keyword">new</span> DataAdapter();</span><br><span class="line"></span><br><span class="line">     ItemHolder holder;</span><br><span class="line">     holder = (ItemHolder) mAdapter.onCreateViewHolder(parent, viewType);</span><br><span class="line">     mAdapter.onBindViewHolder(holder,data.get(position));</span><br><span class="line">     <span class="keyword">int</span>  measureHeight = <span class="number">0</span>;</span><br><span class="line">      WindowManager wm=(WindowManager)context.getSystemService(Context.WINDOW_SERVICE);</span><br><span class="line">     <span class="keyword">int</span> width = wm.getDefaultDisplay().getWidth();</span><br><span class="line">     <span class="keyword">int</span> widthSpecTitle=View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.AT_MOST);</span><br><span class="line">     holder.itemView.measure(widthSpecTitle,View.MeasureSpec.UNSPECIFIED);</span><br><span class="line">     measureHeight = holder.itemView.getMeasuredHeight();</span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> measureHeight;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<p>调用View的measure会简介调用ViewGroup的onMeasure，View的measure的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">measure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">          。。。。</span><br><span class="line">          <span class="keyword">if</span> (cacheIndex &lt; <span class="number">0</span> || sIgnoreMeasureCache) &#123;</span><br><span class="line">              <span class="comment">// measure ourselves, this should set the measured dimension flag back</span></span><br><span class="line">              <span class="comment">// 重点onMeasure方法</span></span><br><span class="line">              onMeasure(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">              mPrivateFlags3 &amp;= ~PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              <span class="keyword">long</span> value = mMeasureCache.valueAt(cacheIndex);</span><br><span class="line">              <span class="comment">// Casting a long to int drops the high 32 bits, no mask needed</span></span><br><span class="line">              setMeasuredDimensionRaw((<span class="keyword">int</span>) (value &gt;&gt; <span class="number">32</span>), (<span class="keyword">int</span>) value);</span><br><span class="line">              mPrivateFlags3 |= PFLAG3_MEASURE_NEEDED_BEFORE_LAYOUT;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">         。。。。</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>但是测量的结果总是不对，要不太大了，要不太小了，总结如下：<br>1 如果对于子视图的显示主要依赖负空间的大小然后按照比例计算的，Measure方法的调用需要添加适当的大小。<br>2 对于ImageView，如果没有设置默认的图片，等待网络加载在显示，默认的大小是为0的，源码如下，所以对于ImageVIew的测量需要特殊处理一下，单独做测量处理。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">     。。。。</span><br><span class="line">     resolveUri();</span><br><span class="line">     <span class="keyword">int</span> w;</span><br><span class="line">     <span class="keyword">int</span> h;</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// Desired aspect ratio of the view's contents (not including padding)</span></span><br><span class="line">     <span class="keyword">float</span> desiredAspect = <span class="number">0.0f</span>;</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// We are allowed to change the view's width</span></span><br><span class="line">     <span class="keyword">boolean</span> resizeWidth = <span class="keyword">false</span>;</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// We are allowed to change the view's height</span></span><br><span class="line">     <span class="keyword">boolean</span> resizeHeight = <span class="keyword">false</span>;</span><br><span class="line">     </span><br><span class="line">     <span class="keyword">final</span> <span class="keyword">int</span> widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);</span><br><span class="line">     <span class="keyword">final</span> <span class="keyword">int</span> heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">if</span> (mDrawable == <span class="keyword">null</span>) &#123;</span><br><span class="line">         <span class="comment">// If no drawable, its intrinsic size is 0.</span></span><br><span class="line">         mDrawableWidth = -<span class="number">1</span>;</span><br><span class="line">         mDrawableHeight = -<span class="number">1</span>;</span><br><span class="line">         w = h = <span class="number">0</span>;   <span class="comment">//没有图片就直接返回大小为0</span></span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         w = mDrawableWidth;</span><br><span class="line">         h = mDrawableHeight;</span><br><span class="line">         <span class="keyword">if</span> (w &lt;= <span class="number">0</span>) w = <span class="number">1</span>;</span><br><span class="line">         <span class="keyword">if</span> (h &lt;= <span class="number">0</span>) h = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">         <span class="comment">// We are supposed to adjust view bounds to match the aspect</span></span><br><span class="line">         <span class="comment">// ratio of our drawable. See if that is possible.</span></span><br><span class="line">         <span class="keyword">if</span> (mAdjustViewBounds) &#123;</span><br><span class="line">             resizeWidth = widthSpecMode != MeasureSpec.EXACTLY;</span><br><span class="line">             resizeHeight = heightSpecMode != MeasureSpec.EXACTLY;</span><br><span class="line">             </span><br><span class="line">             desiredAspect = (<span class="keyword">float</span>) w / (<span class="keyword">float</span>) h;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">    。。。。。</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<p>～～～本人能力有限，难免有理解不透彻的地方，有什么问题欢迎指出，感谢～～～</p>
-
+        <h1 id="–致力于挖掘并分享有价值的技术网站"><a href="#–致力于挖掘并分享有价值的技术网站" class="headerlink" title="–致力于挖掘并分享有价值的技术网站  "></a>–致力于挖掘并分享有价值的技术网站  <a id="more"></a></h1><h1 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h1><h5 id="剑客爱编程-https-iskylove-github-io"><a href="#剑客爱编程-https-iskylove-github-io" class="headerlink" title="(剑客爱编程)https://iskylove.github.io/"></a>(剑客爱编程)<a href="https://iskylove.github.io/">https://iskylove.github.io/</a></h5><h5 id="Android-developer-portal-with-tools-libraries-and-apps-http-www-android-arsenal-com"><a href="#Android-developer-portal-with-tools-libraries-and-apps-http-www-android-arsenal-com" class="headerlink" title="(Android developer portal with tools, libraries, and apps)http://www.android-arsenal.com/"></a>(Android developer portal with tools, libraries, and apps)<a href="http://www.android-arsenal.com/" target="_blank" rel="external">http://www.android-arsenal.com/</a></h5><h5 id="V2EX–来自-Google-的开放源代码智能手机平台。-http-www-v2ex-com-go-android"><a href="#V2EX–来自-Google-的开放源代码智能手机平台。-http-www-v2ex-com-go-android" class="headerlink" title="(V2EX–来自 Google 的开放源代码智能手机平台。)http://www.v2ex.com/go/android"></a>(V2EX–来自 Google 的开放源代码智能手机平台。)<a href="http://www.v2ex.com/go/android" target="_blank" rel="external">http://www.v2ex.com/go/android</a></h5><h5 id="androidxref–android源码-http-androidxref-com"><a href="#androidxref–android源码-http-androidxref-com" class="headerlink" title="(androidxref–android源码)http://androidxref.com/"></a>(androidxref–android源码)<a href="http://androidxref.com/" target="_blank" rel="external">http://androidxref.com/</a></h5><h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><p>(grepcode)<a href="http://grepcode.com/" target="_blank" rel="external">http://grepcode.com/</a></p>
+<h1 id="ALL"><a href="#ALL" class="headerlink" title="ALL"></a>ALL</h1><h5 id="stackoverflow-–著名技术问答平台-http-stackoverflow-com"><a href="#stackoverflow-–著名技术问答平台-http-stackoverflow-com" class="headerlink" title="(stackoverflow –著名技术问答平台)http://stackoverflow.com/"></a>(stackoverflow –著名技术问答平台)<a href="http://stackoverflow.com/" target="_blank" rel="external">http://stackoverflow.com/</a></h5><h5 id="developerworks-http-www-ibm-com-developerworks-cn"><a href="#developerworks-http-www-ibm-com-developerworks-cn" class="headerlink" title="(developerworks)http://www.ibm.com/developerworks/cn/"></a>(developerworks)<a href="http://www.ibm.com/developerworks/cn/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/</a></h5><h5 id="开发者头条-http-toutiao-io"><a href="#开发者头条-http-toutiao-io" class="headerlink" title="(开发者头条)http://toutiao.io/"></a>(开发者头条)<a href="http://toutiao.io/" target="_blank" rel="external">http://toutiao.io/</a></h5><h5 id="掘金–高质量的技术社区-http-gold-xitu-io"><a href="#掘金–高质量的技术社区-http-gold-xitu-io" class="headerlink" title="(掘金–高质量的技术社区)http://gold.xitu.io//"></a>(掘金–高质量的技术社区)<a href="http://gold.xitu.io/" target="_blank" rel="external">http://gold.xitu.io//</a></h5><h5 id="深度开源–发掘开源的价值-http-www-open-open-com"><a href="#深度开源–发掘开源的价值-http-www-open-open-com" class="headerlink" title="(深度开源–发掘开源的价值)http://www.open-open.com/"></a>(深度开源–发掘开源的价值)<a href="http://www.open-open.com/" target="_blank" rel="external">http://www.open-open.com/</a></h5><h5 id="DiyCode–致力于构建开发工程师高端交流分享社区-http-www-diycode-cc"><a href="#DiyCode–致力于构建开发工程师高端交流分享社区-http-www-diycode-cc" class="headerlink" title="(DiyCode–致力于构建开发工程师高端交流分享社区)http://www.diycode.cc/"></a>(DiyCode–致力于构建开发工程师高端交流分享社区)<a href="http://www.diycode.cc/" target="_blank" rel="external">http://www.diycode.cc/</a></h5><h5 id="GDG–谷歌开发者社区-http-chinagdg-org"><a href="#GDG–谷歌开发者社区-http-chinagdg-org" class="headerlink" title="(GDG–谷歌开发者社区)http://chinagdg.org/"></a>(GDG–谷歌开发者社区)<a href="http://chinagdg.org/" target="_blank" rel="external">http://chinagdg.org/</a></h5><h1 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h1><h5 id="git–fast-version-control-https-git-scm-com-book-zh-v2-E8-B5-B7-E6-AD-A5-E5-85-B3-E4-BA-8E-E7-89-88-E6-9C-AC-E6-8E-A7-E5-88-B6"><a href="#git–fast-version-control-https-git-scm-com-book-zh-v2-E8-B5-B7-E6-AD-A5-E5-85-B3-E4-BA-8E-E7-89-88-E6-9C-AC-E6-8E-A7-E5-88-B6" class="headerlink" title="(git–fast-version-control)https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%85%B3%E4%BA%8E%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6"></a>(git–fast-version-control)<a href="https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%85%B3%E4%BA%8E%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6" target="_blank" rel="external">https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%85%B3%E4%BA%8E%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6</a></h5><h1 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h1><h5 id="Java-API-Examples–a-collection-of-frequently-asked-Java-questions-http-www-programcreek-com-java-api-examples-index-php"><a href="#Java-API-Examples–a-collection-of-frequently-asked-Java-questions-http-www-programcreek-com-java-api-examples-index-php" class="headerlink" title="(Java API Examples–a collection of frequently asked Java questions)http://www.programcreek.com/java-api-examples/index.php"></a>(Java API Examples–a collection of frequently asked Java questions)<a href="http://www.programcreek.com/java-api-examples/index.php" target="_blank" rel="external">http://www.programcreek.com/java-api-examples/index.php</a></h5>
       
     </div>
     
@@ -273,13 +265,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/06/24/android_view_measure/">android view measure方法</a></p>
+        <p><span>本文标题:</span><a href="/2016/08/24/website_share/">技术网站分享(持续更新中~~)</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
-        <p><span>发布时间:</span>2016-06-24, 00:11:50</p>
-        <p><span>最后更新:</span>2016-06-24, 00:11:11</p>
+        <p><span>发布时间:</span>2016-08-24, 23:24:57</p>
+        <p><span>最后更新:</span>2016-08-24, 23:24:57</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/06/24/android_view_measure/" title="android view measure方法">https://iskylove.github.io/2016/06/24/android_view_measure/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/06/24/android_view_measure/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2016/08/24/website_share/" title="技术网站分享(持续更新中~~)">https://iskylove.github.io/2016/08/24/website_share/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/08/24/website_share/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -291,16 +283,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2016/06/30/android_build_apk/">
-                    (转)手把手教你AndroidStudio多渠道打包
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/06/19/android_surface/">
-                    (转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView
+                <a href="/2016/08/24/android_viewpager/">
+                    android ViewPager控件深入了解
                 </a>
             </div>
         
@@ -311,7 +297,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#–致力于挖掘并分享有价值的技术网站"><span class="toc-number">1.</span> <span class="toc-text">–致力于挖掘并分享有价值的技术网站  </span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Android"><span class="toc-number">2.</span> <span class="toc-text">Android</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#剑客爱编程-https-iskylove-github-io"><span class="toc-number">2.0.0.0.1.</span> <span class="toc-text">(剑客爱编程)https://iskylove.github.io/</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Android-developer-portal-with-tools-libraries-and-apps-http-www-android-arsenal-com"><span class="toc-number">2.0.0.0.2.</span> <span class="toc-text">(Android developer portal with tools, libraries, and apps)http://www.android-arsenal.com/</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#V2EX–来自-Google-的开放源代码智能手机平台。-http-www-v2ex-com-go-android"><span class="toc-number">2.0.0.0.3.</span> <span class="toc-text">(V2EX–来自 Google 的开放源代码智能手机平台。)http://www.v2ex.com/go/android</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#androidxref–android源码-http-androidxref-com"><span class="toc-number">2.0.0.0.4.</span> <span class="toc-text">(androidxref–android源码)http://androidxref.com/</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Code"><span class="toc-number">3.</span> <span class="toc-text">Code</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ALL"><span class="toc-number">4.</span> <span class="toc-text">ALL</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#stackoverflow-–著名技术问答平台-http-stackoverflow-com"><span class="toc-number">4.0.0.0.1.</span> <span class="toc-text">(stackoverflow –著名技术问答平台)http://stackoverflow.com/</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#developerworks-http-www-ibm-com-developerworks-cn"><span class="toc-number">4.0.0.0.2.</span> <span class="toc-text">(developerworks)http://www.ibm.com/developerworks/cn/</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#开发者头条-http-toutiao-io"><span class="toc-number">4.0.0.0.3.</span> <span class="toc-text">(开发者头条)http://toutiao.io/</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#掘金–高质量的技术社区-http-gold-xitu-io"><span class="toc-number">4.0.0.0.4.</span> <span class="toc-text">(掘金–高质量的技术社区)http://gold.xitu.io//</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#深度开源–发掘开源的价值-http-www-open-open-com"><span class="toc-number">4.0.0.0.5.</span> <span class="toc-text">(深度开源–发掘开源的价值)http://www.open-open.com/</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#DiyCode–致力于构建开发工程师高端交流分享社区-http-www-diycode-cc"><span class="toc-number">4.0.0.0.6.</span> <span class="toc-text">(DiyCode–致力于构建开发工程师高端交流分享社区)http://www.diycode.cc/</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#GDG–谷歌开发者社区-http-chinagdg-org"><span class="toc-number">4.0.0.0.7.</span> <span class="toc-text">(GDG–谷歌开发者社区)http://chinagdg.org/</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Git"><span class="toc-number">5.</span> <span class="toc-text">Git</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#git–fast-version-control-https-git-scm-com-book-zh-v2-E8-B5-B7-E6-AD-A5-E5-85-B3-E4-BA-8E-E7-89-88-E6-9C-AC-E6-8E-A7-E5-88-B6"><span class="toc-number">5.0.0.0.1.</span> <span class="toc-text">(git–fast-version-control)https://git-scm.com/book/zh/v2/%E8%B5%B7%E6%AD%A5-%E5%85%B3%E4%BA%8E%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java"><span class="toc-number">6.</span> <span class="toc-text">Java</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Java-API-Examples–a-collection-of-frequently-asked-Java-questions-http-www-programcreek-com-java-api-examples-index-php"><span class="toc-number">6.0.0.0.1.</span> <span class="toc-text">(Java API Examples–a collection of frequently asked Java questions)http://www.programcreek.com/java-api-examples/index.php</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -368,7 +354,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"android view measure方法　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"技术网站分享(持续更新中~~)　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -388,15 +374,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2016/06/30/android_build_apk/" title="上一篇: (转)手把手教你AndroidStudio多渠道打包">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2016/06/19/android_surface/" title="下一篇: (转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView">
+            <a href="/2016/08/24/android_viewpager/" title="下一篇: android ViewPager控件深入了解">
                 <i class="fa fa-angle-right"></i>
             </a>
         

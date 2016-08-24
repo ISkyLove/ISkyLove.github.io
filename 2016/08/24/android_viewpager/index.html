@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>android ViewPager控件深入了解 | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="code WebSize:http://grepcode.com/
+ViewPager InstroductionLayout manager that allows the user to flip left and right through pages of data. You supply an implementation of a PagerAdapter to generate th">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android ViewPager控件深入了解">
+<meta property="og:url" content="https://iskylove.github.io/2016/08/24/android_viewpager/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="code WebSize:http://grepcode.com/
+ViewPager InstroductionLayout manager that allows the user to flip left and right through pages of data. You supply an implementation of a PagerAdapter to generate th">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/viewpager_adjacent.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/viewpagertransforms.gif">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/viewpager_1.gif">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/viewpager_2.gif">
+<meta property="og:updated_time" content="2016-08-24T14:58:23.369Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android ViewPager控件深入了解">
+<meta name="twitter:description" content="code WebSize:http://grepcode.com/
+ViewPager InstroductionLayout manager that allows the user to flip left and right through pages of data. You supply an implementation of a PagerAdapter to generate th">
+<meta name="twitter:image" content="http://7xtazt.com1.z0.glb.clouddn.com/viewpager_adjacent.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-android_viewpager" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/24/android_viewpager/" class="article-date">
+      <time datetime="2016-08-24T14:58:23.509Z" itemprop="datePublished">2016-08-24</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      android ViewPager控件深入了解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/android/">android</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><strong><em>code WebSize:<a href="http://grepcode.com/" target="_blank" rel="external">http://grepcode.com/</a></em></strong></p>
+<h5 id="ViewPager-Instroduction"><a href="#ViewPager-Instroduction" class="headerlink" title="ViewPager Instroduction"></a><strong><em>ViewPager Instroduction</em></strong></h5><p>Layout manager that allows the user to flip left and right through pages of data. You supply an implementation of a PagerAdapter to generate the pages that the view shows.<br>Note this class is currently under early design and development. The API will likely change in later updates of the compatibility library, requiring changes to the source code of apps when they are compiled against the newer version.<a id="more"></a></p>
+<p>ViewPager is most often used in conjunction with android.app.Fragment, which is a convenient way to supply and manage the lifecycle of each page. There are standard adapters implemented for using fragments with the ViewPager, which cover the most common use cases. These are android.support.v4.app.FragmentPagerAdapter and android.support.v4.app.FragmentStatePagerAdapter; each of these classes have simple code showing how to build a full user interface with them.</p>
+<p>Below is a more complicated example of ViewPager, using it in conjunction with android.app.ActionBar tabs. You can find other examples of using ViewPager in the API 4+ Support Demos and API 13+ Support Demos sample code. development/samples/Support13Demos/src/com/example/android/supportv13/app/ActionBarTabsPager.java complete </p>
+<h4 id="android-support-v4-view-PagerAdapter"><a href="#android-support-v4-view-PagerAdapter" class="headerlink" title="android.support.v4.view.PagerAdapter"></a><strong><em>android.support.v4.view.PagerAdapter</em></strong></h4><p>Base class providing the adapter to populate pages inside of a ViewPager. You will most likely want to use a more specific implementation of this, such as  android.support.v4.app.FragmentPagerAdapter]() or android.support.v4.app.FragmentStatePagerAdapter.</p>
+<p>When you implement a PagerAdapter, you must override the following methods at minimum:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">instantiateItem(android.view.ViewGroup,<span class="keyword">int</span>)</span><br><span class="line">destroyItem(android.view.ViewGroup,<span class="keyword">int</span>,java.lang.Object)</span><br><span class="line">getCount()</span><br><span class="line">isViewFromObject(android.view.View,java.lang.Object)</span><br></pre></td></tr></table></figure></p>
+<p>PagerAdapter is more general than the adapters used for AdapterViews. Instead of providing a View recycling mechanism directly ViewPager uses callbacks to indicate the steps taken during an update. A PagerAdapter may implement a form of View recycling if desired or use a more sophisticated method of managing page Views such as Fragment transactions where each page is represented by its own Fragment.</p>
+<p>ViewPager associates each page with a key Object instead of working with Views directly. This key is used to track and uniquely identify a given page independent of its position in the adapter. A call to the PagerAdapter method <strong>startUpdate(android.view.ViewGroup)</strong> indicates that the contents of the ViewPager are about to change. One or more calls to <strong>instantiateItem(android.view.ViewGroup,int)</strong> and/or<br><strong>destroyItem(android.view.ViewGroup,int,java.lang.Object)</strong> will follow, and the end of an update will be signaled by a call to <strong>finishUpdate(android.view.ViewGroup)</strong>. By the time finishUpdate returns the views associated with the key objects returned by instantiateItem should be added to the parent ViewGroup passed to these methods and the views associated with the keys passed to destroyItem should be removed. The method <strong>isViewFromObject(android.view.View,java.lang.Object)</strong> identifies whether a page View is associated with a given key object.</p>
+<p>A very simple PagerAdapter may choose to use the page Views themselves as key objects, returning them from <strong>instantiateItem(android.view.ViewGroup,int)</strong> after creation and adding them to the parent ViewGroup. A matching <strong>destroyItem(android.view.ViewGroup,int,java.lang.Object)</strong> implementation would remove the View from the parent ViewGroup and <strong>isViewFromObject(android.view.View,java.lang.Object)</strong> could be implemented as return view == object;.</p>
+<p>PagerAdapter supports data set changes. Data set changes must occur on the main thread and must end with a call to <strong>notifyDataSetChanged()</strong> similar to AdapterView adapters derived from android.widget.BaseAdapter. A data set change may involve pages being added, removed, or changing position. The ViewPager will keep the current page active provided the adapter implements the method <strong>getItemPosition(java.lang.Object)</strong>.</p>
+<h4 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a><strong>Usage</strong></h4><h5 id="Layout-ViewPager"><a href="#Layout-ViewPager" class="headerlink" title="Layout ViewPager"></a><strong>Layout ViewPager</strong></h5><p>A ViewPager is a layout which can be added to any layout XML file inside a root layout:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span><br><span class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></span><br><span class="line">    <span class="attr">android:orientation</span>=<span class="string">"vertical"</span>&gt;</span></span><br><span class="line"> </span><br><span class="line">    <span class="tag">&lt;<span class="name">android.support.v4.view.ViewPager</span></span><br><span class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/vpPager"</span></span><br><span class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span><br><span class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">android.support.v4.view.ViewPager</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>If you want an “indicator” that displays the pages available at the top as shown in the screenshot above, you need to include a nested indicator view called a PagerTabStrip:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">android.support.v4.view.ViewPager</span></span><br><span class="line">   <span class="attr">android:id</span>=<span class="string">"@+id/vpPager"</span></span><br><span class="line">   <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span><br><span class="line">   <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">   <span class="tag">&lt;<span class="name">android.support.v4.view.PagerTabStrip</span></span><br><span class="line">        <span class="attr">android:id</span>=<span class="string">"@+id/pager_header"</span></span><br><span class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span><br><span class="line">        <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span><br><span class="line">        <span class="attr">android:layout_gravity</span>=<span class="string">"top"</span></span><br><span class="line">        <span class="attr">android:paddingBottom</span>=<span class="string">"4dp"</span></span><br><span class="line">        <span class="attr">android:paddingTop</span>=<span class="string">"4dp"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">android.support.v4.view.ViewPager</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>which will automatically display the page indicator for your pager. You might want to check out the popular <a href="http://viewpagerindicator.com/" target="_blank" rel="external">ViewPagerIndicator</a> for an improved page indicator.</p>
+<h6 id="Define-Fragments"><a href="#Define-Fragments" class="headerlink" title="Define Fragments"></a><strong>Define Fragments</strong></h6><p>Next, let’s suppose we have defined two fragments FirstFragment and SecondFragment both of which contain a label in the layout and have implementations such as:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FirstFragment</span> <span class="keyword">extends</span> <span class="title">Fragment</span> </span>&#123;</span><br><span class="line">	<span class="comment">// Store instance variables</span></span><br><span class="line">	<span class="keyword">private</span> String title;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> page;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// newInstance constructor for creating fragment with arguments</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> FirstFragment <span class="title">newInstance</span><span class="params">(<span class="keyword">int</span> page, String title)</span> </span>&#123;</span><br><span class="line">		FirstFragment fragmentFirst = <span class="keyword">new</span> FirstFragment();</span><br><span class="line">		Bundle args = <span class="keyword">new</span> Bundle();</span><br><span class="line">		args.putInt(<span class="string">"someInt"</span>, page);</span><br><span class="line">		args.putString(<span class="string">"someTitle"</span>, title);</span><br><span class="line">		fragmentFirst.setArguments(args);</span><br><span class="line">		<span class="keyword">return</span> fragmentFirst;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Store instance variables based on arguments passed</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">		page = getArguments().getInt(<span class="string">"someInt"</span>, <span class="number">0</span>);</span><br><span class="line">		title = getArguments().getString(<span class="string">"someTitle"</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Inflate the view for the fragment based on layout XML</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> View <span class="title">onCreateView</span><span class="params">(LayoutInflater inflater, ViewGroup container, </span><br><span class="line">            Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">		View view = inflater.inflate(R.layout.fragment_first, container, <span class="keyword">false</span>);</span><br><span class="line">		TextView tvLabel = (TextView) view.findViewById(R.id.tvLabel);</span><br><span class="line">		tvLabel.setText(page + <span class="string">" -- "</span> + title);</span><br><span class="line">		<span class="keyword">return</span> view;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="Setup-FragmentPagerAdapter"><a href="#Setup-FragmentPagerAdapter" class="headerlink" title="Setup FragmentPagerAdapter"></a><strong>Setup FragmentPagerAdapter</strong></h5><p>Now we need to define the adapter that will properly determine how many pages exist and which fragment to display for each page of the adapter by creating a FragmentPagerAdapter:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">	</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyPagerAdapter</span> <span class="keyword">extends</span> <span class="title">FragmentPagerAdapter</span> </span>&#123;</span><br><span class="line">	    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> NUM_ITEMS = <span class="number">3</span>;</span><br><span class="line">		</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyPagerAdapter</span><span class="params">(FragmentManager fragmentManager)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(fragmentManager);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Returns total number of pages</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> NUM_ITEMS;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// Returns the fragment to display for that page</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Fragment <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">switch</span> (position) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>: <span class="comment">// Fragment # 0 - This will show FirstFragment</span></span><br><span class="line">                <span class="keyword">return</span> FirstFragment.newInstance(<span class="number">0</span>, <span class="string">"Page # 1"</span>);</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: <span class="comment">// Fragment # 0 - This will show FirstFragment different title</span></span><br><span class="line">                <span class="keyword">return</span> FirstFragment.newInstance(<span class="number">1</span>, <span class="string">"Page # 2"</span>);</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: <span class="comment">// Fragment # 1 - This will show SecondFragment</span></span><br><span class="line">                <span class="keyword">return</span> SecondFragment.newInstance(<span class="number">2</span>, <span class="string">"Page # 3"</span>);</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">            	<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Returns the page title for the top indicator</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> CharSequence <span class="title">getPageTitle</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">        	<span class="keyword">return</span> <span class="string">"Page "</span> + position;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>For more complex cases with many pages, check out the more dynamic approach with SmartFragmentStatePagerAdapter explained later.</p>
+<h6 id="Apply-the-Adapter"><a href="#Apply-the-Adapter" class="headerlink" title="Apply the Adapter"></a><strong>Apply the Adapter</strong></h6><p>Finally, let’s associate the ViewPager with a new instance of our adapter:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">	FragmentPagerAdapter adapterViewPager;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">		setContentView(R.layout.activity_home);</span><br><span class="line">		ViewPager vpPager = (ViewPager) findViewById(R.id.vpPager);</span><br><span class="line">		adapterViewPager = <span class="keyword">new</span> MyPagerAdapter(getSupportFragmentManager());</span><br><span class="line">		vpPager.setAdapter(adapterViewPager);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>And now we have a basic functioning ViewPager with any number of fragments as pages which can be swiped between.</p>
+<h6 id="Selecting-or-Getting-the-Page"><a href="#Selecting-or-Getting-the-Page" class="headerlink" title="Selecting or Getting the Page"></a><strong>Selecting or Getting the Page</strong></h6><p>We can access the selected page within the ViewPager at any time with the getCurrentItem method which returns the current page:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vpPager.getCurrentItem(); <span class="comment">// --&gt; 2</span></span><br></pre></td></tr></table></figure></p>
+<p>The current page can also be changed programmatically with the<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vpPager.setCurrentItem(<span class="number">2</span>)</span><br></pre></td></tr></table></figure></p>
+<p>With this getter and setter, we can easily access or modify the selected page at runtime.</p>
+<h5 id="Setup-OnPageChangeListener"><a href="#Setup-OnPageChangeListener" class="headerlink" title="Setup OnPageChangeListener"></a><strong>Setup OnPageChangeListener</strong></h5><p>If the Activity needs to be able listen for changes to the page selected or other events surrounding the ViewPager, then we just need to hook into the ViewPager.OnPageChangeListener on the ViewPager to handle the events:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Attach the page change listener inside the activity</span></span><br><span class="line">vpPager.addOnPageChangeListener(<span class="keyword">new</span> OnPageChangeListener() &#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// This method will be invoked when a new page becomes selected.</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageSelected</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">		Toast.makeText(HomeActivity.<span class="keyword">this</span>, </span><br><span class="line">                    <span class="string">"Selected page position: "</span> + position, Toast.LENGTH_SHORT).show();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// This method will be invoked when the current page is scrolled</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrolled</span><span class="params">(<span class="keyword">int</span> position, <span class="keyword">float</span> positionOffset, <span class="keyword">int</span> positionOffsetPixels)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// Code goes here</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// Called when the scroll state changes: </span></span><br><span class="line">	<span class="comment">// SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onPageScrollStateChanged</span><span class="params">(<span class="keyword">int</span> state)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// Code goes here</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h5 id="Dynamic-ViewPager-Fragments"><a href="#Dynamic-ViewPager-Fragments" class="headerlink" title="Dynamic ViewPager Fragments"></a><strong>Dynamic ViewPager Fragments</strong></h5><p>In certain cases, we may require a dynamic ViewPager where we want to get access to fragment instances or with pages being added or removed at runtime. If your ViewPager is more dynamic with many pages and fragments, we will want to use an implementation of the alternate <strong>FragmentStatePagerAdapter</strong> instead. Below shows us how to use this and also intelligently cache the fragments for easy lookup.</p>
+<h5 id="Setup-SmartFragmentStatePagerAdapter"><a href="#Setup-SmartFragmentStatePagerAdapter" class="headerlink" title="**Setup SmartFragmentStatePagerAdapter"></a>**Setup SmartFragmentStatePagerAdapter</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span><br><span class="line">   Extension of FragmentStatePagerAdapter which intelligently caches </span><br><span class="line">   all active fragments and manages the fragment lifecycles. </span><br><span class="line">   Usage involves extending from SmartFragmentStatePagerAdapter as you would any other PagerAdapter.</span><br><span class="line">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">SmartFragmentStatePagerAdapter</span> <span class="keyword">extends</span> <span class="title">FragmentStatePagerAdapter</span> </span>&#123;</span><br><span class="line">	<span class="comment">// Sparse array to keep track of registered fragments in memory</span></span><br><span class="line">	<span class="keyword">private</span> SparseArray&lt;Fragment&gt; registeredFragments = <span class="keyword">new</span> SparseArray&lt;Fragment&gt;();</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">SmartFragmentStatePagerAdapter</span><span class="params">(FragmentManager fragmentManager)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">super</span>(fragmentManager);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Register the fragment when the item is instantiated</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Object <span class="title">instantiateItem</span><span class="params">(ViewGroup container, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">		Fragment fragment = (Fragment) <span class="keyword">super</span>.instantiateItem(container, position);</span><br><span class="line">		registeredFragments.put(position, fragment);</span><br><span class="line">		<span class="keyword">return</span> fragment;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Unregister when the item is inactive</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(ViewGroup container, <span class="keyword">int</span> position, Object object)</span> </span>&#123;</span><br><span class="line">		registeredFragments.remove(position);</span><br><span class="line">		<span class="keyword">super</span>.destroyItem(container, position, object);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Returns the fragment for the position (if instantiated)</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Fragment <span class="title">getRegisteredFragment</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> registeredFragments.get(position);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>First, copy in the SmartFragmentStatePagerAdapter.java which provides the intelligent caching of registered fragments within our ViewPager. This solves the common problem of needing to access the current item within the ViewPager.</p>
+<p>Now, we want to extend from SmartFragmentStatePagerAdapter copied above when declaring our adapter so we can take advantage of the better memory management of the state pager:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MainActivity</span> <span class="keyword">extends</span> <span class="title">AppCompatActivity</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">private</span> SmartFragmentStatePagerAdapter adapterViewPager;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Extend from SmartFragmentStatePagerAdapter now instead for more dynamic ViewPager items</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyPagerAdapter</span> <span class="keyword">extends</span> <span class="title">SmartFragmentStatePagerAdapter</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> NUM_ITEMS = <span class="number">3</span>;</span><br><span class="line">		</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyPagerAdapter</span><span class="params">(FragmentManager fragmentManager)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(fragmentManager);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Returns total number of pages</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> NUM_ITEMS;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// Returns the fragment to display for that page</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Fragment <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">switch</span> (position) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>: <span class="comment">// Fragment # 0 - This will show FirstFragment</span></span><br><span class="line">                <span class="keyword">return</span> FirstFragment.newInstance(<span class="number">0</span>, <span class="string">"Page # 1"</span>);</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: <span class="comment">// Fragment # 0 - This will show FirstFragment different title</span></span><br><span class="line">                <span class="keyword">return</span> FirstFragment.newInstance(<span class="number">1</span>, <span class="string">"Page # 2"</span>);</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: <span class="comment">// Fragment # 1 - This will show SecondFragment</span></span><br><span class="line">                <span class="keyword">return</span> SecondFragment.newInstance(<span class="number">2</span>, <span class="string">"Page # 3"</span>);</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">            	<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Returns the page title for the top indicator</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> CharSequence <span class="title">getPageTitle</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">        	<span class="keyword">return</span> <span class="string">"Page "</span> + position;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="Access-Fragment-Instances"><a href="#Access-Fragment-Instances" class="headerlink" title="Access Fragment Instances"></a><strong>Access Fragment Instances</strong></h5><p>Now with this adapter in place, we can also easily access any fragments within the ViewPager with:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adapterViewPager.getRegisteredFragment(<span class="number">0</span>); </span><br><span class="line"><span class="comment">// returns first Fragment item within the pager</span></span><br></pre></td></tr></table></figure>
+<p>and we can easily access the “current” pager item with:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adapterViewPager.getRegisteredFragment(vpPager.getCurrentItem());</span><br><span class="line"><span class="comment">// returns current Fragment item displayed within the pager</span></span><br></pre></td></tr></table></figure></p>
+<p>This pattern should save your app quite a deal of memory and allow for much easier management of fragments within your pager for the right situation.</p>
+<h5 id="Set-Offscreen-Page-Limit"><a href="#Set-Offscreen-Page-Limit" class="headerlink" title="Set Offscreen Page Limit"></a><strong>Set Offscreen Page Limit</strong></h5><p>Alternatively, you can use the method setOffscreenPageLimit(int limit) provided by ViewPager to set how many page instances you want the system to keep in memory on either side of your current page. As a result, more memory will be consumed. So be careful when tweaking this setting if your pages have complex layouts.</p>
+<p>For example, to let the system keep 3 page instances on both sides of the current page:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vpPager.setOffscreenPageLimit(<span class="number">3</span>);</span><br></pre></td></tr></table></figure></p>
+<p>This can be useful in order to preload more fragments for a smoother viewing experience trading off with memory usage.</p>
+<h5 id="ViewPager-with-Visible-Adjacent-Pages"><a href="#ViewPager-with-Visible-Adjacent-Pages" class="headerlink" title="ViewPager with Visible Adjacent Pages"></a><strong>ViewPager with Visible Adjacent Pages</strong></h5><p>If you are interested in a ViewPager with visible adjacent pages that are partially visible:</p>
+<p><img src="http://7xtazt.com1.z0.glb.clouddn.com/viewpager_adjacent.jpg" alt="ViewPager Adjacent"></p>
+<p>We can do that with by tuning a few properties of our pager. First, here’s how the ViewPager might be defined in the XML Layout:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">android.support.v4.view.ViewPager</span></span><br><span class="line">  	<span class="attr">android:id</span>=<span class="string">"@+id/pager"</span></span><br><span class="line">  	<span class="attr">android:gravity</span>=<span class="string">"center"</span></span><br><span class="line">  	<span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span><br><span class="line">  	<span class="attr">android:layout_height</span>=<span class="string">"0px"</span></span><br><span class="line">  	<span class="attr">android:paddingLeft</span>=<span class="string">"24dp"</span></span><br><span class="line">  	<span class="attr">android:paddingRight</span>=<span class="string">"12dp"</span></span><br><span class="line">  	<span class="attr">android:layout_weight</span>=<span class="string">"1"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Next, we need to tune these properties of the pager in the containing fragment or activity:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ViewPager vpPager = (ViewPager) view.findViewById(R.id.vpPager);</span><br><span class="line">vpPager.setClipToPadding(<span class="keyword">false</span>);</span><br><span class="line">vpPager.setPageMargin(<span class="number">12</span>);</span><br><span class="line"><span class="comment">// Now setup the adapter as normal</span></span><br></pre></td></tr></table></figure>
+<p>Finally we need to adjust the width inside the adapter:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class MyPageAdapter : FragmentStatePagerAdapter &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public float getPageWidth (int position) &#123;</span><br><span class="line">        return 0.93f;</span><br><span class="line">    &#125;	</span><br><span class="line">    </span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>For more details, you can follow these guides:</p>
+<p><a href="http://blog.neteril.org/blog/2013/10/14/android-tip-viewpager-with-protruding-children/" target="_blank" rel="external">ViewPager with Protruding Children</a><br><a href="http://stackoverflow.com/questions/13914609/viewpager-with-previous-and-next-page-boundaries" target="_blank" rel="external">ViewPager with Page Boundaries</a></p>
+<h5 id="Animating-the-Scroll-with-PageTransformer"><a href="#Animating-the-Scroll-with-PageTransformer" class="headerlink" title="**Animating the Scroll with PageTransformer"></a>**Animating the Scroll with PageTransformer</h5><p>We can customize how the pages animate as they are being swiped between using the PageTransformer. This transformer exists within the support library and is compatible with API 11 or greater.</p>
+<h5 id="Using-a-Third-Party-Library"><a href="#Using-a-Third-Party-Library" class="headerlink" title="Using a Third-Party Library"></a><strong>Using a Third-Party Library</strong></h5><p>The easiest way to leverage transformers is to use this <a href="https://github.com/ToxicBakery/ViewPagerTransforms" target="_blank" rel="external">ViewPagerTransforms</a> library:</p>
+<p><img src="http://7xtazt.com1.z0.glb.clouddn.com/viewpagertransforms.gif" alt="viewpagertransforms"></p>
+<p>Loading the library into app/build.gradle with:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">compile <span class="string">'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'</span></span><br></pre></td></tr></table></figure>
+<p>and then using the desired effect:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Reference (or instantiate) a ViewPager instance and apply a transformer</span></span><br><span class="line">pager = (ViewPager) findViewById(R.id.container);</span><br><span class="line">pager.setAdapter(mAdapter);</span><br><span class="line">pager.setPageTransformer(<span class="keyword">true</span>, <span class="keyword">new</span> RotateUpTransformer());</span><br></pre></td></tr></table></figure>
+<p>Other transform types include AccordionTransformer, CubeInTransformer, FlipHorizontalTransformer, ScaleInOutTransformer, ZoomInTransformer, and many others.</p>
+<h5 id="Developing-Custom-Transforms"><a href="#Developing-Custom-Transforms" class="headerlink" title="Developing Custom Transforms"></a><strong>Developing Custom Transforms</strong></h5><p>However, custom usage is pretty straightforward, just attach a PageTransformer to the ViewPager:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">vpPager.setPageTransformer(<span class="keyword">false</span>, <span class="keyword">new</span> ViewPager.PageTransformer() &#123; </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transformPage</span><span class="params">(View page, <span class="keyword">float</span> position)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Do our transformations to the pages here</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>The first argument is set to true if the supplied PageTransformer requires page views to be drawn from last to first instead of first to last. The second argument is the transformer which requires defining the transformPage method to define the sliding page behavior.</p>
+<p>The transformPage method accepts two parameters: page which is the particular page to be modified and position which indicates where a given page is located relative to the center of the screen. The page which fills the screen is at position 0. The page immediately to the right is at position 1. If the user scrolls halfway between pages one and two, page one has a position of -0.5 and page two has a position of 0.5.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">vpPager.setPageTransformer(<span class="keyword">false</span>, <span class="keyword">new</span> ViewPager.PageTransformer() &#123; </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">transformPage</span><span class="params">(View page, <span class="keyword">float</span> position)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> pageWidth = view.getWidth();</span><br><span class="line">        <span class="keyword">int</span> pageHeight = view.getHeight();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (position &lt; -<span class="number">1</span>) &#123; <span class="comment">// [-Infinity,-1)</span></span><br><span class="line">            <span class="comment">// This page is way off-screen to the left.</span></span><br><span class="line">            view.setAlpha(<span class="number">0</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(position &lt;= <span class="number">1</span>)&#123; <span class="comment">// Page to the left, page centered, page to the right</span></span><br><span class="line">           <span class="comment">// modify page view animations here for pages in view </span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// (1,+Infinity]</span></span><br><span class="line">            <span class="comment">// This page is way off-screen to the right.</span></span><br><span class="line">            view.setAlpha(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>For more details, check out the official guide or this guide. You can also review this cool <a href="https://stevenkideckel.wordpress.com/tag/pagetransformer/" target="_blank" rel="external">rotating page transformer effect</a> for another example.</p>
+<h5 id="Disabling-Swipe-Events"><a href="#Disabling-Swipe-Events" class="headerlink" title="Disabling Swipe Events"></a><strong>Disabling Swipe Events</strong></h5><p>If we want to disable swipe in a particular direction, check out this <a href="http://stackoverflow.com/questions/19602369/how-to-disable-viewpager-from-swiping-in-one-direction/34076649#34076649" target="_blank" rel="external">custom ViewPager that swipes in only one direction</a> using a custom class extending ViewPager that intercepts the swipe touch events.</p>
+<p>In certain situations your app might even want to have a ViewPager that allows switching pages using an indicator but that doesn’t intercept swipe events at all. This is usually because we want to have the swipe events perform another action rather than change the page.</p>
+<p>The first step is to define a custom ViewPager <a href="https://gist.github.com/nesquena/898db22a38747bd9bc19" target="_blank" rel="external">subclass called LockableViewPager</a> The class inherits from ViewPager and includes a new method called setSwipeable to control if swipe events are enabled or not. Copy this class into your project. Make sure to change your layout file accordingly:<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mypackage.lockableviewpager</span></span><br><span class="line">    <span class="attr">android:id</span>=<span class="string">"@+id/photosViewPager"</span> </span><br><span class="line">    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span> </span><br><span class="line">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span> /&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>Now, just call setSwipeable(false) to disable swiping to change the page.</p>
+<h5 id="Launching-an-Activity-with-Tab-Selected"><a href="#Launching-an-Activity-with-Tab-Selected" class="headerlink" title="Launching an Activity with Tab Selected"></a><strong>Launching an Activity with Tab Selected</strong></h5><p>Often when launching a tabbed activity, there needs to be a way to select a particular tab to be displayed once the activity loads. For example, an activity has three tabs with one tab being a list of created posts. After a user creates a post on a separate activity, the user needs to be returned to the main activity with the “new posts” tab displayed. This can be done through the use of intent extras and the ViewPager#setCurrentItem method. First, when launching the tabbed activity, we need to pass in the selected tab as an extra:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* In creation activity that wants to launch a tabbed activity */</span></span><br><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, MyTabbedActivity.class);</span><br><span class="line"><span class="comment">// Pass in tab to be displayed</span></span><br><span class="line">i.putExtra(MyTabbedActivity.SELECTED_TAB_EXTRA_KEY, MyTabbedActivity.NEW_POSTS_TAB);</span><br><span class="line"><span class="comment">// Start the activity</span></span><br><span class="line">startActivity(i);</span><br></pre></td></tr></table></figure></p>
+<p>If the activity needs to return a result, we can also return this as an activity result. Next, we can read this information from the intent within the tabbed activity:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* In tabbed activity */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> SELECTED_TAB_EXTRA_KEY = <span class="string">"selectedTabIndex"</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> HOME_TAB = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> FAVORITES_TAB = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> NEW_POSTS_TAB = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.main_activity);</span><br><span class="line">    <span class="comment">// Set the selected tab</span></span><br><span class="line">    setSelectedTab();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Reads selected tab from launching intent and </span></span><br><span class="line"><span class="comment">// sets page accordingly</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSelectedTab</span><span class="params">()</span> </span>&#123;</span><br><span class="line">   <span class="comment">// Fetch the selected tab index with default</span></span><br><span class="line">   <span class="keyword">int</span> selectedTabIndex = getIntent().getIntExtra(SELECTED_TAB_EXTRA_KEY, HOME_TAB); </span><br><span class="line">   <span class="comment">// Switch to page based on index</span></span><br><span class="line">   vpPager.setCurrentItem(selectedTabIndex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>With that, any activity can launch the tabbed activity with the ability to configure the selected tab.</p>
+<h5 id="Custom-Pages-without-Fragments"><a href="#Custom-Pages-without-Fragments" class="headerlink" title="Custom Pages without Fragments"></a><strong>Custom Pages without Fragments</strong></h5><p>While a ViewPager is often coupled with a Fragment for each page using the FragmentPagerAdapter, there are cases where the pages are better off as plain views.</p>
+<p>A good example is an image gallery, where the user can swipe between different pictures. To achieve this, we can extend from PagerAdapter:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Custom pager adapter not using fragments</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomPagerAdapter</span> <span class="keyword">extends</span> <span class="title">PagerAdapter</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    Context mContext;</span><br><span class="line">    LayoutInflater mLayoutInflater;</span><br><span class="line">    ArrayList&lt;Page&gt; pages = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CustomPagerAdapter</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        mContext = context;</span><br><span class="line">        mLayoutInflater = LayoutInflater.from(mContext);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// Returns the number of pages to be displayed in the ViewPager.</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> pages.size();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// Returns true if a particular object (page) is from a particular page</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isViewFromObject</span><span class="params">(View view, Object object)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> view == object;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// This method should create the page for the given position passed to it as an argument. </span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">instantiateItem</span><span class="params">(ViewGroup container, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Inflate the layout for the page</span></span><br><span class="line">        View itemView = mLayoutInflater.inflate(R.layout.pager_item, container, <span class="keyword">false</span>);</span><br><span class="line">        <span class="comment">// Find and populate data into the page (i.e set the image)</span></span><br><span class="line">        ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="comment">// Add the page to the container</span></span><br><span class="line">        container.addView(itemView);</span><br><span class="line">        <span class="comment">// Return the page</span></span><br><span class="line">        <span class="keyword">return</span> itemView;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// Removes the page from the container for the given position.</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroyItem</span><span class="params">(ViewGroup container, <span class="keyword">int</span> position, Object object)</span> </span>&#123;</span><br><span class="line">        container.removeView((View) object);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This is most commonly used for image slideshows or galleries. See this image gallery tutorial or this viewpager without fragments guide for more detailed steps.</p>
+<h5 id="Custom-ViewPager-Indicators"><a href="#Custom-ViewPager-Indicators" class="headerlink" title="Custom ViewPager Indicators"></a><strong>Custom ViewPager Indicators</strong></h5><p>An “indicator” is the UI element that displays the possible pages and the current page such as “tabs”. There are a number of other custom indicators for the pager that can be helpful in various contexts.</p>
+<p> <img src="http://7xtazt.com1.z0.glb.clouddn.com/viewpager_1.gif" alt="viewpager_1"><img src="http://7xtazt.com1.z0.glb.clouddn.com/viewpager_2.gif" alt="viewpager_2"></p>
+<p>A few of the most interesting ones are listed below:</p>
+<p><a href="https://github.com/chenupt/SpringIndicator" target="_blank" rel="external">Spring indicator with animated elastic selection</a>. Indicator that visually springs between pages as dragged.<br><a href="https://github.com/ongakuer/CircleIndicator" target="_blank" rel="external">Simple circle “dots” indicator for pages</a>. Indicator that displays the typical “dots” associated to pages.<br><a href="v">Custom “Ink” dots indicator for pages</a>. Indicator that displays dots for items and uses “ink” to visualize the current page.</p>
+<h4 id="References"><a href="#References" class="headerlink" title="References"></a>References</h4><p><a href="http://architects.dzone.com/articles/android-tutorial-using" target="_blank" rel="external">http://architects.dzone.com/articles/android-tutorial-using</a><br><a href="http://developer.android.com/training/animation/screen-slide.html" target="_blank" rel="external">http://developer.android.com/training/animation/screen-slide.html</a><br><a href="http://developer.android.com/reference/android/support/v4/view/ViewPager.html" target="_blank" rel="external">http://developer.android.com/reference/android/support/v4/view/ViewPager.html</a><br><a href="http://android-developers.blogspot.com/2011/08/horizontal-view-swiping-with-viewpager.html" target="_blank" rel="external">http://android-developers.blogspot.com/2011/08/horizontal-view-swiping-with-viewpager.html</a><br><a href="http://viewpagerindicator.com/" target="_blank" rel="external">http://viewpagerindicator.com/</a><br><a href="http://mobile.tutsplus.com/tutorials/android/android-user-interface-design-horizontal-view-paging/" target="_blank" rel="external">http://mobile.tutsplus.com/tutorials/android/android-user-interface-design-horizontal-view-paging/</a><br><a href="http://tamsler.blogspot.com/2011/10/android-viewpager-and-fragments.html" target="_blank" rel="external">http://tamsler.blogspot.com/2011/10/android-viewpager-and-fragments.html</a><br><a href="http://www.truiton.com/2013/05/android-fragmentpageradapter-example/" target="_blank" rel="external">http://www.truiton.com/2013/05/android-fragmentpageradapter-example/</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2016-08-24, 22:58:23</p>
+        <p><span>最后更新:</span>2016-08-24, 22:58:23</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/08/24/android_viewpager/" title="android ViewPager控件深入了解">https://iskylove.github.io/2016/08/24/android_viewpager/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/08/24/android_viewpager/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/08/24/android_material_design/">
+                    android material design 学习
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#ViewPager-Instroduction"><span class="toc-number">1.</span> <span class="toc-text">ViewPager Instroduction</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#android-support-v4-view-PagerAdapter"><span class="toc-number"></span> <span class="toc-text">android.support.v4.view.PagerAdapter</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Usage"><span class="toc-number"></span> <span class="toc-text">Usage</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Layout-ViewPager"><span class="toc-number">1.</span> <span class="toc-text">Layout ViewPager</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Define-Fragments"><span class="toc-number">1.1.</span> <span class="toc-text">Define Fragments</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Setup-FragmentPagerAdapter"><span class="toc-number">2.</span> <span class="toc-text">Setup FragmentPagerAdapter</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Apply-the-Adapter"><span class="toc-number">2.1.</span> <span class="toc-text">Apply the Adapter</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Selecting-or-Getting-the-Page"><span class="toc-number">2.2.</span> <span class="toc-text">Selecting or Getting the Page</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Setup-OnPageChangeListener"><span class="toc-number">3.</span> <span class="toc-text">Setup OnPageChangeListener</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Dynamic-ViewPager-Fragments"><span class="toc-number">4.</span> <span class="toc-text">Dynamic ViewPager Fragments</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Setup-SmartFragmentStatePagerAdapter"><span class="toc-number">5.</span> <span class="toc-text">**Setup SmartFragmentStatePagerAdapter</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Access-Fragment-Instances"><span class="toc-number">6.</span> <span class="toc-text">Access Fragment Instances</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Set-Offscreen-Page-Limit"><span class="toc-number">7.</span> <span class="toc-text">Set Offscreen Page Limit</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ViewPager-with-Visible-Adjacent-Pages"><span class="toc-number">8.</span> <span class="toc-text">ViewPager with Visible Adjacent Pages</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Animating-the-Scroll-with-PageTransformer"><span class="toc-number">9.</span> <span class="toc-text">**Animating the Scroll with PageTransformer</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Using-a-Third-Party-Library"><span class="toc-number">10.</span> <span class="toc-text">Using a Third-Party Library</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Developing-Custom-Transforms"><span class="toc-number">11.</span> <span class="toc-text">Developing Custom Transforms</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Disabling-Swipe-Events"><span class="toc-number">12.</span> <span class="toc-text">Disabling Swipe Events</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Launching-an-Activity-with-Tab-Selected"><span class="toc-number">13.</span> <span class="toc-text">Launching an Activity with Tab Selected</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Custom-Pages-without-Fragments"><span class="toc-number">14.</span> <span class="toc-text">Custom Pages without Fragments</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Custom-ViewPager-Indicators"><span class="toc-number">15.</span> <span class="toc-text">Custom ViewPager Indicators</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#References"><span class="toc-number"></span> <span class="toc-text">References</span></a>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"android ViewPager控件深入了解　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/08/24/android_material_design/" title="下一篇: android material design 学习">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2016 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

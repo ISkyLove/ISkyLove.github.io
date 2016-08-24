@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>(数据结构与算法分析笔记])第四章  树 | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="概述对于大量的数据输入，链表的线性访问时间太慢，二叉查找树结构的数据大部分运行的平均时间为：$O(\log N)$,二叉查找树是两种库集合类TreeSet和TreeMap实现的基础。树可以用几种方式定义，定义树的一种自然方式是递归的方式。一棵树是一些节点的集合。这个集合可以是空集，若不是空集，则树由称做根的节点r以及0个或多个非空的（子）树$T_1,T_2,T_3,…,T_k$组成，这些子树中的每">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(数据结构与算法分析笔记])第四章  树">
+<meta property="og:url" content="https://iskylove.github.io/2016/07/09/java_datastructures_alogorithm_3/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="概述对于大量的数据输入，链表的线性访问时间太慢，二叉查找树结构的数据大部分运行的平均时间为：$O(\log N)$,二叉查找树是两种库集合类TreeSet和TreeMap实现的基础。树可以用几种方式定义，定义树的一种自然方式是递归的方式。一棵树是一些节点的集合。这个集合可以是空集，若不是空集，则树由称做根的节点r以及0个或多个非空的（子）树$T_1,T_2,T_3,…,T_k$组成，这些子树中的每">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_1.png">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_2.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_3.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_4.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_5.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_6.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_7.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_8.jpg">
+<meta property="og:updated_time" content="2016-07-08T16:43:44.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(数据结构与算法分析笔记])第四章  树">
+<meta name="twitter:description" content="概述对于大量的数据输入，链表的线性访问时间太慢，二叉查找树结构的数据大部分运行的平均时间为：$O(\log N)$,二叉查找树是两种库集合类TreeSet和TreeMap实现的基础。树可以用几种方式定义，定义树的一种自然方式是递归的方式。一棵树是一些节点的集合。这个集合可以是空集，若不是空集，则树由称做根的节点r以及0个或多个非空的（子）树$T_1,T_2,T_3,…,T_k$组成，这些子树中的每">
+<meta name="twitter:image" content="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_1.png">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-java_datastructures_alogorithm_3" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/07/09/java_datastructures_alogorithm_3/" class="article-date">
+      <time datetime="2016-07-08T16:43:55.576Z" itemprop="datePublished">2016-07-09</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (数据结构与算法分析笔记])第四章  树
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/java/">java</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h5 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h5><p>对于大量的数据输入，链表的线性访问时间太慢，二叉查找树结构的数据大部分运行的平均时间为：$O(\log N)$,二叉查找树是两种库集合类TreeSet和TreeMap实现的基础。<br>树可以用几种方式定义，定义树的一种自然方式是递归的方式。一棵树是一些节点的集合。这个集合可以是空集，若不是空集，则树由称做根的节点r以及0个或多个非空的（子）树$T_1,T_2,T_3,…,T_k$组成，这些子树中的每一棵的根都被来自根r的一条有向的边所连接.<br>每一棵子树的根叫做根r的儿子（child）,而r是每一棵子树的根的父亲（parent）.<a id="more"></a></p>
+<h5 id="树的实现"><a href="#树的实现" class="headerlink" title="树的实现"></a>树的实现</h5><p>实现树的一种方法可以是在每一个节点除数据外还有一些链，使得该节点的每一个儿子都有一个链指向它，代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span></span>&#123;</span><br><span class="line">   Object element;</span><br><span class="line">   TreeNode firstChild;</span><br><span class="line">   TreeNode nextChild;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h5><p><strong>二叉树</strong>是一棵树，其中每个节点都不能有多余两个儿子。二叉树的一个性质是一棵平均二叉树的深度要比节点个数N小得多，这个性质很重要。分析表明，其平均深度为$O(\sqrt[2]{N})$而对于特殊二叉树，即二叉查找树深度的平均值为$O(\log N)$<br>二叉树的结构代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BinaryNode</span></span>&#123;</span><br><span class="line">    Object element;</span><br><span class="line">    BinaryNode left;</span><br><span class="line">    BinaryNode right;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="查找树ADT-—-二叉查找树"><a href="#查找树ADT-—-二叉查找树" class="headerlink" title="查找树ADT —-二叉查找树"></a>查找树ADT —-二叉查找树</h5><p>二叉树成为二叉查找树的性质是：对于树中的每一个节点X,它的左子树中所有的项小于X中的项，而它的右子树中的所有项的值大于X中的项。这意味着该树所有的元素可以用某种一致的方式排序。<br>二叉查找树要求所有的项能够排序，要写出一个一般的类，我们需要提供一个interface来表示这个性质，该接口就是Comparable,通过CompareTo方法进行比较。由此我们确定所有的关系，特别是我们不能使用equals方法，而是根据两项相等当且仅当compareTo方法返回0来判断，二叉树结构类如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinaryNode</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">	</span><br><span class="line">    T mT;</span><br><span class="line">	BinaryNode&lt;T&gt; mLeft;</span><br><span class="line">    BinaryNode&lt;T&gt; mRight;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">BinaryNode</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>(t,<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">BinaryNode</span><span class="params">(T t,BinaryNode&lt;T&gt; left,BinaryNode&lt;T&gt; right)</span></span>&#123;</span><br><span class="line">    	<span class="keyword">this</span>.mT = t;</span><br><span class="line">    	<span class="keyword">this</span>.mLeft = left;</span><br><span class="line">    	<span class="keyword">this</span>.mRight = right;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>二叉查找树架构如下代码所示，其中唯一的数据域是对根节点的引用，这个引用对于子空树来说为null。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BinarySearchTree</span> &lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> BinaryNode&lt;T&gt; mRoot;</span><br><span class="line">	<span class="keyword">private</span> Comparator cmp;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">BinarySearchTree</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>(<span class="keyword">null</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">BinarySearchTree</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> T&gt; c)</span> </span>&#123;</span><br><span class="line">		mRoot = <span class="keyword">null</span>;</span><br><span class="line">		cmp = c;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Empty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		mRoot = <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> mRoot == <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printTree</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(T elementA, T elementB)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (cmp != <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> cmp.compare(elementA, elementB);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> ((Comparable) elementA).compareTo(elementB);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(T t, BinaryNode&lt;T&gt; element)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (t == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">int</span> compareResult = compareTo(t, element.mT);</span><br><span class="line">		<span class="keyword">if</span> (compareResult &gt; <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> contains(t, element.mRight);</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (compareResult &lt; <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> contains(t, element.mLeft);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> BinaryNode&lt;T&gt; <span class="title">findMin</span><span class="params">(BinaryNode&lt;T&gt; element)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (element == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (element.mLeft == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> element;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> findMin(element.mLeft);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> BinaryNode&lt;T&gt; <span class="title">findMax</span><span class="params">(BinaryNode&lt;T&gt; element)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (element == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (element.mRight == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> element;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> findMax(element.mRight);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> BinaryNode&lt;T&gt; <span class="title">insert</span><span class="params">(T t, BinaryNode&lt;T&gt; element)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (element == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> BinaryNode&lt;T&gt;(t, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> compareResult = compareTo(t, element.mT);</span><br><span class="line">		<span class="keyword">if</span> (compareResult &gt; <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> insert(t, element.mRight);</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (compareResult &lt; <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> insert(t, element.mLeft);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> element;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> BinaryNode&lt;T&gt; <span class="title">remove</span><span class="params">(T t, BinaryNode&lt;T&gt; element)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span> (t == <span class="keyword">null</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">int</span> compareResult = compareTo(t, element.mT);</span><br><span class="line">		<span class="keyword">if</span> (compareResult &gt; <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> remove(t, element.mRight);</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (compareResult &lt; <span class="number">0</span>) &#123;</span><br><span class="line">			<span class="keyword">return</span> remove(t, element.mLeft);</span><br><span class="line">		&#125; <span class="keyword">else</span> <span class="keyword">if</span> (element.mLeft != <span class="keyword">null</span> &amp;&amp; element.mRight != <span class="keyword">null</span>) &#123;</span><br><span class="line">			element.mT = findMin(element.mRight).mT;</span><br><span class="line">			element.mRight = remove(element.mT, element.mRight);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			element = (element.mLeft != <span class="keyword">null</span>) ? element.mLeft : element.mRight;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> element;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">printTree</span><span class="params">(BinaryNode&lt;T&gt; element)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>补充说明：当需要排序的集合或数组不是单纯的数字型时，通常可以使用Comparator或Comparable,JDK声明如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparator</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">int</span> <span class="title">compare</span><span class="params">(T t1,T t2)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(T t)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a>AVL树</h5><p>AVL树是带有平衡条件的二叉查找树，这个平衡条件必须保持，一棵AVL树是其每个节点的左子树和右子树的高度最多差1的二叉查找树（空树的高度定义为-1）。<br>当对AVL树进行插入操作时，我们需要更新通向根节点路劲上那些节点的所有平衡信息，而插入操作隐含着困难的原因在于：插入一个节点可能破坏AVL树的特性，发生这个情况，就需要考虑<strong>旋转</strong>使得AVL树再次平衡。，插入后不平衡可能出现在一下四种情况：<br><strong>1.对节点X的左儿子的左子树进行一次插入</strong><br><strong>2.对节点X的左儿子的右子树进行一次插入</strong><br><strong>3.对节点X的右儿子的左子树进行一次插入</strong><br><strong>4.对节点X的右儿子的右子树进行一次插入</strong><br>情形1和4的情况都是插入发生在”外边“，该情况通过对树的一次单旋转而完成调整，第二种情况是插入是发生在”内部“，需要通过较复杂的双旋转来处理。代码实例如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AVLNode</span> &lt;<span class="title">T</span>&gt;</span>&#123;</span><br><span class="line">	</span><br><span class="line">	T mT;</span><br><span class="line">	AVLNode&lt;T&gt; mLeft;</span><br><span class="line">	AVLNode&lt;T&gt; mRight;</span><br><span class="line">	<span class="keyword">int</span> mHeight;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">AVLNode</span><span class="params">(T t)</span></span>&#123;</span><br><span class="line">		<span class="keyword">this</span>(t,<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">AVLNode</span><span class="params">(T t,AVLNode&lt;T&gt; left,AVLNode&lt;T&gt; right)</span></span>&#123;</span><br><span class="line">		mT = t;</span><br><span class="line">		mLeft = left;</span><br><span class="line">		mRight = right;</span><br><span class="line">		mHeight = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span>  AVLNode&lt;T&gt; <span class="title">insert</span><span class="params">(T t,AVLNode&lt;T&gt; element)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(t == <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AVLNode&lt;T&gt;(t,<span class="keyword">null</span>,<span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> compareResult = compare(t,element.mT);</span><br><span class="line">    <span class="keyword">if</span>(compareResult &gt; <span class="number">0</span>)&#123;</span><br><span class="line">        element.mRight = insert(t,element.mRight);</span><br><span class="line">        <span class="keyword">if</span>(height(element.mRight) - height(element.mLeft) == <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>( compare(t,element.mRight.mT) &gt; <span class="number">0</span> )&#123;</span><br><span class="line">                 element = rotateWithRightChild(element);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                 element = doubleWithRightChild(element);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(compareResult &lt; <span class="number">0</span>)&#123;</span><br><span class="line">        element.mLeft = insert(t,element.mLeft);</span><br><span class="line">        <span class="keyword">if</span>(height(element.mLeft) - height(element.mRight) == <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>( compare(t,element.mLeft.mT) &lt; <span class="number">0</span> )&#123;</span><br><span class="line">                 element = rotateWithLefttChild(element);</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                 element = doubleWithLeftChild(element);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    element.height = Math.Max(height(element.mLeft),height(element.mRight))+<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> element;</span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">height</span><span class="params">(AVLNode&lt;T&gt; element)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> element == <span class="keyword">null</span> ? -<span class="number">1</span> : element.height;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> AVLNode&lt;T&gt; <span class="title">rotateWithLeftChild</span><span class="params">(AVLNode&lt;T&gt; element)</span></span>&#123;</span><br><span class="line">   AVLNode&lt;T&gt; element1 = element.mLft;</span><br><span class="line">   element.mLeft = element1.mRight;</span><br><span class="line">   element1.mRight = element;</span><br><span class="line">   element.height = Math.Max(height(element.mLeft),height(element.mRight)) + <span class="number">1</span>;</span><br><span class="line">   element1.height = Math.Max(height(element1.mLeft),height(element.height)) + <span class="number">1</span>;</span><br><span class="line">   <span class="keyword">return</span> element1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> AVLNode&lt;T&gt; <span class="title">doubleWithLeftChild</span><span class="params">(AVLNode&lt;T&gt; element)</span></span>&#123;</span><br><span class="line">   element.mLeft = rotateWithRightChild(element.mLeft);</span><br><span class="line">   <span class="keyword">return</span> rotateWithLeftChild(element);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="伸展树Splay-Tree"><a href="#伸展树Splay-Tree" class="headerlink" title="伸展树Splay Tree"></a>伸展树Splay Tree</h5><p>伸展树（Splay Tree）是一种二叉排序树，它能在O(log n)内完成插入、查找和删除操作。它由Daniel Sleator和Robert Tarjan创造。它的优势在于不需要记录用于平衡树的冗余信息。在伸展树上的一般操作都基于伸展操作。<br><strong>为什么需要伸展树（Splay Tree）</strong>各种查找树存在不足。比如：对于一个有n个节点的平衡树，虽然最坏情况下每次查找的时间复杂度不会超过O(logn)，但是如果访问模式不均匀，平衡树的效率就会受到影响。此外，它们还需要额外的空间来存储平衡信息。<br>这些查找树的设计目标都是减少最坏情况下单次操作时间，但是查找树的典型应用经常需要执行一系列的查找操作，此时更关心的性能指标是所有这些操作总共需要多少时间。对于此类应用，更好的目标就是降低操作的摊平时间，此处的摊平时间是指在一系列最坏情况的操作序列中单次操作的平均时间。获得摊平效率的一种方法就是使用“自调整”的数据结构。<br><strong>什么是伸展树（Splay Tree）</strong>假设想要对一个二叉查找树执行一系列的查找操作。为了使整个查找时间更小，被查频率高的那些条目就应当经常处于靠近树根的位置。于是想到设计一个简单方法，在每次查找之后对树进行重构，把被查找的条目搬移到离树根近一些的地方。splay tree应运而生。splay tree是一种自调整形式的二叉查找树，它会沿着从某个节点到树根之间的路径，通过一系列的旋转把这个节点搬移到树根去。<br>伸展树的基本想法是：<strong>当一个节点被访问后，它就要经过一系列AVL树的旋转被推到根上。如果一个节点很深，那么在其路劲上就存在许多也相对较深的节点，通过重新构造可以减少对所有这些节点进一步访问所花费的时间。所以如果节点太深，那么我们需要重新构造应具有平衡这棵树的左右。</strong><br>伸展树的<strong>一个简单</strong>的想法（不能直接使用）：对上面描述的重新构造实行单旋转，从底向上进行。旋转效果是会把节点X一直推向树根，使得对节点X的进一步访问很容易，但这样也容易把其他的节点推向更深<br>伸展树的<strong>展开</strong>想法：思路类似上面介绍的旋转想法，但在旋转的选择上我们有余地，是单旋转还是双旋转，我们仍然从底部沿着访问路劲旋转，展开操作不仅把访问的节点移动到根处，而且还把访问路劲上的大部分节点的深度大致减少一半（某些浅的节点最多向下推后两层）。对伸展树的进一步学习将在后面继续提供～～～～</p>
+<h5 id="树的遍历"><a href="#树的遍历" class="headerlink" title="树的遍历"></a>树的遍历</h5><p>由于二叉查找树中对信息进行的排序，因而按照排序的顺序列出所有的项很简单。<br><strong>前序遍历:</strong>首先访问根结点然后遍历左子树，最后遍历右子树<br><strong>中序遍历:</strong>首先遍历左子树，然后访问根结点，最后遍历右子树<br><strong>后序遍历:</strong>首先遍历左子树，然后遍历右子树，最后访问根结点<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_1.png" alt="picture"><br>按顺序前序遍历二叉查找树例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printTree</span><span class="params">()</span></span>&#123;</span><br><span class="line">   <span class="keyword">if</span>(isEmpty())&#123;</span><br><span class="line">       System.out.println(<span class="string">"Empty Tree"</span>);</span><br><span class="line">   &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">       printTree(mRoot);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">printTree</span><span class="params">(BinaryNode&lt;T&gt; element)</span></span>&#123;</span><br><span class="line">   <span class="keyword">if</span>( element != <span class="keyword">null</span> )&#123;</span><br><span class="line">       printTree(element.mLeft);</span><br><span class="line">       System.out.println( element.mT);</span><br><span class="line">       printTree(element.mRight);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用后序遍历二叉查找树高度的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">height</span><span class="params">( BinaryNode&lt;T&gt; element)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(element == <span class="keyword">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> + Math.Max(height(element.mLeft),height(element.mRight));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h5><p> B树，M叉查找树，一棵M叉查找树可以有M路分支，随着分支的增加，输的深度在减少，一棵完全二叉树的高度大约为$\log_2 N$,而一棵完全M叉树的高度大约为$\log_M N$<br> 阶为M的B树具有一下特性：<br> <strong>1.数据项存储在树叶上</strong><br> <strong>2.非叶节点存储直到M-1个关键字以指示搜索的方向；关键字i代表子树i+1中的最小的关键字</strong><br> <strong>3.树的根或者是一片树叶，或者其儿子树在2和M之间</strong><br> <strong>4.除根外，所有的非树叶节点的儿子数在[M/2]和M之间</strong><br> <strong>5.所有的树叶都在相同的深度上并有[L/2]和L之间个数据项</strong><br><strong>B树</strong>即二叉搜索树：<br>1.所有非叶子结点至多拥有两个儿子（Left和Right）；<br>2.所有结点存储一个关键字；<br>3.非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树；<br>如：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_2.jpg" alt="picture"><br>B树的搜索，从根结点开始，如果查询的关键字与结点的关键字相等，那么就命中；否则，如果查询关键字比结点关键字小，就进入左儿子；如果比结点关键字大，就进入右儿子；如果左儿子或右儿子的指针为空，则报告找不到相应的关键字；如果B树的所有非叶子结点的左右子树的结点数目均保持差不多（平衡），那么B树的搜索性能逼近二分查找；但它比连续内存空间的二分查找的优点是，改变B树结构（插入与删除结点）不需要移动大段的内存数据，甚至通常是常数开销;<br>如：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_3.jpg" alt="picture"><br>但B树在经过多次插入与删除后，有可能导致不同的结构：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_4.jpg" alt="picture"><br>右边也是一个B树，但它的搜索性能已经是线性的了；同样的关键字集合有可能导致不同的树结构索引；所以，使用B树还要考虑尽可能让B树保持左图的结构，和避免右图的结构，也就是所谓的“平衡”问题；实际使用的B树都是在原B树的基础上加上平衡算法，即“平衡二叉树”；如何保持B树结点分布均匀的平衡算法是平衡二叉树的关键；平衡算法是一种在B树中插入和删除结点的策略；<br><strong>B-树</strong>是一种多路搜索树（并不是二叉的）：<br>1.定义任意非叶子结点最多只有M个儿子；且M&gt;2；<br>2.根结点的儿子数为[2, M]；<br>3.除根结点以外的非叶子结点的儿子数为[M/2, M]；<br>4.每个结点存放至少M/2-1（取上整）和至多M-1个关键字；（至少2个关键字）<br>5.非叶子结点的关键字个数=指向儿子的指针个数-1；<br>6.非叶子结点的关键字：K[1], K[2], …, K[M-1]；且K[i] &lt; K[i+1]；<br>7.非叶子结点的指针：P[1], P[2], …, P[M]；其中P[1]指向关键字小于K[1]的子树，P[M]指向关键字大于K[M-1]的子树，其它P[i]指向关键字属于(K[i-1], K[i])的子树；<br>8.所有叶子结点位于同一层；<br>如：（M=3）<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_5.jpg" alt="picture"><br>B-树的搜索，从根结点开始，对结点内的关键字（有序）序列进行二分查找，如果命中则结束，否则进入查询关键字所属范围的儿子结点；重复，直到所对应的儿子指针为空，或已经是叶子结点；B-树的特性：<br>1.关键字集合分布在整颗树中；<br>2.任何一个关键字出现且只出现在一个结点中；<br>3.搜索有可能在非叶子结点结束；<br>4.其搜索性能等价于在关键字全集内做一次二分查找；<br>5.自动层次控制；<br>由于限制了除根结点以外的非叶子结点，至少含有M/2个儿子，确保了结点的至少利用率，其最底搜索性能为：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_6.jpg" alt="picture"><br>其中，M为设定的非叶子结点最多子树个数，N为关键字总数；所以B-树的性能总是等价于二分查找（与M值无关），也就没有B树平衡的问题；由于M/2的限制，在插入结点时，如果结点已满，需要将结点分裂为两个各占M/2的结点；删除结点时，需将两个不足M/2的兄弟结点合并；<br><strong>B+树</strong>B+树是B-树的变体，也是一种多路搜索树：<br>1.其定义基本与B-树同，除了：<br>2.非叶子结点的子树指针与关键字个数相同；<br>3.非叶子结点的子树指针P[i]，指向关键字值属于[K[i], K[i+1])的子树（B-树是开区间）；<br>4.为所有叶子结点增加一个链指针；<br>5.所有关键字都在叶子结点出现；<br>如：（M=3）<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_7.jpg" alt="picture"><br>B+的搜索与B-树也基本相同，区别是B+树只有达到叶子结点才命中（B-树可以在非叶子结点命中），其性能也等价于在关键字全集做一次二分查找；<br>B+的特性：<br>1.所有关键字都出现在叶子结点的链表中（稠密索引），且链表中的关键字恰好是有序的；<br>2.不可能在非叶子结点命中；<br>3.非叶子结点相当于是叶子结点的索引（稀疏索引），叶子结点相当于是存储（关键字）数据的数据层；<br>4.更适合文件索引系统；<br><strong>B*树</strong>是B+树的变体，在B+树的非根和非叶子结点再增加指向兄弟的指针；<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headjava_tree_8.jpg" alt="picture"><br> B<em>树定义了非叶子结点关键字个数至少为(2/3)</em>M，即块的最低使用率为2/3（代替B+树的1/2）；<br>B+树的分裂：当一个结点满时，分配一个新的结点，并将原结点中1/2的数据复制到新结点，最后在父结点中增加新结点的指针；B+树的分裂只影响原结点和父结点，而不会影响兄弟结点，所以它不需要指向兄弟的指针；<br>B<em>树的分裂：当一个结点满时，如果它的下一个兄弟结点未满，那么将一部分数据移到兄弟结点中，再在原结点插入关键字，最后修改父结点中兄弟结点的关键字（因为兄弟结点的关键字范围改变了）；如果兄弟也满了，则在原结点与兄弟结点之间增加新结点，并各复制1/3的数据到新结点，最后在父结点增加新结点的指针；所以，B</em>树分配新结点的概率比B+树要低，空间使用率更高；</p>
+<h5 id="标准库中的集合与映射"><a href="#标准库中的集合与映射" class="headerlink" title="标准库中的集合与映射"></a>标准库中的集合与映射</h5><p>List容器ArrayList和LinkedList用于查找的效率很低，所以Collection API提供了两个附加容器Set和Map，他们对于插入，删除，查找等基本操作提供有效的实现<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Collection</span><br><span class="line">├List</span><br><span class="line">│├LinkedList</span><br><span class="line">│├ArrayList</span><br><span class="line">│└Vector</span><br><span class="line">│　└Stack</span><br><span class="line">└Set</span><br><span class="line">Map</span><br><span class="line">├Hashtable</span><br><span class="line">├HashMap</span><br><span class="line">└WeakHashMap</span><br></pre></td></tr></table></figure></p>
+<h6 id="关于Set接口"><a href="#关于Set接口" class="headerlink" title="关于Set接口"></a><strong>关于Set接口</strong></h6><p>Set接口代表不允许重复元的Collection。Set is a Collection。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Set</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt;</span>&#123;</span><br><span class="line">   ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实现类分别是：<br><strong>hashSet</strong>通过hashcode和equal方法，用自己的关键字段来重写是否实例一致，因为当使用HashSet时，hashCode()方法就会得到调用，判断已经存储在集合中的对象的hash code值是否与增加的对象的hash code值一致；如果不一致，直接加进去；如果一致，再进行equals方法的比较，equals方法如果返回true，表示对象已经加进去了，就不会再增加新的对象，否则加进去。<br><strong>TreeSet</strong>TreeSet使用元素的自然顺序对元素进行排序，或者根据创建 set 时提供的 Comparator 进行排序，具体取决于使用的构造方法,通俗一点讲，就是可以按照排序后的列表显示，也可以按照指定的规则排序</p>
+<h6 id="关于Map接口"><a href="#关于Map接口" class="headerlink" title="关于Map接口"></a><strong>关于Map接口</strong></h6><p>Map接口代表关键字以及它们的值组成的一些项的集合。关键字必须是唯一的，但若干个关键字可以映射到一些相同的值，所以值不是唯一的。<strong>Map不提供迭代器。</strong>所以提供一下三种方法将Map对象的视图作为Collection对象返回，由于这些对象本身就是Collection，因此它们可以迭代：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Set&lt;KeyType&gt; <span class="title">keySet</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function">Collection&lt;ValueType&gt; <span class="title">values</span><span class="params">()</span></span>;</span><br><span class="line">Set&lt;Map.Entry&lt;KeyType,ValueType&gt;&gt; entrySet();</span><br></pre></td></tr></table></figure></p>
+<p>Map.Entry对象包含的方法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">KeyType <span class="title">getKey</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function">ValueType <span class="title">getValue</span><span class="params">()</span></span>;</span><br><span class="line"><span class="function">ValueType <span class="title">setValue</span><span class="params">(ValueType newValue)</span></span>;</span><br></pre></td></tr></table></figure></p>
+<h6 id="TreeSet类和TreeMap类的实现"><a href="#TreeSet类和TreeMap类的实现" class="headerlink" title="TreeSet类和TreeMap类的实现"></a><strong>TreeSet类和TreeMap类的实现</strong></h6><p>JDK中的TreeSet和TreeMap支持基本的add,remove,contains操作以对数最坏情况时间完成，所以基本的实现方法就是平衡二叉查找树。一般来书我们不使用AVL树，而是自顶向下的红黑树。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2016-07-09, 00:43:55</p>
+        <p><span>最后更新:</span>2016-07-09, 00:43:44</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/07/09/java_datastructures_alogorithm_3/" title="(数据结构与算法分析笔记])第四章  树">https://iskylove.github.io/2016/07/09/java_datastructures_alogorithm_3/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/07/09/java_datastructures_alogorithm_3/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/08/24/android_material_design/">
+                    android material design 学习
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/07/08/java_datastructures_alogorithm_2/">
+                    (数据结构与算法分析笔记)第三章  表  栈  队列
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#树的实现"><span class="toc-number">2.</span> <span class="toc-text">树的实现</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#二叉树"><span class="toc-number">3.</span> <span class="toc-text">二叉树</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#查找树ADT-—-二叉查找树"><span class="toc-number">4.</span> <span class="toc-text">查找树ADT —-二叉查找树</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#AVL树"><span class="toc-number">5.</span> <span class="toc-text">AVL树</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#伸展树Splay-Tree"><span class="toc-number">6.</span> <span class="toc-text">伸展树Splay Tree</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#树的遍历"><span class="toc-number">7.</span> <span class="toc-text">树的遍历</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#B树"><span class="toc-number">8.</span> <span class="toc-text">B树</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#标准库中的集合与映射"><span class="toc-number">9.</span> <span class="toc-text">标准库中的集合与映射</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#关于Set接口"><span class="toc-number">9.1.</span> <span class="toc-text">关于Set接口</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#关于Map接口"><span class="toc-number">9.2.</span> <span class="toc-text">关于Map接口</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#TreeSet类和TreeMap类的实现"><span class="toc-number">9.3.</span> <span class="toc-text">TreeSet类和TreeMap类的实现</span></a></li></ol></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"(数据结构与算法分析笔记])第四章  树　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/08/24/android_material_design/" title="上一篇: android material design 学习">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/07/08/java_datastructures_alogorithm_2/" title="下一篇: (数据结构与算法分析笔记)第三章  表  栈  队列">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2016 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

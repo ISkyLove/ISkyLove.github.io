@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>&lt;转&gt;漫谈Android 增量更新 | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="原文地址：http://blog.csdn.net/dd864140130/article/details/52928419在前几年，整体移动网络环境相比现在差很多，加之流量费用又相对较高，因此每当我们发布新版本的时候，一些用户升级并不是很积极，这就造成了新版本的升级率并不高。而google为了解决了这个问题，提出了Smart App Update，即增量更新（也叫做差分升级）。
+尽管现在网络环境">
+<meta property="og:type" content="article">
+<meta property="og:title" content="<转>漫谈Android 增量更新">
+<meta property="og:url" content="https://iskylove.github.io/2016/11/05/android_patch_fix/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="原文地址：http://blog.csdn.net/dd864140130/article/details/52928419在前几年，整体移动网络环境相比现在差很多，加之流量费用又相对较高，因此每当我们发布新版本的时候，一些用户升级并不是很积极，这就造成了新版本的升级率并不高。而google为了解决了这个问题，提出了Smart App Update，即增量更新（也叫做差分升级）。
+尽管现在网络环境">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix2.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix3.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix4.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix5.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix6.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix7.jpg">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix8.gif">
+<meta property="og:updated_time" content="2016-11-04T17:32:16.302Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<转>漫谈Android 增量更新">
+<meta name="twitter:description" content="原文地址：http://blog.csdn.net/dd864140130/article/details/52928419在前几年，整体移动网络环境相比现在差很多，加之流量费用又相对较高，因此每当我们发布新版本的时候，一些用户升级并不是很积极，这就造成了新版本的升级率并不高。而google为了解决了这个问题，提出了Smart App Update，即增量更新（也叫做差分升级）。
+尽管现在网络环境">
+<meta name="twitter:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/all/">all</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-android_patch_fix" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/11/05/android_patch_fix/" class="article-date">
+      <time datetime="2016-11-04T17:32:29.505Z" itemprop="datePublished">2016-11-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      &lt;转&gt;漫谈Android 增量更新
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/android/">android</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>原文地址：<a href="http://blog.csdn.net/dd864140130/article/details/52928419" target="_blank" rel="external">http://blog.csdn.net/dd864140130/article/details/52928419</a><br>在前几年，整体移动网络环境相比现在差很多，加之流量费用又相对较高，因此每当我们发布新版本的时候，一些用户升级并不是很积极，这就造成了新版本的升级率并不高。而google为了解决了这个问题，提出了Smart App Update，即增量更新（也叫做差分升级）。</p>
+<p>尽管现在网络环境有了很大的提升，但一个不争的事实就是应用越做越大，因此，增量更新在目前的仍然是一种解决APP更新包过大的有效方案。今天，我们就来聊聊增量更新。<a id="more"></a><br>什么是增量更新？</p>
+<p>增量更新的关键在于如何理解增量一词。来想想平时我们的开发过程，往往都是今天在昨天的基础上修改一些代码，app的更新也是类似的：往往都是在旧版本的app上进行修改。这样看来，增量更新就是原有app的基础上只更新发生变化的地方，其余保持原样。</p>
+<p>与原来每次更新都要下载完整apk包的做法相比，这样做的好处显而易见：每次变化的地方总是比较少，因此更新包的体积就会小很多。比如“师父说”安装包的体积在6m左右，如果不采用增量更新，用户每次更新都需要下载大约6m左右的安装包，而采用增量更新这种方案之后每次只需要下载2m左右的更新包即可，相比原来做法大大减少了用户下载等待的时间。</p>
+<p>增量更新的原理</p>
+<p>增量更新的原理非常简单，简单的说就是通过某种算法找出新版本和旧版本不一样的地方（这个过程也叫做差分），然后将不一样的地方抽取出来形成所谓的更新补丁（patch），也称之为差分包。客户端在检测到更新的时候，只需要下载差分包到本地，然后将差分包合并至本地的安装包，形成新版本的安装包，文件校验通过后再执行安装即可。本地的安装包通过提取当前已安装应用的apk得到。</p>
+<p>演示：差分包的生成与合并</p>
+<p>如下图所示：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix.jpg" alt="picture"><br>现在的问题在于如何生成差分包以及合并差分包。这里，我们借助开源库bsdiff来解决以上两个问题。首先我们先演示一下差分包的形成与合并。</p>
+<p>下载bsdiff_win_exe.zip，解压到本地。如下图:<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix2.jpg" alt="picture"><br>然后，我们先打出一个安装包，假设为old.apk。对源码做修改后，再打出一个新的安装包new.apk。此处old.apk相当于老版本的应用，而new.apk相当于新版本的应用。接下来，我们利用bsdiff来生成差分包patch.patch。</p>
+<p>生成差分包</p>
+<p>将上面的old.apk和new.apk放入bsdiff解压后的目录，然后在控制台中执行命令bsdiff old.apk new.apk patch.patch,稍等一会便可以生成差分包patch.patch，如下<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix3.jpg" alt="picture"><br>合并差分包</p>
+<p>合并old.apk和patch.patch，生成新的安装包new.apk。只要此处合并出来的new.apk和上面我们自己打出来的new.apk一样，那么就可以认为它就是我们需要的新版本安装包。</p>
+<p>我们来看看如何合并。将old.apk和patch.patch放入bsdiff文件夹，合并之前为：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix4.jpg" alt="picture"><br>然后执行命令bspatch old.apk new.apk patch.patch，稍等一会之后便可以看到合并出的new.apk.如下：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix5.jpg" alt="picture"><br>不出意外，合并而来的new.apk应该和我们自己打出来的new.apk是一模一样的，这可以通过验证两者的md5来认定。</p>
+<p>导线在为止，我们已经弄明白增量更行是怎么一回事。下面，我们就以“师父说”为对象进行实践一把。</p>
+<p>实践：让师父说支持增量更新</p>
+<p>客户端支持增量更新总体和上面的演示差不多，唯一的区别在于客户端要自行编译bspatch.c来实现合并差分包，也就是所谓的ndk开发，这里我们首先要下载bsdiff的源码以及bszip的源码，以便后面使用。在as中如何进行ndk开放不是本文的重点，因此不做详细说明。</p>
+<p>1.编写BsPatchUtil类</p>
+<p>BsPatchUtil中只有一个natvie方法patch(String oldApkPath,String newApkPath,String patchPath)用于实现增量包的合并：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BsPatchUtil</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">"apkpatch"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  <span class="keyword">native</span> <span class="keyword">int</span> <span class="title">patch</span><span class="params">(String oldApkPath, String newApkPath, String patchPath)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.编写C代码</p>
+<p>在实现BsPatchUtil之前，我们需要将bspatch.c以及bzip的相关代码拷贝到jni目录下（bzip只保留.h头文件和.c文件）。并将bspatch.c中的main()方法名修改为executePatch()，并且修改其中bzip的引入头为#include “bzip2/bzlib.h”.目录结构如下：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix6.jpg" alt="picture"></p>
+<p>注意:上图当中的em.c是一个空文件，用来避免在window下编译产生的未知错误。</p>
+<p>接下来我们就可以在bspatch_util.c中实现相关的代码了：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//</span><br><span class="line">// Created by God on 2016/10/25.</span><br><span class="line">//</span><br><span class="line">#include "com_closedevice_fastapp_util_BsPatchUtil.h"</span><br><span class="line"></span><br><span class="line">JNIEXPORT jint JNICALL Java_com_closedevice_fastapp_util_BsPatchUtil_patch</span><br><span class="line">        (JNIEnv *env, jclass clazz, jstring old, jstring new, jstring patch)&#123;</span><br><span class="line">        int args=4;</span><br><span class="line">        char *argv[args];</span><br><span class="line">    argv[0] = "bspatch";</span><br><span class="line">    argv[1] = (char*)((*env)-&gt;GetStringUTFChars(env, old, 0));</span><br><span class="line">    argv[2] = (char*)((*env)-&gt;GetStringUTFChars(env, new, 0));</span><br><span class="line">    argv[3] = (char*)((*env)-&gt;GetStringUTFChars(env, patch, 0));</span><br><span class="line"></span><br><span class="line">    //此处executePathch()就是上面我们修改出的</span><br><span class="line">    int result = executePatch(args, argv);</span><br><span class="line"></span><br><span class="line">    (*env)-&gt;ReleaseStringUTFChars(env, old, argv[1]);</span><br><span class="line">    (*env)-&gt;ReleaseStringUTFChars(env, new, argv[2]);</span><br><span class="line">    (*env)-&gt;ReleaseStringUTFChars(env, patch, argv[3]);</span><br><span class="line"></span><br><span class="line">    return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>至此，大部分工作已经完成了。配置app moudle中的build.gradle中添加ndk配置<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">defaultConfig &#123;</span><br><span class="line">        applicationId <span class="string">"com.closedevice.fastapp"</span></span><br><span class="line">        minSdkVersion <span class="number">14</span></span><br><span class="line">        targetSdkVersion <span class="number">24</span></span><br><span class="line">        versionCode <span class="number">1</span></span><br><span class="line">        versionName <span class="string">"1.0.0"</span></span><br><span class="line">        testInstrumentationRunner <span class="string">"android.support.test.runner.AndroidJUnitRunner"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//ndk配置</span></span><br><span class="line">        ndk&#123;</span><br><span class="line">            moduleName <span class="string">"apkpatch"</span></span><br><span class="line">            abiFilters <span class="string">"armeabi"</span>, <span class="string">"armeabi-v7a"</span>,<span class="string">"x86"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>接下来，我们编译试试（ndk环境的配置这里不做说明，自行配置即可），不出意外会遇到以下错误：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix7.jpg" alt="picture"><br>该问题的解决方法也非常简单，注释掉对应文件的main()方法即可。重新编译，不出意外没什么问题了。接下来，我们就需要在合适的地方合并差分包了。</p>
+<p>3.合并差分包</p>
+<p>上面的过程做完之后，就可以通过BsPatchUtil.patch()来合并当前安装包和差分包了。</p>
+<p>这里，我们假设差分包已经从服务器下载到本地了。</p>
+<p>首先来看如何获取当前安装包。我们安装的应用通常在、data/app下，可以通过一下代码获取其路径：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getApkInstalledSrc</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> BaseApplication.context().getApplicationInfo().sourceDir;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>下面就可以通过BsPatchUtil.patch(String oldApkPath,String newApkPath,String pathPath)来进行合并了。此处需要注意两点：<br>1.合并的地方建议放在外置存储（SDcard）当中<br>2.合并的过程比较耗时，需要放到子线程中进行。<br>4.安装</p>
+<p>任何更新包在下载完成后首先要做的就是进行ＭＤ５校验，以便确认该更新包是正规途径下载而来的。同样，对于合并之后的更新包，首先要做的事情也是进行ＭＤ5校验，校验通过之后，再进行安装：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">installAPK</span><span class="params">(Context context, File file)</span> </span>&#123;</span><br><span class="line">        Intent intent = <span class="keyword">new</span> Intent();</span><br><span class="line">        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span><br><span class="line">        intent.setAction(Intent.ACTION_VIEW);</span><br><span class="line">        intent.setDataAndType(Uri.fromFile(file),</span><br><span class="line">                <span class="string">"application/vnd.android.package-archive"</span>);</span><br><span class="line">        context.startActivity(intent);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>到现在，增量更新已经完成。现在可以把增量包以及合并之后的安装包进行删除了。<br>大体代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">smartupdate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Observable.create(<span class="keyword">new</span> Observable.OnSubscribe&lt;File&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Subscriber&lt;? <span class="keyword">super</span> File&gt; subscriber)</span> </span>&#123;</span><br><span class="line">                <span class="comment">//定义生成的新包</span></span><br><span class="line">                File newApk = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(), <span class="string">"newApk.apk"</span>);</span><br><span class="line"></span><br><span class="line">                <span class="comment">//假设patch.patch文件已经下载到sdcard上，切已经校验通过</span></span><br><span class="line">                File patch = <span class="keyword">new</span> File(Environment.getExternalStorageDirectory(), <span class="string">"patch.patch"</span>);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span>(!patch.exists())&#123;</span><br><span class="line">                    subscriber.onError(<span class="keyword">new</span> IOException(<span class="string">"patch file not exist!"</span>));</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">                <span class="comment">//合并差分包</span></span><br><span class="line">                BsPatchUtil.patch(OSUtil.getApkInstalledSrc(), newApk.getAbsolutePath(), patch.getAbsolutePath());</span><br><span class="line">                <span class="keyword">if</span> (newApk.exists()) &#123;</span><br><span class="line">                    subscriber.onNext(newApk);</span><br><span class="line">                    subscriber.onCompleted();</span><br><span class="line">                    patch.delete();</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    subscriber.onError(<span class="keyword">new</span> IOException(<span class="string">"bspatch failed,file not exist!"</span>));</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).subscribeOn(Schedulers.newThread())</span><br><span class="line">                .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">                .doOnSubscribe(<span class="keyword">new</span> Action0() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                        showDialog(<span class="string">"正在应用差分包"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">                .subscribe(<span class="keyword">new</span> Subscriber&lt;File&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCompleted</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                        hideDialog();</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">                        hideDialog();</span><br><span class="line">                        LogUtils.d(e.getMessage());</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(File file)</span> </span>&#123;</span><br><span class="line">                        OSUtil.installAPK(getActivity(),file);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>增量更新的缺点</p>
+<p>增量更新虽让有效的解决了更新包过大的问题，但是存在以下几点问题：</p>
+<p>客户端和服务端需要加入相应的支持。每次发布新版本，服务端都需要为以前所有的老版本生成对应的差分包，并根据客户端端请求返回对应的更新包，维护过程将会变得相对复杂。客户端需要对差分包做更为详细的验证，防止出错，除此之外，客户端应该可以根据服务端更新开关来确定当前是使用完整更新还是增量更新。<br>apk包之间的差异过小时，比如2m以下，此时生成的差分包仍然有几百k，此时使用增量更新得不偿失，毕竟形成差分包和合并的过程都非常耗时。另外，但版本之间变化非常大的时候，通常是是大版本好变化的时候，比如从v 1.0.0到2.0.0,此时使用完整更新也不错。<br>在师父说中已经添加主要代码，可自行练习。效果如下：<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_patch_fix8.gif" alt="picture"></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/11/05/android_patch_fix/">&lt;转&gt;漫谈Android 增量更新</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2016-11-05, 01:32:29</p>
+        <p><span>最后更新:</span>2016-11-05, 01:32:16</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/11/05/android_patch_fix/" title="&lt;转&gt;漫谈Android 增量更新">https://iskylove.github.io/2016/11/05/android_patch_fix/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/11/05/android_patch_fix/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/11/05/java_javassist/">
+                    (转)JAVA 字节码操作利器javassist
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"<转>漫谈Android 增量更新　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/11/05/java_javassist/" title="下一篇: (转)JAVA 字节码操作利器javassist">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_patch_fix/"><转>漫谈Android 增量更新</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/java_javassist/">(转)JAVA 字节码操作利器javassist</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_aop_des/">【翻译】Android中的AOP编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/android_drawable/">(转)领略千变万化的Android Drawable</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/website_share/">技术网站分享(持续更新中~~)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2016 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

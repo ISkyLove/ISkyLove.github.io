@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>【翻译】Android中的AOP编程 | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="原文链接 : Aspect Oriented Programming in Android
+面向切面编程（AOP，Aspect-oriented programming）需要把程序逻辑分解成『关注点』（concerns，功能的内聚区域）。这意味着，在 AOP 中，我们不需要显式的修改就可以向代码中添加可执行的代码块。这种编程范式假定『横切关注点』（cross-cutting concerns，多处">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻译】Android中的AOP编程">
+<meta property="og:url" content="https://iskylove.github.io/2016/11/05/android_aop_des/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="原文链接 : Aspect Oriented Programming in Android
+面向切面编程（AOP，Aspect-oriented programming）需要把程序逻辑分解成『关注点』（concerns，功能的内聚区域）。这意味着，在 AOP 中，我们不需要显式的修改就可以向代码中添加可执行的代码块。这种编程范式假定『横切关注点』（cross-cutting concerns，多处">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_aop1.png">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_aop2.png">
+<meta property="og:updated_time" content="2016-11-04T17:29:44.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【翻译】Android中的AOP编程">
+<meta name="twitter:description" content="原文链接 : Aspect Oriented Programming in Android
+面向切面编程（AOP，Aspect-oriented programming）需要把程序逻辑分解成『关注点』（concerns，功能的内聚区域）。这意味着，在 AOP 中，我们不需要显式的修改就可以向代码中添加可执行的代码块。这种编程范式假定『横切关注点』（cross-cutting concerns，多处">
+<meta name="twitter:image" content="http://7xtazt.com1.z0.glb.clouddn.com/android_aop1.png">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/all/">all</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-android_aop_des" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/11/05/android_aop_des/" class="article-date">
+      <time datetime="2016-11-04T17:30:11.636Z" itemprop="datePublished">2016-11-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【翻译】Android中的AOP编程
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/android/">android</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>原文链接 : <a href="http://fernandocejas.com/2014/08/03/aspect-oriented-programming-in-android" target="_blank" rel="external">Aspect Oriented Programming in Android</a></p>
+<p>面向切面编程（AOP，Aspect-oriented programming）需要把程序逻辑分解成『关注点』（concerns，功能的内聚区域）。这意味着，在 AOP 中，我们不需要显式的修改就可以向代码中添加可执行的代码块。这种编程范式假定『横切关注点』（cross-cutting concerns，多处代码中需要的逻辑，但没有一个单独的类来实现）应该只被实现一次，且能够多次注入到需要该逻辑的地方。<a id="more"></a></p>
+<p>代码注入是 AOP 中的重要部分：它在处理上述提及的横切整个应用的『关注点』时很有用，例如日志或者性能监控。这种方式，并不如你所想的应用甚少，相反的，每个程序员都可以有使用这种注入代码能力的场景，这样可以避免很多痛苦和无奈。</p>
+<p>AOP 是一种已经存在了很多年的编程范式。我发现把它应用到 Android 开发中也很有用。经过一番调研后，我认为我们用它可以获得很多好处和有用的东西。</p>
+<p>术语（迷你术语表）<br>在开始之前，我们先看看需要了解的词汇：</p>
+<p>Cross-cutting concerns（横切关注点）: 尽管面向对象模型中大多数类会实现单一特定的功能，但通常也会开放一些通用的附属功能给其他类。例如，我们希望在数据访问层中的类中添加日志，同时也希望当UI层中一个线程进入或者退出调用一个方法时添加日志。尽管每个类都有一个区别于其他类的主要功能，但在代码里，仍然经常需要添加一些相同的附属功能。</p>
+<p>Advice（通知）: 注入到class文件中的代码。典型的 Advice 类型有 before、after 和 around，分别表示在目标方法执行之前、执行后和完全替代目标方法执行的代码。 除了在方法中注入代码，也可能会对代码做其他修改，比如在一个class中增加字段或者接口。</p>
+<p>Joint point（连接点）: 程序中可能作为代码注入目标的特定的点，例如一个方法调用或者方法入口。</p>
+<p>Pointcut（切入点）: 告诉代码注入工具，在何处注入一段特定代码的表达式。例如，在哪些 joint points 应用一个特定的 Advice。切入点可以选择唯一一个，比如执行某一个方法，也可以有多个选择，比如，标记了一个定义成@DebguTrace 的自定义注解的所有方法。</p>
+<p>Aspect（切面）: Pointcut 和 Advice 的组合看做切面。例如，我们在应用中通过定义一个 pointcut 和给定恰当的advice，添加一个日志切面。</p>
+<p>Weaving（织入）: 注入代码（advices）到目标位置（joint points）的过程。</p>
+<p>下面这张图简要总结了一下上述这些概念。</p>
+<p><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_aop1.png" alt="picture"></p>
+<p>那么…我们何时何地应用AOP呢？<br>一些示例的 cross-cutting concerns 如下：</p>
+<p>日志<br>持久化<br>性能监控<br>数据校验<br>缓存<br>其他更多<br>取决于你所选的其中一种或其他方案 :)。</p>
+<p>工具和库<br>有一些工具和库帮助我们使用 AOP:<br><a href="https://eclipse.org/aspectj/" target="_blank" rel="external">AspectJ</a>: 一个 JavaTM 语言的面向切面编程的无缝扩展（适用Android）。</p>
+<p><a href="https://github.com/crimsonwoods/javassist-android" target="_blank" rel="external">Javassist for Android</a>: 用于字节码操作的知名 java 类库 Javassist 的 Android 平台移植版。</p>
+<p><a href="https://code.google.com/p/dexmaker/" target="_blank" rel="external">DexMaker</a>: Dalvik 虚拟机上，在编译期或者运行时生成代码的 Java API。</p>
+<p><a href="http://asm.ow2.org/asmdex-index.html" target="_blank" rel="external">ASMDEX</a>: 一个类似 ASM 的字节码操作库，运行在Android平台，操作Dex字节码。<br>为什么用 AspectJ？<br>我们下面的例子选用 AspectJ，有以下原因：</p>
+<p>功能强大<br>支持编译期和加载时代码注入<br>易于使用<br>示例<br>比方说，我们要测量一个方法的性能（执行这个方法需要多长时间）。为此我们用一个 @DebugTrace 的注解标记我们的这个方法，并且无需在每个注解过的方法中编写代码，就可以通过 logcat 输出结果。我们的方法是使用 AspectJ 达到这个目的。</p>
+<p>我们看下在底层到底发生了什么：</p>
+<p>我们在编译过程中增加一个新的步骤处理注解。<br>注解的方法内会生成和注入必要的样板代码。</p>
+<p>在此，我必须要提到当我研究这些时，发现了<a href="https://github.com/JakeWharton/hugo" target="_blank" rel="external">Jake Wharton’s Hugo Library</a> 这个项目，支持做同样的事情。因此，我重构了我的代码，看上去和它类似。尽管，我的代码是一个更加原始和简化的版本（顺便提一下，通过看这个项目的代码，我学到了很多）。</p>
+<p><img src="http://7xtazt.com1.z0.glb.clouddn.com/android_aop2.png" alt="picture"></p>
+<p>工程结构<br>我们会把一个简单的示例应用拆分成两个 modules，第一个包含我们的 Android App 代码，第二个是一个 Android Library 工程，使用 AspectJ 织入代码（代码注入）。</p>
+<p>你可能会想知道为什么我们用一个 Android Library 工程，而不是用一个纯的 Java Library：原因是为了使 AspectJ 能在 Android 上运行，我们必须在编译时做一些 hook。这只能使用 andorid-library gradle 插件完成。（先不要为此担心，后面我会给出更多细节。）</p>
+<p>创建注解<br>首先我们创建我们的Java注解。这个注解周期声明在 class 文件上（RetentionPolicy.CLASS），可以注解构造函数和方法（ElementType.CONSTRUCTOR 和 ElementType.METHOD）。因此，我们的 DebugTrace.java 文件看上是这样的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.CLASS)</span><br><span class="line"><span class="meta">@Target</span>(&#123; ElementType.CONSTRUCTOR, ElementType.METHOD &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DebugTrace &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>我们的性能监控计时类<br>我已经创建了一个简单的计时类，包含 start/stop 方法。下面是 StopWatch.java 文件:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * Class representing a StopWatch for measuring time.</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StopWatch</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> startTime;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> endTime;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">long</span> elapsedTime;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">StopWatch</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//empty</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">reset</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    startTime = <span class="number">0</span>;</span><br><span class="line">    endTime = <span class="number">0</span>;</span><br><span class="line">    elapsedTime = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    reset();</span><br><span class="line">    startTime = System.nanoTime();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (startTime != <span class="number">0</span>) &#123;</span><br><span class="line">      endTime = System.nanoTime();</span><br><span class="line">      elapsedTime = endTime - startTime;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      reset();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getTotalTimeMillis</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (elapsedTime != <span class="number">0</span>) ? TimeUnit.NANOSECONDS.toMillis(endTime - startTime) : <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>DebugLog 类<br>我只是包装了一下 “android.util.Log”，因为我首先想到的是向 android log 中增加更多的实用功能。下面是代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * Wrapper around &#123;<span class="doctag">@link</span> android.util.Log&#125;</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DebugLog</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">DebugLog</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * Send a debug log message</span><br><span class="line">   *</span><br><span class="line">   * <span class="doctag">@param</span> tag Source of a log message.</span><br><span class="line">   * <span class="doctag">@param</span> message The message you would like logged.</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(String tag, String message)</span> </span>&#123;</span><br><span class="line">    Log.d(tag, message);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Aspect 类<br>现在是时候创建我们的 Aspect 类（TraceAspect.java）了。Aspect 类负责管理注解的处理和代码织入。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * Aspect representing the cross cutting-concern: Method and Constructor Tracing.</span><br><span class="line"> */</span></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TraceAspect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String POINTCUT_METHOD =</span><br><span class="line">      <span class="string">"execution(@org.android10.gintonic.annotation.DebugTrace * *(..))"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String POINTCUT_CONSTRUCTOR =</span><br><span class="line">      <span class="string">"execution(@org.android10.gintonic.annotation.DebugTrace *.new(..))"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Pointcut</span>(POINTCUT_METHOD)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">methodAnnotatedWithDebugTrace</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Pointcut</span>(POINTCUT_CONSTRUCTOR)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">constructorAnnotatedDebugTrace</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Around</span>(<span class="string">"methodAnnotatedWithDebugTrace() || constructorAnnotatedDebugTrace()"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">weaveJoinPoint</span><span class="params">(ProceedingJoinPoint joinPoint)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();</span><br><span class="line">    String className = methodSignature.getDeclaringType().getSimpleName();</span><br><span class="line">    String methodName = methodSignature.getName();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> StopWatch stopWatch = <span class="keyword">new</span> StopWatch();</span><br><span class="line">    stopWatch.start();</span><br><span class="line">    Object result = joinPoint.proceed();</span><br><span class="line">    stopWatch.stop();</span><br><span class="line"></span><br><span class="line">    DebugLog.log(className, buildLogMessage(methodName, stopWatch.getTotalTimeMillis()));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">   * Create a log message.</span><br><span class="line">   *</span><br><span class="line">   * <span class="doctag">@param</span> methodName A string with the method name.</span><br><span class="line">   * <span class="doctag">@param</span> methodDuration Duration of the method in milliseconds.</span><br><span class="line">   * <span class="doctag">@return</span> A string representing message.</span><br><span class="line">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">buildLogMessage</span><span class="params">(String methodName, <span class="keyword">long</span> methodDuration)</span> </span>&#123;</span><br><span class="line">    StringBuilder message = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    message.append(<span class="string">"Gintonic --&gt; "</span>);</span><br><span class="line">    message.append(methodName);</span><br><span class="line">    message.append(<span class="string">" --&gt; "</span>);</span><br><span class="line">    message.append(<span class="string">"["</span>);</span><br><span class="line">    message.append(methodDuration);</span><br><span class="line">    message.append(<span class="string">"ms"</span>);</span><br><span class="line">    message.append(<span class="string">"]"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> message.toString();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>几个在此提到的重点：<br>1.我们声明了两个作为 pointcuts 的 public 方法，筛选出所有通过 “org.android10.gintonic.annotation.DebugTrace” 注解的方法和构造函数。<br>2.我们使用 “@Around” 注解定义了“weaveJointPoint(ProceedingJoinPoint joinPoint)”方法,使我们的代码注入在使用”@DebugTrace”注解的地方生效。<br>3.“Object result = joinPoint.proceed();”这行代码是被注解的方法执行的地方。因此，在此之前，我们启动我们的计时类计时，在这之后，停止计时。<br>4.最后，我们构造日志信息，用 Android Log 输出。<br>使 AspectJ 运行在 Anroid 上<br>现在，所有代码都可以正常工作了，但是，如果我们编译我们的例子，我们并没有看到任何事情发生。原因是我们必须使用 AspectJ 的编译器（ajc，一个java编译器的扩展）对所有受 aspect 影响的类进行织入。这就是为什么，我之前提到的，我们需要在 gradle 的编译 task 中增加一些额外配置，使之能正确编译运行。</p>
+<p>我们的 build.gradle 文件如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.android.build.gradle.LibraryPlugin</span><br><span class="line"><span class="keyword">import</span> org.aspectj.bridge.IMessage</span><br><span class="line"><span class="keyword">import</span> org.aspectj.bridge.MessageHandler</span><br><span class="line"><span class="keyword">import</span> org.aspectj.tools.ajc.Main</span><br><span class="line"></span><br><span class="line">buildscript &#123;</span><br><span class="line">  repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">  &#125;</span><br><span class="line">  dependencies &#123;</span><br><span class="line">    classpath <span class="string">'com.android.tools.build:gradle:0.12.+'</span></span><br><span class="line">    classpath <span class="string">'org.aspectj:aspectjtools:1.8.1'</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">apply plugin: <span class="string">'android-library'</span></span><br><span class="line"></span><br><span class="line">repositories &#123;</span><br><span class="line">  mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">  compile <span class="string">'org.aspectj:aspectjrt:1.8.1'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">android &#123;</span><br><span class="line">  compileSdkVersion <span class="number">19</span></span><br><span class="line">  buildToolsVersion <span class="string">'19.1.0'</span></span><br><span class="line"></span><br><span class="line">  lintOptions &#123;</span><br><span class="line">    abortOnError <span class="keyword">false</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">android.libraryVariants.all &#123; variant -&gt;</span><br><span class="line">  LibraryPlugin plugin = project.plugins.getPlugin(LibraryPlugin)</span><br><span class="line">  JavaCompile javaCompile = variant.javaCompile</span><br><span class="line">  javaCompile.doLast &#123;</span><br><span class="line">    String[] args = [<span class="string">"-showWeaveInfo"</span>,</span><br><span class="line">                     <span class="string">"-1.5"</span>,</span><br><span class="line">                     <span class="string">"-inpath"</span>, javaCompile.destinationDir.toString(),</span><br><span class="line">                     <span class="string">"-aspectpath"</span>, javaCompile.classpath.asPath,</span><br><span class="line">                     <span class="string">"-d"</span>, javaCompile.destinationDir.toString(),</span><br><span class="line">                     <span class="string">"-classpath"</span>, javaCompile.classpath.asPath,</span><br><span class="line">                     <span class="string">"-bootclasspath"</span>, plugin.project.android.bootClasspath.join(</span><br><span class="line">        File.pathSeparator)]</span><br><span class="line"></span><br><span class="line">    MessageHandler handler = <span class="keyword">new</span> MessageHandler(<span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">new</span> Main().run(args, handler)</span><br><span class="line"></span><br><span class="line">    def log = project.<span class="function">logger</span><br><span class="line">    <span class="title">for</span> <span class="params">(IMessage message : handler.getMessages(<span class="keyword">null</span>, <span class="keyword">true</span>)</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">switch</span> (message.getKind()) &#123;</span><br><span class="line">        <span class="keyword">case</span> IMessage.ABORT:</span><br><span class="line">        <span class="keyword">case</span> IMessage.ERROR:</span><br><span class="line">        <span class="keyword">case</span> IMessage.FAIL:</span><br><span class="line">          log.error message.message, message.thrown</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> IMessage.WARNING:</span><br><span class="line">        <span class="keyword">case</span> IMessage.INFO:</span><br><span class="line">          log.info message.message, message.thrown</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> IMessage.DEBUG:</span><br><span class="line">          log.debug message.message, message.thrown</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们的测试方法<br>我们添加一个测试方法，来使用我们炫酷的 aspect 注解。我已经在主 Activity 类中增加了一个方法用来测试。看下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@DebugTrace</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">testAnnotatedMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      Thread.sleep(<span class="number">10</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">      e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行我们的应用<br>我们用 gradle 命令编译部署我们的 app 到 android 设备或者模拟器上：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gradlew clean build installDebug</span><br></pre></td></tr></table></figure></p>
+<p>If we open the logcat and execute our sample, we will see a debug log with:<br>如果我们打开 logcat，执行我们的例子，会看到一条 debug 日志：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Gintonic --&gt; testAnnotatedMethod --&gt; [<span class="number">10</span>ms]</span><br></pre></td></tr></table></figure></p>
+<p>我们的第一个使用 AOP 的 Androd 应用可以工作了！<br>你可以用 Dex Dump 或者任何其他的逆向工具反编译 apk 文件，看一下生成和注入的代码。</p>
+<p>回顾<br>回顾总结如下：</p>
+<p>我们已经对面向切面编程（AOP）这一范式有了初步体验。<br>代码注入是 AOP 中的重要部分。<br>AspectJ 是在 Android 应用中进行代码织入的强大且易用的工具。<br>我们已经使用 AOP 能力创建了一个可以工作的示例。<br>结论<br>面向切面编程很强大。通过正确使用，你可以在开发你的 Android 应用时，避免在『cross-cutting concerns』处复制大量代码，比如我们在示例中看到的性能监控部分。我非常鼓励你尝试一下，你会发现它非常有用。</p>
+<p>我希望你能喜欢这篇文章，文章的目的是分享我学到的东西，所以，欢迎评论和反馈，如果能 fork 代码玩一下就更好了。</p>
+<p>我确信我们能在示例 app 的 AOP 模块里增加些有趣的东西，欢迎提出你的想法;)。</p>
+<p>源码<br>你可以在 <a href="https://github.com/android10/Android-AOPExample" target="_blank" rel="external">https://github.com/android10/Android-AOPExample</a> 下载示例 app 代码。另外我还有一个使用动态代理的 Java AOP 示例（也可以用在Android上）：<a href="https://github.com/android10/DynamicProxy_Java_Sample" target="_blank" rel="external">https://github.com/android10/DynamicProxy_Java_Sample</a>。</p>
+<p>资源<br><a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming" target="_blank" rel="external">Aspect-oriented programming.</a><br><a href="http://en.wikipedia.org/wiki/Aspect-oriented_software_development" target="_blank" rel="external">Aspect-oriented software development.</a><br><a href="http://www.javacodegeeks.com/2011/09/practical-introduction-into-code.html" target="_blank" rel="external">Practical Introduction into Code Injection with AspectJ, Javassist, and Java Proxy.</a><br><a href="http://java.dzone.com/articles/implementing-build-time" target="_blank" rel="external">Implementing Build-time Bytecode Instrumentation With Javassist.</a><br><a href="http://www.eclipse.org/aspectj/doc/released/faq.php" target="_blank" rel="external">Frequently Asked Questions about AspectJ.</a><br><a href="http://blog.espenberntsen.net/2010/03/20/aspectj-cheat-sheet/" target="_blank" rel="external">AspectJ Cheat Sheet.</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/11/05/android_aop_des/">【翻译】Android中的AOP编程</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2016-11-05, 01:30:11</p>
+        <p><span>最后更新:</span>2016-11-05, 01:29:44</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/11/05/android_aop_des/" title="【翻译】Android中的AOP编程">https://iskylove.github.io/2016/11/05/android_aop_des/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/11/05/android_aop_des/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/11/05/java_javassist/">
+                    (转)JAVA 字节码操作利器javassist
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/08/25/android_drawable/">
+                    (转)领略千变万化的Android Drawable
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"【翻译】Android中的AOP编程　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/11/05/java_javassist/" title="上一篇: (转)JAVA 字节码操作利器javassist">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/08/25/android_drawable/" title="下一篇: (转)领略千变万化的Android Drawable">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_patch_fix/"><转>漫谈Android 增量更新</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/java_javassist/">(转)JAVA 字节码操作利器javassist</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_aop_des/">【翻译】Android中的AOP编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/android_drawable/">(转)领略千变万化的Android Drawable</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/website_share/">技术网站分享(持续更新中~~)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2016 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

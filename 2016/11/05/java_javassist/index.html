@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>(转)JAVA 字节码操作利器javassist | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1、简介javassist是一个开源的分析、编辑和创建Java字节码的类库。不需要了解虚拟机指令，就能动态生成类或者改变类的结构。官网首页www.javassist.org2、下载（1）下载链接http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/（2）使用的版本是javassist-3.18.0-GA。
+Javassist是一个执行字节码操作的强而">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(转)JAVA 字节码操作利器javassist">
+<meta property="og:url" content="https://iskylove.github.io/2016/11/05/java_javassist/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="1、简介javassist是一个开源的分析、编辑和创建Java字节码的类库。不需要了解虚拟机指令，就能动态生成类或者改变类的结构。官网首页www.javassist.org2、下载（1）下载链接http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/（2）使用的版本是javassist-3.18.0-GA。
+Javassist是一个执行字节码操作的强而">
+<meta property="og:updated_time" content="2016-11-04T17:31:31.324Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(转)JAVA 字节码操作利器javassist">
+<meta name="twitter:description" content="1、简介javassist是一个开源的分析、编辑和创建Java字节码的类库。不需要了解虚拟机指令，就能动态生成类或者改变类的结构。官网首页www.javassist.org2、下载（1）下载链接http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/（2）使用的版本是javassist-3.18.0-GA。
+Javassist是一个执行字节码操作的强而">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/all/">all</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-java_javassist" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/11/05/java_javassist/" class="article-date">
+      <time datetime="2016-11-04T17:31:45.123Z" itemprop="datePublished">2016-11-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (转)JAVA 字节码操作利器javassist
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/java/">java</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>1、简介<br>javassist是一个开源的分析、编辑和创建Java字节码的类库。不需要了解虚拟机指令，就能动态生成类或者改变类的结构。<br>官网首页<a href="www.javassist.org">www.javassist.org</a><br>2、下载<br>（1）下载链接<a href="http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/" target="_blank" rel="external">http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/</a><br>（2）使用的版本是javassist-3.18.0-GA。</p>
+<p>Javassist是一个执行字节码操作的强而有力的驱动代码库。它允许开发者自由的在一个已经编译好的类中添加新的方法，或者是修改已有的方法。但是，和其他的类似库不同的是，Javassist并不要求开发者对字节码方面具有多么深入的了解，同样的，它也允许开发者忽略被修改的类本身的细节和结构。<a id="more"></a><br>  字节码驱动通常被用来执行对于已经编译好的类的修改，或者由程序自动创建执行类等等等等相关方面的操作。这就要求字节码引擎具备无论是在运行时或是编译时都能修改程序的能力。当下有些技术便是使用字节码来强化已经存在的Java类的，也有的则是使用它来使用或者产生一些由系统在运行时动态创建的类。举例而言，JDO1.0规范就使用了字节码技术对数据库中的表进行处理和预编译，并进而包装成Java类。特别是在面向对象驱动的系统开发中，相当多的框架体系使用字节码以使我们更好的获得程序的范型性和动态性。而某些EJB容器，比如JBOSS项目，则通过在运行中动态的创建和加载EJB，从而戏剧性的缩短了部署EJB的周期。这项技术是如此的引人入胜，以至于在JDK中也有了标准的java.lang.reflect.Proxy类来执行相关的操作。<br>   但是，尽管如此，编写字节码对于框架程序开发者们而言，却是一个相当不受欢迎的繁重任务。学习和使用字节码在某种程度上就如同使用汇编语言。这使得于大多数开发者而言，尽管在程序上可以获得相当多的好处，可攀登它所需要的难度则足以冷却这份热情。不仅如此，在程序中使用字节码操作也大大的降低了程序的可读性和可维护性。<br> 这是一块很好的奶油面包，但是我们却只能隔着橱窗流口水…难道我们只能如此了吗？<br>  所幸的是，我们还有Javassist。Javassist是一个可以执行字节码操作的函数库，可是尽管如此，它却是简单而便与理解的。他允许开发者对自己的程序自由的执行字节码层的操作，当然了，你并不需要对字节码有多深的了解，或者，你根本就不需要了解。<br>  二、具体使用</p>
+<p> Javassist的最外层的API和JAVA的反射包中的API颇为类似。它使你可以在装入ClassLoder之前，方便的查看类的结构。它主要由CtClass,，CtMethod,，以及CtField几个类组成。用以执行和JDK反射API中java.lang.Class,，java.lang.reflect.Method,， java.lang.reflect.Method .Field相同的操作。这些类可以使你在目标类被加载前，轻松的获得它的结构，函数，以及属性。此外，不仅仅是在功能上，甚至在结构上，这些类的执行函数也和反射的API大体相同。比如getName，getSuperclass，getMethods,，getSignature，等等。如果你对JAVA的反射机制有所了解的话，使用Javassist的这一层将会是轻松而快乐的。</p>
+<p>接下来我们将给出一个使用Javassist来读取org.geometry.Point.class的相关信息的例子（当然了，千万不要忘记引入javassist.*包）：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ClassPool pool = ClassPool.getDefault();  </span><br><span class="line">CtClass pt = pool.get(<span class="string">"org.geometry.Point"</span>);  </span><br><span class="line">System.out.println(pt.getSuperclass().getName());</span><br></pre></td></tr></table></figure>
+<p>其中，ClassPool是CtClass 的创建工厂。它在class path中查找CtClass的位置，并为每一个分析请求创建一个CtClass实例。而“getSuperclass().getName()”则展示出org.geometry.Point.class所继承的父类的名字。</p>
+<p>但是，和反射的API不尽相同的是，Javassist并不提供构造的能力，换句话说，我们并不能就此得到一个org.geometry.Point.class类的实例。另一方面，在该类没有实例化前，Javassist也不提供对目标类的函数的调用接口和获取属性的值的方法。在分析阶段，它仅仅提供对目标类的类定义修改，而这点，却是反射API所无法做到的。<br>1、目标类和其父类之间的关系<br>例1：<br>pt.setSuperclass(pool.get(“Figure”));<br>这样做将修改目标类和其父类之间的关系。我们将使org.geometry.Point.clas改继承自Figure类。当然了，就一致性而言，必须确保Figure类和原始的父类之间的兼容性。<br>2、往目标类中新增一个新的方法<br>而往目标类中新增一个新的方法则更加的简单了。首先我们来看字节码是如何形成的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CtMethod m = CtNewMethod.make(<span class="string">"public int xmove(int dx) &#123; x += dx; &#125;"</span>, pt);  </span><br><span class="line">pt.addMethod(m);</span><br></pre></td></tr></table></figure>
+<p>CtMethod类的让我们要新增一个方法只需要写一段小小的函数。这可是一个天大的好消息，开发者们再也不用为了实现这么一个小小的操作而写一大段的虚拟机指令序列了。Javassist将使用一个它自带的编译器来帮我们完成这一切。<br>最后，千万别忘了指示Javassist把已经写好的字节码存入到你的目标类里：<br>pt.writeFile();<br>writeFile方法可以帮我们把修改好了的定义写到目标类的.class文件里。当然了，我们甚至可以在该目标类加载的时候完成这一切，Javassist可以很好的和ClassLoader协同工作，我们不久就将看到这一点。<br>3、动态生成一个类<br>（1）生成的目标类Emp.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.study.javassist;    </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Emp</span> </span>&#123;    </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> String ename;    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> eno;    </span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Emp</span><span class="params">()</span></span>&#123;    </span><br><span class="line">        ename=<span class="string">"yy"</span>;    </span><br><span class="line">        eno=<span class="number">001</span>;    </span><br><span class="line">    &#125;    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getEname</span><span class="params">()</span> </span>&#123;    </span><br><span class="line">        <span class="keyword">return</span> ename;    </span><br><span class="line">    &#125;    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setEname</span><span class="params">(String ename)</span> </span>&#123;    </span><br><span class="line">        <span class="keyword">this</span>.ename = ename;    </span><br><span class="line">    &#125;    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getEno</span><span class="params">()</span> </span>&#123;    </span><br><span class="line">        <span class="keyword">return</span> eno;    </span><br><span class="line">    &#125;    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setEno</span><span class="params">(<span class="keyword">int</span> eno)</span> </span>&#123;    </span><br><span class="line">        <span class="keyword">this</span>.eno = eno;    </span><br><span class="line">    &#125;    </span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    <span class="comment">//添加一个自定义方法    </span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printInfo</span><span class="params">()</span></span>&#123;    </span><br><span class="line">        System.out.println(<span class="string">"begin!"</span>);    </span><br><span class="line">        System.out.println(ename);    </span><br><span class="line">        System.out.println(eno);    </span><br><span class="line">        System.out.println(<span class="string">"over!"</span>);    </span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>主类GenerateNewClassByJavassist.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.study.javassist;    </span><br><span class="line">    </span><br><span class="line"><span class="keyword">import</span> java.io.File;    </span><br><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;    </span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Modifier;    </span><br><span class="line">    </span><br><span class="line"><span class="keyword">import</span> javassist.ClassPool;    </span><br><span class="line"><span class="keyword">import</span> javassist.CtClass;    </span><br><span class="line"><span class="keyword">import</span> javassist.CtConstructor;    </span><br><span class="line"><span class="keyword">import</span> javassist.CtField;    </span><br><span class="line"><span class="keyword">import</span> javassist.CtMethod;    </span><br><span class="line"><span class="keyword">import</span> javassist.CtNewMethod;    </span><br><span class="line">    </span><br><span class="line"><span class="comment">/**  </span><br><span class="line"> *使用javassit动态生成一个java类  </span><br><span class="line"> * <span class="doctag">@author</span> yy  </span><br><span class="line"> * <span class="doctag">@version</span> 1.0  </span><br><span class="line"> *   </span><br><span class="line"> */</span>    </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GenerateNewClassByJavassist</span> </span>&#123;    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//ClassPool：CtClass对象的容器    </span></span><br><span class="line">        ClassPool pool = ClassPool.getDefault();    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//通过ClassPool生成一个public新类Emp.java    </span></span><br><span class="line">        CtClass ctClass = pool.makeClass(<span class="string">"com.study.javassist.Emp"</span>);    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//添加字段    </span></span><br><span class="line">        <span class="comment">//首先添加字段private String ename    </span></span><br><span class="line">        CtField enameField = <span class="keyword">new</span> CtField(pool.getCtClass(<span class="string">"java.lang.String"</span>),<span class="string">"ename"</span>,ctClass);    </span><br><span class="line">        enameField.setModifiers(Modifier.PRIVATE);    </span><br><span class="line">        ctClass.addField(enameField);    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//其次添加字段privtae int eno    </span></span><br><span class="line">        CtField enoField = <span class="keyword">new</span> CtField(pool.getCtClass(<span class="string">"int"</span>),<span class="string">"eno"</span>,ctClass);    </span><br><span class="line">        enoField.setModifiers(Modifier.PRIVATE);    </span><br><span class="line">        ctClass.addField(enoField);    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//为字段ename和eno添加getXXX和setXXX方法    </span></span><br><span class="line">        ctClass.addMethod(CtNewMethod.getter(<span class="string">"getEname"</span>, enameField));    </span><br><span class="line">        ctClass.addMethod(CtNewMethod.setter(<span class="string">"setEname"</span>, enameField));    </span><br><span class="line">        ctClass.addMethod(CtNewMethod.getter(<span class="string">"getEno"</span>, enoField));    </span><br><span class="line">        ctClass.addMethod(CtNewMethod.setter(<span class="string">"setEno"</span>, enoField));    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//添加构造函数    </span></span><br><span class="line">        CtConstructor ctConstructor = <span class="keyword">new</span> CtConstructor(<span class="keyword">new</span> CtClass[]&#123;&#125;, ctClass);    </span><br><span class="line">        <span class="comment">//为构造函数设置函数体    </span></span><br><span class="line">        StringBuffer buffer = <span class="keyword">new</span> StringBuffer();    </span><br><span class="line">        buffer.append(<span class="string">"&#123;\n"</span>)    </span><br><span class="line">              .append(<span class="string">"ename=\"yy\";\n"</span>)    </span><br><span class="line">              .append(<span class="string">"eno=001;\n&#125;"</span>);    </span><br><span class="line">        ctConstructor.setBody(buffer.toString());    </span><br><span class="line">        <span class="comment">//把构造函数添加到新的类中    </span></span><br><span class="line">        ctClass.addConstructor(ctConstructor);    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//添加自定义方法    </span></span><br><span class="line">        CtMethod ctMethod = <span class="keyword">new</span> CtMethod(CtClass.voidType,<span class="string">"printInfo"</span>,<span class="keyword">new</span> CtClass[]&#123;&#125;,ctClass);    </span><br><span class="line">        <span class="comment">//为自定义方法设置修饰符    </span></span><br><span class="line">        ctMethod.setModifiers(Modifier.PUBLIC);    </span><br><span class="line">        <span class="comment">//为自定义方法设置函数体    </span></span><br><span class="line">        StringBuffer buffer2 = <span class="keyword">new</span> StringBuffer();    </span><br><span class="line">        buffer2.append(<span class="string">"&#123;\nSystem.out.println(\"begin!\");\n"</span>)    </span><br><span class="line">                .append(<span class="string">"System.out.println(ename);\n"</span>)    </span><br><span class="line">                .append(<span class="string">"System.out.println(eno);\n"</span>)    </span><br><span class="line">                .append(<span class="string">"System.out.println(\"over!\");\n"</span>)    </span><br><span class="line">                .append(<span class="string">"&#125;"</span>);    </span><br><span class="line">        ctMethod.setBody(buffer2.toString());    </span><br><span class="line">        ctClass.addMethod(ctMethod);    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//为了验证效果，下面使用反射执行方法printInfo    </span></span><br><span class="line">        Class&lt;?&gt; clazz = ctClass.toClass();    </span><br><span class="line">        Object obj = clazz.newInstance();    </span><br><span class="line">        obj.getClass().getMethod(<span class="string">"printInfo"</span>, <span class="keyword">new</span> Class[]&#123;&#125;).invoke(obj, <span class="keyword">new</span> Object[]&#123;&#125;);    </span><br><span class="line">            </span><br><span class="line">        <span class="comment">//把生成的class文件写入文件    </span></span><br><span class="line">        <span class="keyword">byte</span>[] byteArr = ctClass.toBytecode();    </span><br><span class="line">        FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(<span class="string">"D://Emp.class"</span>));    </span><br><span class="line">        fos.write(byteArr);    </span><br><span class="line">        fos.close();    </span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4、Javassist与AOP思想<br>设计Javassist对目标类的子函数体的操作API的设想立足与ASPect-Oriented Programming（AOP）思想。Javassist允许把具有耦合关系的语句作为一个整体，它允许在一个插入语句中调用或获取其他函数或者及属性值。它将自动的对这些语句进行优先级分解并执行嵌套操作。<br>如下例所示，清单1首先包含了一个CtMethod，它主要针对Screen类的draw方法。然后，我们定义一个Point类，该类有一个move操作，用来实现该Point的移动。当然了，在移动前，我们希望可以通过draw方法得到该point目前的位置，那么，我们需要对该move方法加增如下的定义：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123; System.out.println(<span class="string">"move"</span>); $_ = $proceed($$); &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样，在执行move之前，我们就可以打印出它的位置了。请注意这里的调用语句，它是如下格式的：<br>$<em> = $proceed($$);<br>这样我们就将使用原CtMethod类中的process()对该point的位置进行追踪了。<br>基与如上情况，CtMethod的关于methord的操作其实被划分成了如下步骤，首先，CtMethod的methord将扫描插入语句（代码）本身。一旦发现了子函数，则创建一个ExprEditor实例来分析并执行这个子函数的操作。这个操作将在整个插入语句执行之前完成。而假如这个实例存在某个static的属性，那么methord将率先检测对插入语句进行检测。然后，在执行插入到目标类—如上例的point类—之前，该static属性将自动的替换插入语句（代码）中所有的相关的部分。不过，值得注意的是，以上的替换操作，将在Javassist把插入语句（代码）转变为字节码之后完成。<br>5、特殊字符<br>在替换的语句（代码）中，我们也有可能需要用到一些特殊变量来完成对某个子函数的调用，而这个时候我们就需要使用关键字“$”了。在Javassist中，“$”用来申明此后的某个词为特殊参数，而“$</em>”则用来申明此后的某个词为函数的回传值。每一个特殊参数在被调用时应该是这个样子的“$1,$2,$3…”但是，特别的，目标类本身在被调用时，则被表示为“$0”。这种使用格式让开发者在填写使用子函数的参数时轻松了许多。比如如下的例子：<br>{ System.out.println(“move”); $_ = $proceed($1, 0); }</p>
+<p>请注意，该子函数的第2个参数为0。</p>
+<p>另外一个特殊类型则是$arg，它实际上是一个容纳了函数所有调用参数的Object队列。当Javassist在扫描该$arg时，如果发现某一个参数为JAVA的基本类型，则它将自动的对该参数进行包装，并放入队列。比如，当它发现某一个参数为int类型时，它将使用java.lang.integer 类来包装这个int参数，并存入参数队列。和Java的反射包：java.lang.reflect.Methord类中的invoke方法相比，$args明显要省事的多。<br>6、函数的头或尾插入代码<br>Javassist也同样允许开发者在某个函数的头，或者某个函数的尾上插入某段语句（代码）。比如，它有一个insertBefore方法用以在某函数的调用前执行某个操作，它的使用大致是这个样子的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ClassPool pool = ClassPool.getDefault();  </span><br><span class="line">CtClass cc = pool.get(<span class="string">"Screen"</span>);  </span><br><span class="line">CtMethod cm = cc.getDeclaredMethod(<span class="string">"draw"</span>, <span class="keyword">new</span> CtClass[<span class="number">0</span>]);  </span><br><span class="line">cm.insertBefore(<span class="string">"&#123; System.out.println($1); System.out.println($2); &#125;"</span>);  </span><br><span class="line">cc.writeFile();</span><br></pre></td></tr></table></figure>
+<p>以上例子允许我们在draw函数调用之前执行打印操作—把传递给draw的两个参数打印出来。</p>
+<p>7、函数修改或包装<br>同样的，我们也可以使用关键字$对某一个函数进行修改或者是包装，下面就</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CtClass cc = sloader.get("Point");  </span><br><span class="line">CtMethod m1 = cc.getDeclaredMethod("move");  </span><br><span class="line">CtMethod m2 = CtNewMethod.copy(m1, cc, null);  </span><br><span class="line">m1.setName(m1.getName() + "_orig");  </span><br><span class="line">m2.setBody("&#123; System.out.println("call"); return $proceed($$);  </span><br><span class="line">&#125;", "this", m1.getName());  </span><br><span class="line">cc.addMethod(m2);  </span><br><span class="line">cc.writeFile();</span><br></pre></td></tr></table></figure>
+<p>以上代码的前四行不难理解，Javassist首先对Point中的move方法做了个拷贝，并创建了一个新的函数。然后，它把存在与Point类中的原move方法更名为“_orig”。接下来，让我们关注一下程序第五行中的几个参数：第一个参数指示该函数的在执行的最初部分需要先打印一段信息，然后执行子函数proceed()并返回结果，这个和move方法差不多，很好理解。第二个参数则只是申明该子函数所在的类的位置。这里为this即为Point类本身。第三个参数，也就是“m1.getName()”则定义了这个新函数的名字。<br>Javassist也同样具有其他的操作和类来帮助你实现诸如修改某一个属性的值，改变函数的回值，并在某个函数的执行后补上其他操作的功能。您可以浏览www.javassist.org以获得相关的信息。<br>三、其他<br>以下是一个简单的完整示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javassist.ClassPool;  </span><br><span class="line">        <span class="keyword">import</span> javassist.CtClass;  </span><br><span class="line">        <span class="keyword">import</span> javassist.CtMethod;  </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">        <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;  </span><br><span class="line">              </span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;  </span><br><span class="line">                ClassPool pool = ClassPool.getDefault();  </span><br><span class="line">  </span><br><span class="line">                <span class="comment">//设置目标类的路径，确保能够找到需要修改的类，这里我指向firestorm.jar  </span></span><br><span class="line">                <span class="comment">//解包后的路径  </span></span><br><span class="line">                pool.insertClassPath(<span class="string">"d:/work/firestorm/firestorm"</span>) ;      </span><br><span class="line">                  </span><br><span class="line">                <span class="comment">//获得要修改的类  </span></span><br><span class="line">                CtClass cc = pool.get(<span class="string">"com.codefutures.if.if"</span>);  </span><br><span class="line">                <span class="comment">//设置方法需要的参数  </span></span><br><span class="line">                CtClass[] param = <span class="keyword">new</span> CtClass[<span class="number">3</span>] ;                  </span><br><span class="line">                param[<span class="number">0</span>] = pool.get(<span class="string">"java.security.PublicKey"</span>) ;  </span><br><span class="line">                param[<span class="number">1</span>] = pool.get(<span class="string">"byte[]"</span>) ;  </span><br><span class="line">                param[<span class="number">2</span>] = pool.get(<span class="string">"byte[]"</span>) ;  </span><br><span class="line">  </span><br><span class="line">                <span class="comment">//得到方法  </span></span><br><span class="line">                CtMethod m = cc.getDeclaredMethod(<span class="string">"a"</span>, param);  </span><br><span class="line">                <span class="comment">//插入新的代码  </span></span><br><span class="line">                m.insertBefore(<span class="string">"&#123;return true ;&#125;"</span>) ;  </span><br><span class="line">                <span class="comment">//保存到文件里  </span></span><br><span class="line">                cc.writeFile() ;  </span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/11/05/java_javassist/">(转)JAVA 字节码操作利器javassist</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2016-11-05, 01:31:45</p>
+        <p><span>最后更新:</span>2016-11-05, 01:31:31</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/11/05/java_javassist/" title="(转)JAVA 字节码操作利器javassist">https://iskylove.github.io/2016/11/05/java_javassist/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2016/11/05/java_javassist/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/11/05/android_patch_fix/">
+                    &lt;转&gt;漫谈Android 增量更新
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/11/05/android_aop_des/">
+                    【翻译】Android中的AOP编程
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"(转)JAVA 字节码操作利器javassist　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/11/05/android_patch_fix/" title="上一篇: &lt;转&gt;漫谈Android 增量更新">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/11/05/android_aop_des/" title="下一篇: 【翻译】Android中的AOP编程">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_patch_fix/"><转>漫谈Android 增量更新</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/java_javassist/">(转)JAVA 字节码操作利器javassist</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_aop_des/">【翻译】Android中的AOP编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/android_drawable/">(转)领略千变万化的Android Drawable</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/website_share/">技术网站分享(持续更新中~~)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2016 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

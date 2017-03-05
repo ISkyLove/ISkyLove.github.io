@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>(转)Hunting Your Leaks, Memory Management in Android | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="原文地址：https://www.raizlabs.com/dev/2014/03/wrangling-dalvik-memory-management-in-android-part-1-of-2/https://www.raizlabs.com/dev/2014/04/hunting-your-leaks-memory-management-in-android-part-2-of-2/
+Th">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(转)Hunting Your Leaks, Memory Management in Android">
+<meta property="og:url" content="https://iskylove.github.io/2017/03/05/android_Memory_Management_in_Android/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="原文地址：https://www.raizlabs.com/dev/2014/03/wrangling-dalvik-memory-management-in-android-part-1-of-2/https://www.raizlabs.com/dev/2014/04/hunting-your-leaks-memory-management-in-android-part-2-of-2/
+Th">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/memory-1.png">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/memory-2.png">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/memory-3.png">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/memory-4.png">
+<meta property="og:image" content="http://7xtazt.com1.z0.glb.clouddn.com/memory-5.png">
+<meta property="og:updated_time" content="2017-03-05T11:15:42.381Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(转)Hunting Your Leaks, Memory Management in Android">
+<meta name="twitter:description" content="原文地址：https://www.raizlabs.com/dev/2014/03/wrangling-dalvik-memory-management-in-android-part-1-of-2/https://www.raizlabs.com/dev/2014/04/hunting-your-leaks-memory-management-in-android-part-2-of-2/
+Th">
+<meta name="twitter:image" content="http://7xtazt.com1.z0.glb.clouddn.com/memory-1.png">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/all/">all</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-android_Memory_Management_in_Android" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/05/android_Memory_Management_in_Android/" class="article-date">
+      <time datetime="2017-03-05T11:15:42.529Z" itemprop="datePublished">2017-03-05</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      (转)Hunting Your Leaks, Memory Management in Android
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/android/">android</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>原文地址：<a href="https://www.raizlabs.com/dev/2014/03/wrangling-dalvik-memory-management-in-android-part-1-of-2/" target="_blank" rel="external">https://www.raizlabs.com/dev/2014/03/wrangling-dalvik-memory-management-in-android-part-1-of-2/</a><br><a href="https://www.raizlabs.com/dev/2014/04/hunting-your-leaks-memory-management-in-android-part-2-of-2/" target="_blank" rel="external">https://www.raizlabs.com/dev/2014/04/hunting-your-leaks-memory-management-in-android-part-2-of-2/</a></p>
+<p>There are some people who believe this myth that you don’t need to worry about managing memory while writing Android applications. It’s a self-contained Java environment, right? What’s the worst that could happen?<a id="more"></a></p>
+<p>Well, it’s true – the Android OS, through the Dalvik runtime1 (now being superceded in some cases with ART), doesn’t have to worry about your app crashing the whole system due to poor memory management. But, alas, that doesn’t mean that your app doesn’t have to deal with managing its memory: Dalvik will be happy to kick you out of execution if you screw up your heap allocation, and your users will start leaving negative reviews about all the crashes they’re getting.</p>
+<p>By the way, what we’re looking for throughout this exploration of potential memory problems is a crash called an OutOfMemoryError (more notoriously and affectionately known as an OOM): thrown by the application when you try to allocate something past the capacity of the heap. It’s important to note that this can happen at any time, caused by any object, so that doesn’t provide a very good reference of what’s actually the cause of the crash (probably something you’ve “leaked” into memory earlier).</p>
+<p>Simply, you’re going to have to face it and trace it back to its source. But where do you start?</p>
+<h5 id="Lesson-1-You’re-not-going-to-find-it-by-accident"><a href="#Lesson-1-You’re-not-going-to-find-it-by-accident" class="headerlink" title="Lesson #1: You’re not going to find it by accident"></a>Lesson #1: You’re not going to find it by accident</h5><p>Don’t trust your own test devices to fail in all of the remarkably innovative ways your users’ devices will manage to fail.</p>
+<p>Here are several tips:</p>
+<p>1.Understand potential sources of issues: if you know what not to do, you never need to know how to fix it.<br>2.Plan for a lot more QA than you ever expected.<br>3.Very thorough unit testing.<br>4.Run analyses on builds before shipping .<br>5.Utilize prayer, lucky rabbit feet, or indomitable willpower in the face of the inevitable flood of negative reviews when you ignore this issue.</p>
+<p>The best way to effectively pass timely, event-driven data around in Android ecosystems can be debated without end. And, in fact, it often is. But, that’s not the purpose of this post.</p>
+<p>One method is attaching an implementation of an interface definition to the object sending the data, and holding that implementation within the receiver object.</p>
+<p>At Raizlabs, one of our go-to simple-syntax elements is an interface called EventListener:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">EventListener</span>&lt;<span class="title">EventResponseType</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(EventResponseType response)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>EventListener might be used to receive data from a separate object, like an Activity class which wants to get notifications when a given Object is updated successfully:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public void onResume() &#123;</span><br><span class="line">    super.onResume();</span><br><span class="line"></span><br><span class="line">    SomeObject object = new SomeObject();</span><br><span class="line"></span><br><span class="line">    object.setSuccessListener(new EventListener&lt;Boolean&gt;() &#123;</span><br><span class="line">        public void onEvent(Boolean response) &#123;</span><br><span class="line">            Log.d(TAG_NAME, &quot;Valid response? &quot;+response);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    SomeObjectManager.getSingleton().addObject(object);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>And, in SomeObject, we might see the following, indicating that our data has been saved successfully:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveData</span><span class="params">(Data newData)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.data = newData;</span><br><span class="line">    <span class="keyword">this</span>.successListener.onEvent(<span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Which would notify the EventListener instance that we created in the Activity’s onResume method that the event has successfully been completed.</p>
+<p>Now, for those well-seasoned memory wranglers, seeing the immediate danger of this kind of pattern must be super easy. But, for the rest of us, we’re going to have to keep an eye out for problems like these. As it turns out, we just leaked an Activity. And most Android devices don’t need many Activities before you hit an OOM.</p>
+<h5 id="Lesson-2-Stalk-your-references"><a href="#Lesson-2-Stalk-your-references" class="headerlink" title="Lesson #2: Stalk your references"></a>Lesson #2: Stalk your references</h5><p>You’re going to have to keep an eye on what you reference in the course of developing an Android app. For iOS developers reading this, you don’t have to worry about retain cycles, since Dalvik’s GarbageCollector will parse the entire map of referenced objects. But, you may accidentally hold strong references to objects you no longer need, and in that case, the GarbageCollector will pass over those unneeded objects. For example, a Context that is no longer on screen, or a bitmap that won’t be displayed again for a while).</p>
+<p>Anytime you find yourself creating a reference (that is, any time you assign a variable to an Object), think about what you might need to do to prevent a memory leak.</p>
+<p>If the reference is to an object that is instantiated inside your own class, you usually2 don’t have to worry about it. That is, unless you’re sharing strong references with a different object. If that’s the case, then you must manage their references more manually.</p>
+<p>For instance, in the example above: we’ve attached a reference to our Activity instance to some object, presumably persistent, and in a manager somewhere. The point is, the Activity doesn’t know that the lifespan of SomeObject will end when the instance of the Activity ends. If that object remains in memory, it will hold that Activity in memory as well, even after the Activity has been visually destroyed (a user going back, or rotating the device, or some other lifecycle-ending event). So, what we need to make sure to do, is remove that reference in onDestroy() or similar end-of-lifecycle-method:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onDestroy();</span><br><span class="line"></span><br><span class="line">    SomeObject objectFromBefore = SomeObjectManager.getSingleton().getOurObject();</span><br><span class="line">    objectFromBefore.setSuccessListener(<span class="keyword">null</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Lesson-3-Survival-of-the-Fittest-References"><a href="#Lesson-3-Survival-of-the-Fittest-References" class="headerlink" title="Lesson #3: Survival of the Fittest References"></a>Lesson #3: Survival of the Fittest References</h5><p>Android contains a few different possible types of references. Each level of strength indicates how the system’s GarbageCollector will interact with that Object.</p>
+<p>The reference you’re inevitably used to using is a Strong reference. This is what you get when you do:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String myVariable = <span class="keyword">new</span> String(<span class="string">"Hello world"</span>);</span><br></pre></td></tr></table></figure>
+<p>A strong reference means the GarbageCollector will ignore the instantiated object “Hello World” as long as the “pointer” myVariable references it. Once you set myVariable = null;, that String can be swept up out of memory at any time. (Not that it matters anymore, since you no longer have a reference to that string! You just have a reference to null).</p>
+<p>The rest of the reference types are actually a part of the SDK, and they are all created in the same general way. We’ll use a SoftReference to demonstrate:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String myStrongVariable = <span class="string">"Hello World"</span>;</span><br><span class="line">SoftReference&lt;String&gt; myReference = <span class="keyword">new</span> SoftReference&lt;String&gt;(myStrongVariable);</span><br></pre></td></tr></table></figure>
+<p>A Reference object will give you access to that “Hello World” string, but at any point the class could decide to reassign myStrongVariable, like so:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">myStrongVariable = <span class="string">"Your string is in danger"</span>;</span><br></pre></td></tr></table></figure>
+<p>Now that object we have a Reference to, “Hello World”, might be GarbageCollected at any time. You can try to access it:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">String testString = myReference().get();</span><br></pre></td></tr></table></figure>
+<p>But you can’t be sure testString is not null. So, how do each of the non-Strong reference types stack up?3</p>
+<p>SoftReference: if there are only SoftReferences to an Object, the reference will generally be held on to as long as there’s memory for it to fit.<br>WeakReference: if there are only WeakReferences to an object, it will be purged from memory at the next GarbageCollection cycle.<br>PhantomReference: the weakest and most enigmatic reference, that get() method will always return null – you can never access the Object it references (even when the Object still exists, and has other references). Realistically, you should probably never be using these.4<br>…With great knowledge comes great responsibility.</p>
+<p>Just because you now know the difference between these references, doesn’t mean you should be throwing them around as a solution to memory management without a very good reason.</p>
+<p>The use of the Reference classes is usually a sign of a dirty design pattern. The first thing most people think of when they learn about SoftReference is, “Oh, what a good idea for designing a cache system!” But, while a decent idea, that’s an official Android no-no.</p>
+<h5 id="Lesson-4-“There-is-no-GarbageCollector-Neo”"><a href="#Lesson-4-“There-is-no-GarbageCollector-Neo”" class="headerlink" title="Lesson #4: “There is no GarbageCollector, Neo”"></a>Lesson #4: “There is no GarbageCollector, Neo”</h5><p>Occasionally, I’ll see a memory-related StackOverflow answer that suggests, as a production-environment solution, the line:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">System.gc();</span><br></pre></td></tr></table></figure>
+<p>And when this happens, I cry myself to sleep.</p>
+<p>The Android GarbageCollector is not some pet that you should whistle for when you want it to come play. It’s slow, and heavy-handed, and totally and completely capable of doing a great job without your input.</p>
+<p>When an activity lifecycle ends (e.g. pressing back, or rotating the device) – that is, once onDestroy() has finished – it should have no references whatsoever still pointing to it. Otherwise, the GarbageCollector will politely ignore it, thinking you’re not done with the Activity object, and you’ll wind up with some massive memory leak.</p>
+<p>OK, this should be in the most tiny font we have available, but… once in a while, and we’re talking every four or five blue moons at the most, you may use System.gc(). But, if you can’t write at least twelve reasons that’s your only solution, you should probably re-think your memory management design.</p>
+<h5 id="Lesson-5-Don’t-hold-on-to-references-to-Activities-Ever"><a href="#Lesson-5-Don’t-hold-on-to-references-to-Activities-Ever" class="headerlink" title="Lesson #5: Don’t hold on to references to Activities. Ever."></a>Lesson #5: Don’t hold on to references to Activities. Ever.</h5><p>This also applies to Fragments, Views, Resources and anything else tightly associated with a Context. These kinds of objects are sprawling metropolises of references to absolutely everything. We can get more into investigating the runtime memory map of your app a bit later, but until then, the tangled web we Context-based objects weave is insidious.</p>
+<p>If you accidentally hold a reference to a View beyond its lifetime (i.e., you “leak” it), it has a reference to the Activity context that created it, and in turn, every other View, Fragment, Dialog, and so forth associated with that activity.</p>
+<p>And if this happens, you’ll not be able to get it out of memory. So, you can kiss handful after handful of MBs goodbye each time this happens.5 If you’re ever having memory trouble while developing an Android application, the very first thing to check for is leaked Activities.</p>
+<h5 id="Lesson-6-It-can-happen-to-you…"><a href="#Lesson-6-It-can-happen-to-you…" class="headerlink" title="Lesson #6: It can happen to you…"></a>Lesson #6: It can happen to you…</h5><p>I wouldn’t be writing this if it wasn’t something we recently ran into. Fortunately, we caught the problem before shipping to the Play Store, but it was entirely possible that it could have made it through.</p>
+<p>Our problem? We had tripped over the fine line between abstraction and obfuscation.</p>
+<p>Story time!</p>
+<p>We had a bunch of activities that wanted to know when someone logged in; so, when the Activity was created, we would instantiate a class variable of that type EventListener, and add it as a reference to the singleton class (as in, an object that is never GarbageCollected in the lifespan of the app) that managed our user authentication. Then, of course, we would remove the reference in the Activity’s onDestroy() method like good little memory managers.</p>
+<p>Alas, the key we had missed: we use many fragments. Occasionally, we have to reference the parent activity from a child fragment. When one of our fragments wanted to get that login notification, it simply retrieved its parent activity, and called the method:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLoginListener</span><span class="params">(EventListener loginListener)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>But, that method’s implementation was designed to add the listener straight on to the singleton that managed authentication. We never bothered removing it, because that method looked like it was adding a reference to the Fragment to its parent Activity – which would allow the Fragment to be GarbageCollected at the same time as that Activity. Since this method was just a convenient proxy to add a reference to the authentication singleton, we wound up with a leaked reference to the Fragment, and, in turn, a reference to that Fragment’s context (its parent Activity) and all of its references in turn.</p>
+<p>Woo-hoo! Now you know what is happening with your app’s memory usage when you see one of those OOM exception. But, you don’t know where to find the source. Let alone, how to fix it.</p>
+<p>Tracking down memory issues can be a pain in the neck. Here are a few strategies that will help you as you pursue the noble craft of Android-igami.</p>
+<p>There are code snippets and screenshots of what I’m working on sprinkled throughout this post. These will come from a single sample project, and if you prefer to see things in their entirety before being divided into little pieces, I provided that sample project to download here.</p>
+<p>Yes, it uses Eclipse. Sorry to all you cutting edge folks working with the still beta Android Studio.<br>Structure: One activity, with a fragment. You’ll see an image that turns on and off every 5 seconds.<br>We’re using a singleton manager to keep time for us, and notify the Fragment when it’s time to switch the image on or off.<br>For those keeping score at home, this project has one A-level memory leak: the type of leak that no developer should ever allow into their code. And I’m not going to tell you where it is. But, that’s the purpose of this experiment! So let’s take a look at where it goes wrong.</p>
+<h5 id="Examination-7-“Update-Heap”-Button"><a href="#Examination-7-“Update-Heap”-Button" class="headerlink" title="Examination 7: “Update Heap” Button"></a>Examination 7: “Update Heap” Button</h5><p><img src="http://7xtazt.com1.z0.glb.clouddn.com/memory-1.png" alt="picture1"></p>
+<p>1.Open the DDMS1 Perspective in Eclipse (It should be found somewhere around the Window-&gt;Open Perspective-&gt;Other popup dialog).<br>2.Highlight the process you wish to profile (most real devices will only show “debug”-signed processes, so you’d only see it on a real device if you built and installed from adb).<br>3.Tap the little green “disk” icon (circled in above image), named “Update Heap.”<br>4.Make sure you open the Heap panel on the right side of the screen.<br>5.Tap the “Cause GC” button2.</p>
+<p>This will put some numbers in that chart. The one we should focus on is “Allocated,” which shows you how much memory the Dalvik VM currently has given your app. This can stretch and shrink a bit, but there’s an upper limit (the size of which depends on the device). If you exceed the upper limit, you pop out an OOM and the app crashes.</p>
+<p>This is a great tool to keep an eye on while you develop, since it shows a live snapshot of the system after any garbage collection cycle. If you ever notice the allocated memory gradually increasing without ever letting anything go, that’s a good indication that you might have a memory leak.3</p>
+<h5 id="Examination-8-MAT-amp-HPROF-—-a-k-a-“The-Hunt”"><a href="#Examination-8-MAT-amp-HPROF-—-a-k-a-“The-Hunt”" class="headerlink" title="Examination 8: MAT &amp; HPROF — a.k.a., “The Hunt”"></a>Examination 8: MAT &amp; HPROF — a.k.a., “The Hunt”</h5><p>There are some acronyms for you, huh?</p>
+<p>“MAT,” the Eclipse Memory Analyzer tool, can read a file that your virtual machine generates (Remember that one we talked about in the last post? It’s called Dalvik). That file, called a “heap dump,” represents the set of all objects currently stored on your process’s heap4. That means you can actually poke around the metadata of the objects you’re using during runtime.</p>
+<p>What you’ll need:<br>1.Eclipse (the Google provided “ADT” version works well here).<br>2.MAT.<br>3.If you’re not using the DDMS plugin, you’ll need to manually convert the Dalvik profile into an .hprof file.<br>Plot a course<br>Run the MemoryLeek project on an emulator5. You should see a white screen with a slowly blinking image. Rotate the emulator ten or so times (either 7 on the numpad or Cntrl+F12). Now, return to Eclipse, and open the DDMS perspective once again. This time, we’re aiming for the green disc icon with an arrow attached — indicating you want to generate a heap dump. Go ahead and click it, and you should see a statement in the Android log that looks like:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">I/dalvikvm(<span class="number">1948</span>): hprof: dumping heap strings to <span class="string">"[DDMS]"</span>.</span><br></pre></td></tr></table></figure>
+<p>That’s good. Now leave it for a bit, because it could take a couple of minutes to generate (and the emulator is frozen until it finishes).</p>
+<p>Once the output is ready, it should prompt you about some different types of reports. (If you instead see a prompt to save a file, go ahead and save it somewhere, then use the SDK tool hprof-conv to convert it to the appropriate format, and manually open it with Eclipse’s MAT). Once you have the “reports” prompt, just cancel out of it — we’re not going to use any pre-set reports for this.</p>
+<p>Load your ammo<br>Hooray! If you’re reading this, you’re hopefully looking at some kind of graph of your app’s current memory state. In my case, a pie chart.</p>
+<p><img src="http://7xtazt.com1.z0.glb.clouddn.com/memory-2.png" alt="picture2"></p>
+<p>Now what?<br>Let’s try poking around a bit. Click the little bar chart icon in the top left, that says “Create a histogram…” when you hover over it. This will show you a list of all the objects currently allocated, in no particular order.</p>
+<p>You’re looking at the name and package of the objects in the first column, the number of that kind of object in existence at the moment in the next column and then some representation of the total heap sizes in the third and fourth columns6.</p>
+<p>It might be interesting to sort by size or count to see where the majority of memory is being used in your code7. If you right-click on one of these listings, you can get some cool options, like all instances of objects of that type with all the references that keep it from being garbage collected.</p>
+<p><img src="http://7xtazt.com1.z0.glb.clouddn.com/memory-3.png" alt="picture3"></p>
+<p>But wait, we’re supposed to be hunting for something, right? We need a target of some kind.</p>
+<p>Tracking the game<br>There’s a lot of noise in an app’s memory space. Fortunately, we can narrow it down in a few ways.</p>
+<p>First, try applying filtering to this list. In the first row, you can enter text. Since you almost always want to take a closer look at your code, I suggest entering something like  “com.example.memoryleek”. This should filter down to a handful of entries.<br><img src="http://7xtazt.com1.z0.glb.clouddn.com/memory-4.png" alt="picture4"><br>Gazing upon these, I’m hoping you notice something horrifying. If you don’t, I recommend taking another look at Part 1 of this series. Hopefully you will figure out what the worst thing in the world to leak would be.</p>
+<p>Hint: it’s Activities.</p>
+<p>And, good Lord, I have 24 instances of LeekActivity right now! That’s totally not OK.</p>
+<p>Why might this be?</p>
+<p>Well, kindly, MAT has a way to tell us. You can right-click that list item, and select “Merge Shortest Paths to GC Roots”, excluding WeakReferences (remember, WeakReferences will have no effect on what is retained). This means we want to see what memory root all these objects have in common. That should indicate if there’s something retaining all of them at once, ergo, a leak of some kind!</p>
+<p><img src="http://7xtazt.com1.z0.glb.clouddn.com/memory-5.png" alt="picture5"></p>
+<p>In this case, there are 3 roots. Two of them are external to this project, so aren’t likely culprits. But, that LeekManager instance looks suspicious….</p>
+<p>A-Ha! If you open it up, you can see that there’s a LinkedList called “listeners” on LeekManager that has a reference to all of those Activities.</p>
+<p>But, where did that come from?</p>
+<p>Well, check this out:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// In LeekFragment.class:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Add this fragment as a leek listener so</span></span><br><span class="line">    <span class="comment">// it can update its view accordingly</span></span><br><span class="line">    LeekManager.get().addListener(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Every time our LeekFragment is created, we add it as a LeekListener to the LeekManager singleton. But, when we did those rotations, the Fragment was never removed as a listener. The Fragment has a reference to the parent Activity, and the parent LeekActivity has references to all the other view elements.</p>
+<p>Taking the shot<br>There’s our leak. Fixing it? Easy: LeekFragment needs to be removed from LeekManager upon its onDestroy() lifecycle method.</p>
+<p>Now, the above code looks like:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// In LeekFragment.class:</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">    super.onCreate(savedInstanceState);</span><br><span class="line"></span><br><span class="line">    // Add this fragment as a leek listener so</span><br><span class="line">    // it can update its view accordingly</span><br><span class="line">    LeekManager.get().addListener(this);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">public void onDestroy() &#123;</span><br><span class="line">    super.onDestroy();</span><br><span class="line"></span><br><span class="line">    LeekManager.get().removeListener(this);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>And when we run the app, we don’t see any more indications of leaky memory! Hoorah!</p>
+<p>Things that are trying to sneak into this post:</p>
+<p>Options for unit testing. If anyone has useful memory analysis-based unit test strategies, feel free to shout at me @onemahon. Props to Reddit user stepwise_refinement for the great question.<br>Static vs. non-static inner classes. Non-static inner classes keep implicit references to their enclosing class. Be careful when deciding on the static modifier for inner classes, as such.<br>Some strategies for testing bad memory management during QA phases:<br>Lots of rotations.<br>Kill the app at unfortunate times (i.e. during activity loads).<br>Leave the app open for long periods of time, especially if you have some depth to your activity stack.<br>Run the app on an emulator with super small RAM.<br>Parting Shots</p>
+<p>Never leak an Activity.<br>Keep an eye on the heap while the app is running.<br>Profile the app’s memory usage every so often with MAT.<br>Now, you’re ready! Go forth, and leak not!</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/03/05/android_Memory_Management_in_Android/">(转)Hunting Your Leaks, Memory Management in Android</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2017-03-05, 19:15:42</p>
+        <p><span>最后更新:</span>2017-03-05, 19:15:42</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/03/05/android_Memory_Management_in_Android/" title="(转)Hunting Your Leaks, Memory Management in Android">https://iskylove.github.io/2017/03/05/android_Memory_Management_in_Android/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2017/03/05/android_Memory_Management_in_Android/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/03/05/android_addIdleHandler/">
+                    android addIdleHandler 空闲线程学习
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/03/05/java_rxjava/">
+                    Rxjava源码学习
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Lesson-1-You’re-not-going-to-find-it-by-accident"><span class="toc-number">1.</span> <span class="toc-text">Lesson #1: You’re not going to find it by accident</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Lesson-2-Stalk-your-references"><span class="toc-number">2.</span> <span class="toc-text">Lesson #2: Stalk your references</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Lesson-3-Survival-of-the-Fittest-References"><span class="toc-number">3.</span> <span class="toc-text">Lesson #3: Survival of the Fittest References</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Lesson-4-“There-is-no-GarbageCollector-Neo”"><span class="toc-number">4.</span> <span class="toc-text">Lesson #4: “There is no GarbageCollector, Neo”</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Lesson-5-Don’t-hold-on-to-references-to-Activities-Ever"><span class="toc-number">5.</span> <span class="toc-text">Lesson #5: Don’t hold on to references to Activities. Ever.</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Lesson-6-It-can-happen-to-you…"><span class="toc-number">6.</span> <span class="toc-text">Lesson #6: It can happen to you…</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Examination-7-“Update-Heap”-Button"><span class="toc-number">7.</span> <span class="toc-text">Examination 7: “Update Heap” Button</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Examination-8-MAT-amp-HPROF-—-a-k-a-“The-Hunt”"><span class="toc-number">8.</span> <span class="toc-text">Examination 8: MAT & HPROF — a.k.a., “The Hunt”</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"(转)Hunting Your Leaks, Memory Management in Android　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/03/05/android_addIdleHandler/" title="上一篇: android addIdleHandler 空闲线程学习">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/03/05/java_rxjava/" title="下一篇: Rxjava源码学习">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_leakcanary_androidwatchexecutor/">LeakCanary源码学习--内存泄露观察策略</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/android_addIdleHandler/">android addIdleHandler 空闲线程学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/android_Memory_Management_in_Android/">(转)Hunting Your Leaks, Memory Management in Android</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_rxjava/">Rxjava源码学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_reference/">java Reference 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_leakcanary/">LeakCanary源码学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_referencequeue/">深入理解ReferenceQueue GC finalize Reference</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_patch_fix/"><转>漫谈Android 增量更新</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/java_javassist/">(转)JAVA 字节码操作利器javassist</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_aop_des/">【翻译】Android中的AOP编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/android_drawable/">(转)领略千变万化的Android Drawable</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/website_share/">技术网站分享(持续更新中~~)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2017 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

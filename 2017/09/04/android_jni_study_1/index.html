@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>JNI 初探----基本数据类型和开发配置 | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="导读   Java Nativie Interface(JNI,中文名称Java本地接口)标准时Java平台的一部分，它允许Java代码和其他语言写得代码进行交互。JNI是本地编程接口，它使得Java虚拟机(VM)内部运行的Java代码能够用其他编程语言(如C、C++和汇编语言)编写的应用程序和库进行交互操作。JNI的主要用途是为了对硬件进行访问以及追求高效率或可重用C/C++库。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JNI 初探----基本数据类型和开发配置">
+<meta property="og:url" content="https://iskylove.github.io/2017/09/04/android_jni_study_1/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="导读   Java Nativie Interface(JNI,中文名称Java本地接口)标准时Java平台的一部分，它允许Java代码和其他语言写得代码进行交互。JNI是本地编程接口，它使得Java虚拟机(VM)内部运行的Java代码能够用其他编程语言(如C、C++和汇编语言)编写的应用程序和库进行交互操作。JNI的主要用途是为了对硬件进行访问以及追求高效率或可重用C/C++库。">
+<meta property="og:updated_time" content="2017-09-04T15:05:22.839Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JNI 初探----基本数据类型和开发配置">
+<meta name="twitter:description" content="导读   Java Nativie Interface(JNI,中文名称Java本地接口)标准时Java平台的一部分，它允许Java代码和其他语言写得代码进行交互。JNI是本地编程接口，它使得Java虚拟机(VM)内部运行的Java代码能够用其他编程语言(如C、C++和汇编语言)编写的应用程序和库进行交互操作。JNI的主要用途是为了对硬件进行访问以及追求高效率或可重用C/C++库。">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/all/">all</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-native/">react native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-android_jni_study_1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/04/android_jni_study_1/" class="article-date">
+      <time datetime="2017-09-04T15:05:22.979Z" itemprop="datePublished">2017-09-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JNI 初探----基本数据类型和开发配置
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/android/">android</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h5 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h5><p>   Java Nativie Interface(JNI,中文名称Java本地接口)标准时Java平台的一部分，它允许Java代码和其他语言写得代码进行交互。JNI是本地编程接口，它使得Java虚拟机(VM)内部运行的Java代码能够用其他编程语言(如C、C++和汇编语言)编写的应用程序和库进行交互操作。JNI的主要用途是为了对硬件进行访问以及追求高效率或可重用C/C++库。<a id="more"></a><br>    Android系统中采用了JNI的方式来调用C/C++方法，然而，在android系统里进一步加强了java JNI的使用，使JNI的调用更具有效率。因此，总的来说，Android系统里可以采用两种方式来使用JNI。第一种:Java原生JNI，使用dll等动态链接库 ；第二种，Android加强版JNI，通过动态加载*.so链接库来进行JNI调用。今天，我们分析第一种JNI使用方式，也称得上是JNI入门。</p>
+<h5 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h5><pre><code>由于Java与其他编程语言采用的语法不同，为了让Java与C/C++库函数能进行通信，约定的一个参数类型映射如下：
+     字符        Java类型              C/C++类型       数组
+      V          void                  void            
+      Z          jboolean              boolean         [Z
+      I          jint                  int             [I
+      J          jlong                 long            [J
+      D          jdouble               double          [D
+      F          jfloat                float           [F
+      B          jbyte                 jbyte           [B
+      C          jchar                 char            [C
+      S          jshort                shor            [S
+</code></pre><p>上面的只是简单类型的一个映射，后面我们会完善其他参数类型的映射。</p>
+<h5 id="android-studio开发配置"><a href="#android-studio开发配置" class="headerlink" title="android studio开发配置"></a>android studio开发配置</h5><h6 id="（一-ndk-build-配置"><a href="#（一-ndk-build-配置" class="headerlink" title="（一)ndk-build 配置"></a>（一)ndk-build 配置</h6><p><strong>ndk-build配置是最初ndk推出时的一套配置方案，比较累赘，需要一对命令结合</strong><br>1、android studio必须配置NDK，检查DNK配置方法：项目根目录-&gt;右键-&gt;Open module settings-&gt;SDK Location-&gt;Android NDK location</p>
+<p>2、添加基本编译工具External Tools<br>File -&gt; Settings -&gt; Tools -&gt; External Tools添加<br>(1)<strong>javah</strong>:主要用于在JNI开发的时，把java代码声明的JNI方法转化成C\C++头文件，以便进行JNI的C\C++端程序的开发。但是需要注意的是javah命令对Android编译生成的类文件并不能正常工作。如果对于Android的JNI要想生成C\C++头文件的话，可能只有先写个纯的java代码来进行JNI定义，接着用JDK编译，然后再用javah命令生成JNI的C\C++头文件。当然你也可以不用javah命令，直接手写JNI的C\C++头文件.<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">  用法:</span><br><span class="line">  javah [options] &lt;classes&gt;</span><br><span class="line">其中, [options] 包括:</span><br><span class="line">  -o &lt;file&gt;                输出文件 (只能使用 <span class="_">-d</span> 或 -o 之一)</span><br><span class="line">  <span class="_">-d</span> &lt;dir&gt;                 输出目录</span><br><span class="line">  -v  -verbose             启用详细输出</span><br><span class="line">  -h  --help  -?           输出此消息</span><br><span class="line">  -version                 输出版本信息</span><br><span class="line">  -jni                     生成 JNI 样式的标头文件 (默认值)</span><br><span class="line">  -force                   始终写入输出文件</span><br><span class="line">  -classpath &lt;path&gt;        从中加载类的路径</span><br><span class="line">  -cp &lt;path&gt;               从中加载类的路径</span><br><span class="line">  -bootclasspath &lt;path&gt;    从中加载引导类的路径</span><br><span class="line">&lt;classes&gt; 是使用其全限定名称指定的</span><br><span class="line">(例如, java.lang.Object)。</span><br></pre></td></tr></table></figure></p>
+<p><strong> External Tools</strong>添加参数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Name:javah</span><br><span class="line">Group:Exteral Tools</span><br><span class="line">Description:javah</span><br><span class="line">Program:<span class="variable">$JDKPath</span>$/bin/javah</span><br><span class="line">Parameters:-classpath  <span class="variable">$Classpath</span>$  -v -jni <span class="variable">$FileClass</span>$</span><br><span class="line">Working directory:<span class="variable">$SourcepathEntry</span>$\..\jni</span><br></pre></td></tr></table></figure></p>
+<p>(2)<strong>ndk-build</strong><br><strong> External Tools</strong>添加参数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Name:ndk-build</span><br><span class="line">Group:Exteral Tools</span><br><span class="line">Description:ndk-build</span><br><span class="line">Program:D:/sdk/sdk/ndk-bundle/ndk-build.cmd</span><br><span class="line">Parameters:</span><br><span class="line">Working directory:<span class="variable">$ProjectFileDir</span>$\app\src\main</span><br></pre></td></tr></table></figure></p>
+<p>(3)<strong>ndk-build clean</strong><br><strong> External Tools</strong>添加参数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Name:ndk-build clean</span><br><span class="line">Group:Exteral Tools</span><br><span class="line">Description:ndk-build clean</span><br><span class="line">Program:D:/sdk/sdk/ndk-bundle/ndk-build.cmd</span><br><span class="line">Parameters:clean</span><br><span class="line">Working directory:<span class="variable">$ProjectFileDir</span>$\app\src\main</span><br></pre></td></tr></table></figure></p>
+<p>(4)<strong>javap</strong>:JDK自带的反汇编器，可以查看java编译器为我们生成的字节码。通过它，我们可以对照源代码和字节码，从而了解很多编译器内部的工作。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">用法: javap &lt;options&gt; &lt;classes&gt;</span><br><span class="line">其中, 可能的选项包括:</span><br><span class="line">  -help  --help  -?        输出此用法消息</span><br><span class="line">  -version                 版本信息</span><br><span class="line">  -v  -verbose             输出附加信息</span><br><span class="line">  <span class="_">-l</span>                       输出行号和本地变量表</span><br><span class="line">  -public                  仅显示公共类和成员</span><br><span class="line">  -protected               显示受保护的/公共类和成员</span><br><span class="line">  -package                 显示程序包/受保护的/公共类和成员 (默认)</span><br><span class="line">  -p  -private             显示所有类和成员</span><br><span class="line">  -c                       对代码进行反汇编</span><br><span class="line">  <span class="_">-s</span>                       输出内部类型签名</span><br><span class="line">  -sysinfo                 显示正在处理的类的系统信息 (路径, 大小, 日期, MD5 散列)</span><br><span class="line">  -constants               显示最终常量</span><br><span class="line">  -classpath &lt;path&gt;        指定查找用户类文件的位置</span><br><span class="line">  -cp &lt;path&gt;               指定查找用户类文件的位置</span><br><span class="line">  -bootclasspath &lt;path&gt;    覆盖引导类文件的位置</span><br></pre></td></tr></table></figure></p>
+<p><strong> External Tools</strong>添加参数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Name:javap</span><br><span class="line">Group:Exteral Tools</span><br><span class="line">Description:javap</span><br><span class="line">Program:<span class="variable">$JDKPath</span>$/bin/javap</span><br><span class="line">Parameters:-classpath <span class="variable">$ModuleFileDir</span>$/build/intermediates/classes/debug <span class="_">-s</span>  -c  -verbose <span class="variable">$FileClass</span>$</span><br><span class="line">Working directory:<span class="variable">$ModuleFileDir</span>$</span><br></pre></td></tr></table></figure></p>
+<h6 id="（二-gradle-experimental-配置"><a href="#（二-gradle-experimental-配置" class="headerlink" title="（二)gradle-experimental 配置"></a>（二)gradle-experimental 配置</h6><p>gradle-experimental是google的一个实验性插件，主要用于NDK的开发与调试，全新的gradle-experimental插件使用了新的DSL语言，所以也需要用新的android插件com.android.model.application／com.android.model.library来替换老版中的com.android.application／com.android.library plugins,gradle-experimental的调试需要与LLDB结合是使用<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">       classpath <span class="string">'com.android.tools.build:gradle-experimental:0.7.0'</span></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>新的build.gradle配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: <span class="string">'com.android.model.application'</span></span><br><span class="line"></span><br><span class="line">model&#123;</span><br><span class="line">    android &#123;</span><br><span class="line">        compileSdkVersion = <span class="number">23</span></span><br><span class="line">        buildToolsVersion = <span class="string">'23.0.3'</span></span><br><span class="line"></span><br><span class="line">        defaultConfig &#123;</span><br><span class="line">            applicationId <span class="string">"com.ykq.demo.jniaes"</span></span><br><span class="line">            minSdkVersion.apiLevel = <span class="number">16</span></span><br><span class="line">            targetSdkVersion.apiLevel = <span class="number">23</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">/*</span><br><span class="line">         * native build settings: taking default for almost everything</span><br><span class="line">         */</span></span><br><span class="line">        ndk &#123;</span><br><span class="line">            moduleName = <span class="string">"mymodule"</span></span><br><span class="line">            ldLibs.addAll([<span class="string">'log'</span>])</span><br><span class="line">            ldFlags.add(<span class="string">""</span>)</span><br><span class="line">            toolchain = <span class="string">"clang"</span></span><br><span class="line">            toolchainVersion = <span class="string">"3.9"</span></span><br><span class="line">            abiFilters.add(<span class="string">"x86"</span>)</span><br><span class="line">            CFlags.add(<span class="string">""</span>)</span><br><span class="line">            cppFlags.add(<span class="string">""</span>)</span><br><span class="line">            debuggable = <span class="keyword">false</span></span><br><span class="line">            renderscriptNdkMode = <span class="keyword">false</span></span><br><span class="line">            stl = <span class="string">"system"</span></span><br><span class="line">            platformVersion = <span class="number">15</span></span><br><span class="line">        &#125;</span><br><span class="line">        buildTypes &#123;</span><br><span class="line">            release &#123;</span><br><span class="line">                minifyEnabled = <span class="keyword">false</span></span><br><span class="line">                proguardFiles.add(file(<span class="string">'proguard-rules.txt'</span>))</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        productFlavors &#123;</span><br><span class="line">            <span class="comment">// for detailed abiFilter descriptions, refer to "Supported ABIs" @</span></span><br><span class="line">            <span class="comment">// https://developer.android.com/ndk/guides/abis.html#sa</span></span><br><span class="line">            create(<span class="string">"arm"</span>) &#123;</span><br><span class="line">                ndk.abiFilters.add(<span class="string">"armeabi"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            create(<span class="string">"arm7"</span>) &#123;</span><br><span class="line">                ndk.abiFilters.add(<span class="string">"armeabi-v7a"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            create(<span class="string">"arm8"</span>) &#123;</span><br><span class="line">                ndk.abiFilters.add(<span class="string">"arm64-v8a"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            create(<span class="string">"x86"</span>) &#123;</span><br><span class="line">                ndk.abiFilters.add(<span class="string">"x86"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            create(<span class="string">"x86-64"</span>) &#123;</span><br><span class="line">                ndk.abiFilters.add(<span class="string">"x86_64"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            create(<span class="string">"mips"</span>) &#123;</span><br><span class="line">                ndk.abiFilters.add(<span class="string">"mips"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            create(<span class="string">"mips-64"</span>) &#123;</span><br><span class="line">                ndk.abiFilters.add(<span class="string">"mips64"</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// To include all cpu architectures, leaves abiFilters empty</span></span><br><span class="line">            create(<span class="string">"all"</span>)</span><br><span class="line">        &#125;</span><br><span class="line"><span class="comment">//        sources &#123;</span></span><br><span class="line"><span class="comment">//            main &#123;</span></span><br><span class="line"><span class="comment">//                jni &#123;</span></span><br><span class="line"><span class="comment">//                    source &#123;</span></span><br><span class="line"><span class="comment">//                        srcDir "src"</span></span><br><span class="line"><span class="comment">//                    &#125;</span></span><br><span class="line"><span class="comment">//                &#125;</span></span><br><span class="line"><span class="comment">//            &#125;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line">        dependencies &#123;</span><br><span class="line">        <span class="function">compile <span class="title">fileTree</span><span class="params">(dir: <span class="string">'libs'</span>, include: [<span class="string">'*.jar'</span>])</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<h6 id="（三-CMake-配置"><a href="#（三-CMake-配置" class="headerlink" title="（三)CMake 配置"></a>（三)CMake 配置</h6><p><strong>一款外部构建工具，可与 Gradle 搭配使用来构建原生库。如果您只计划使用 ndk-build，则不需要此组件。</strong>如果您的原生源文件还没有CMake构建脚本，则您需要自行创建一个并包含适当的 CMake 命令。CMake 构建脚本是一个纯文本文件，您必须将其命名为CMakeLists.txt：<br><strong>添加add_library</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">add_library( # Specifies the name of the library.</span><br><span class="line">             native-lib</span><br><span class="line"></span><br><span class="line">             # Sets the library as a shared library.</span><br><span class="line">             SHARED</span><br><span class="line"></span><br><span class="line">             # Provides a relative path to your source file(s).</span><br><span class="line">             src/main/cpp/native-lib.cpp )</span><br><span class="line">include_directories(src/main/cpp/include/)</span><br></pre></td></tr></table></figure></p>
+<p>add_library() 向您的 CMake 构建脚本添加源文件或库时，Android Studio 还会在您同步项目后在 Project 视图下显示关联的标头文件。不过，为了确保 CMake 可以在编译时定位您的标头文件，您需要将 include_directories() 命令添加到 CMake 构建脚本中并指定标头的路径：src/main/cpp/include/<br><strong>添加 NDK API</strong><br>Android NDK 提供了一套实用的原生 API 和库。通过将 NDK 库包含到项目的 CMakeLists.txt 脚本文件中，您可以使用这些 API 中的任意一种。</p>
+<p>预构建的 NDK 库已经存在于 Android 平台上，因此，您无需再构建或将其打包到 APK 中。由于 NDK 库已经是 CMake 搜索路径的一部分，您甚至不需要在您的本地 NDK 安装中指定库的位置 - 只需要向 CMake 提供您希望使用的库的名称，并将其关联到您自己的原生库。</p>
+<p>将 find_library() 命令添加到您的 CMake 构建脚本中以定位 NDK 库，并将其路径存储为一个变量。您可以使用此变量在构建脚本的其他部分引用 NDK 库。以下示例可以定位 Android 特定的日志支持库并将其路径存储在 log-lib 中：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">find_library( # Defines the name of the path variable that stores the</span><br><span class="line">              # location of the NDK library.</span><br><span class="line">              log-lib</span><br><span class="line"></span><br><span class="line">              # Specifies the name of the NDK library that</span><br><span class="line">              # CMake needs to locate.</span><br><span class="line">              log )</span><br></pre></td></tr></table></figure></p>
+<p>为了确保您的原生库可以在 log 库中调用函数，您需要使用 CMake 构建脚本中的 target_link_libraries() 命令关联库：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">find_library(...)</span><br><span class="line"></span><br><span class="line"># Links your native library against one or more other native libraries.</span><br><span class="line">target_link_libraries( # Specifies the target library.</span><br><span class="line">                       native-lib</span><br><span class="line"></span><br><span class="line">                       # Links the log library to the target library.</span><br><span class="line">                       $&#123;log-lib&#125; )</span><br></pre></td></tr></table></figure></p>
+<p>NDK 还以源代码的形式包含一些库，您在构建和关联到您的原生库时需要使用这些代码。您可以使用 CMake 构建脚本中的 add_library() 命令，将源代码编译到原生库中。要提供本地 NDK 库的路径，您可以使用 ANDROID_NDK 路径变量，Android Studio 会自动为您定义此变量。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">add_library( app-glue</span><br><span class="line">             STATIC</span><br><span class="line">             $&#123;ANDROID_NDK&#125;/sources/android/native_app_glue/android_native_app_glue.c )</span><br><span class="line"></span><br><span class="line"># You need to link static libraries against your shared native library.</span><br><span class="line">target_link_libraries( native-lib app-glue $&#123;log-lib&#125; )</span><br></pre></td></tr></table></figure></p>
+<p><strong>添加其他预构建库</strong><br>添加预构建库与为 CMake 指定要构建的另一个原生库类似。不过，由于库已经预先构建，您需要使用 IMPORTED 标志告知 CMake 您只希望将库导入到项目中：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_library( imported-lib</span><br><span class="line">             SHARED</span><br><span class="line">             IMPORTED )</span><br></pre></td></tr></table></figure></p>
+<p>然后，您需要使用 set_target_properties() 命令指定库的路径，如下所示。</p>
+<p>某些库为特定的 CPU 架构（或应用二进制接口 (ABI)）提供了单独的软件包，并将其组织到单独的目录中。此方法既有助于库充分利用特定的 CPU 架构，又能让您仅使用所需的库版本。要向 CMake 构建脚本中添加库的多个 ABI 版本，而不必为库的每个版本编写多个命令，您可以使用 ANDROID_ABI 路径变量。此变量使用 NDK 支持的一组默认 ABI，或者您手动配置 Gradle 而让其使用的一组经过筛选的 ABI。例如：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">add_library(...)</span><br><span class="line">set_target_properties( # Specifies the target library.</span><br><span class="line">                       imported-lib</span><br><span class="line"></span><br><span class="line">                       # Specifies the parameter you want to define.</span><br><span class="line">                       PROPERTIES IMPORTED_LOCATION</span><br><span class="line"></span><br><span class="line">                       # Provides the path to the library you want to import.</span><br><span class="line">                       imported-lib/src/$&#123;ANDROID_ABI&#125;/libimported-lib.so )</span><br></pre></td></tr></table></figure></p>
+<p>为了确保 CMake 可以在编译时定位您的标头文件，您需要使用 include_directories() 命令，并包含标头文件的路径：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include_directories( imported-lib/include/ )</span><br></pre></td></tr></table></figure></p>
+<p>要将预构建库关联到您自己的原生库，请将其添加到 CMake 构建脚本的 target_link_libraries() 命令中：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target_link_libraries( <span class="keyword">native</span>-lib imported-lib app-glue $&#123;log-lib&#125; )</span><br></pre></td></tr></table></figure></p>
+<p><strong>将 Gradle 关联到您的原生库</strong><br>手动配置 Gradle<br>要手动配置 Gradle 以关联到您的原生库，您需要将 externalNativeBuild {} 块添加到模块级 build.gradle 文件中，并使用 cmake {} 或 ndkBuild {} 对其进行配置：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">  ...</span><br><span class="line">  defaultConfig &#123;</span><br><span class="line">  ...</span><br><span class="line">    <span class="comment">// This block is different from the one you use to link Gradle</span></span><br><span class="line">    <span class="comment">// to your CMake or ndk-build script.</span></span><br><span class="line">    externalNativeBuild &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// For ndk-build, instead use ndkBuild &#123;&#125;</span></span><br><span class="line">      cmake &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Passes optional arguments to CMake.</span></span><br><span class="line">        arguments <span class="string">"-DANDROID_ARM_NEON=TRUE"</span>, <span class="string">"-DANDROID_TOOLCHAIN=clang"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Sets optional flags for the C compiler.</span></span><br><span class="line">        cFlags <span class="string">"-D_EXAMPLE_C_FLAG1"</span>, <span class="string">"-D_EXAMPLE_C_FLAG2"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Sets a flag to enable format macro constants for the C++ compiler.</span></span><br><span class="line">        cppFlags <span class="string">"-D__STDC_FORMAT_MACROS"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;   </span><br><span class="line">    </span><br><span class="line">     ndk &#123;</span><br><span class="line">      <span class="comment">// Specifies the ABI configurations of your native</span></span><br><span class="line">      <span class="comment">// libraries Gradle should build and package with your APK.</span></span><br><span class="line">      abiFilters <span class="string">'x86'</span>, <span class="string">'x86_64'</span>, <span class="string">'armeabi'</span>, <span class="string">'armeabi-v7a'</span>,</span><br><span class="line">                   <span class="string">'arm64-v8a'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  buildTypes &#123;...&#125;</span><br><span class="line">  </span><br><span class="line">   productFlavors &#123;</span><br><span class="line">    ...</span><br><span class="line">    demo &#123;</span><br><span class="line">      ...</span><br><span class="line">      externalNativeBuild &#123;</span><br><span class="line">        cmake &#123;</span><br><span class="line">          ...</span><br><span class="line">          <span class="comment">// Specifies which native libraries to build and package for this</span></span><br><span class="line">          <span class="comment">// product flavor. If you don't configure this property, Gradle</span></span><br><span class="line">          <span class="comment">// builds and packages all shared object libraries that you define</span></span><br><span class="line">          <span class="comment">// in your CMake or ndk-build project.</span></span><br><span class="line">          targets <span class="string">"native-lib-demo"</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    paid &#123;</span><br><span class="line">      ...</span><br><span class="line">      externalNativeBuild &#123;</span><br><span class="line">        cmake &#123;</span><br><span class="line">          ...</span><br><span class="line">          targets <span class="string">"native-lib-paid"</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">  <span class="comment">// Encapsulates your external native build configurations.</span></span><br><span class="line">  externalNativeBuild &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Encapsulates your CMake build configurations.</span></span><br><span class="line">    cmake &#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// Provides a relative path to your CMake build script.</span></span><br><span class="line">      path <span class="string">"CMakeLists.txt"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>如果您想要将 Gradle 关联到现有 ndk-build 项目，请使用 ndkBuild {} 块而不是 cmake {}，并提供 Android.mk 文件的相对路径。如果 Application.mk 文件与您的 Android.mk 文件位于相同目录下，Gradle 也会包含此文件。</strong></p>
+<h5 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h5><p>1、<a href="http://www.jianshu.com/p/178a2169b7ff" target="_blank" rel="external">Android Studio NDk调试(基于gradle-experimental插件与LLDB)</a><br>2、<a href="http://www.jianshu.com/p/7844aafe897d" target="_blank" rel="external">Android Studio使用gradle-experimental构建NDK工程(无需Android.mk、Application.mk文件)</a><br>3、<a href="https://developer.android.com/studio/projects/add-native-code.html" target="_blank" rel="external">向您的项目添加 C 和 C++ 代码</a><br>4、<a href="https://developer.android.com/ndk/guides/cmake.html" target="_blank" rel="external">CMake</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/04/android_jni_study_1/">JNI 初探----基本数据类型和开发配置</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2017-09-04, 23:05:22</p>
+        <p><span>最后更新:</span>2017-09-04, 23:05:22</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/04/android_jni_study_1/" title="JNI 初探----基本数据类型和开发配置">https://iskylove.github.io/2017/09/04/android_jni_study_1/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2017/09/04/android_jni_study_1/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/04/android_jni_study_2/">
+                    
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/04/java_unsafe_and_cas/">
+                    java Unsafe与CAS 学习
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#导读"><span class="toc-number">1.</span> <span class="toc-text">导读</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#基本类型"><span class="toc-number">2.</span> <span class="toc-text">基本类型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#android-studio开发配置"><span class="toc-number">3.</span> <span class="toc-text">android studio开发配置</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#（一-ndk-build-配置"><span class="toc-number">3.1.</span> <span class="toc-text">（一)ndk-build 配置</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#（二-gradle-experimental-配置"><span class="toc-number">3.2.</span> <span class="toc-text">（二)gradle-experimental 配置</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#（三-CMake-配置"><span class="toc-number">3.3.</span> <span class="toc-text">（三)CMake 配置</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#参考资料"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"JNI 初探----基本数据类型和开发配置　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/04/android_jni_study_2/" title="上一篇: ">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/04/java_unsafe_and_cas/" title="下一篇: java Unsafe与CAS 学习">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_jni_study_2/">android_jni_study_2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_jni_study_1/">JNI 初探----基本数据类型和开发配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_unsafe_and_cas/">java Unsafe与CAS 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_interface_callback_thinker/">对Java接口回调的一些内存泄漏优化的想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_freemarket/">(转)利用FreeMarker生成java源代码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_DynamicProxy/">java 动态代理DynamicProxy学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/react_native_upgrade/">react-native 升级日志----0.39.2版本升级到0.45.1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_gralde_shrinkResources_minifyEnabled/">android gradle配置minifyEnabled以及 shrinkResources踩坑记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/react_native_optimize/">react-native 优化</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_apk_size_reduce/">android减包小工具----gradle任务分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_tinker_andresguard_fit/">android tinker热更与AndResGuard混淆适配</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_sdk_moudle_debug_release/">(转)Android中使用BuildConfig.DEBUG必须知道的内幕</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_layoutinflater_setFactory/">android layoutinflater里面setFactory的探索</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_apollo_graphql/">graphql浅析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_leakcanary_androidwatchexecutor/">LeakCanary源码学习--内存泄露观察策略</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/android_addIdleHandler/">android addIdleHandler 空闲线程学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/android_Memory_Management_in_Android/">(转)Hunting Your Leaks, Memory Management in Android</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_rxjava/">Rxjava源码学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_reference/">java Reference 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_leakcanary/">LeakCanary源码学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_referencequeue/">深入理解ReferenceQueue GC finalize Reference</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_patch_fix/"><转>漫谈Android 增量更新</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/java_javassist/">(转)JAVA 字节码操作利器javassist</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_aop_des/">【翻译】Android中的AOP编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/android_drawable/">(转)领略千变万化的Android Drawable</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/website_share/">技术网站分享(持续更新中~~)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2017 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

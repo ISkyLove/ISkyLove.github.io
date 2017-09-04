@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>android减包小工具----gradle任务分析 | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="导读 –android减包小工具projectFit.gradle,基于android  Gradle的打包配置任务以及APK包进行减包分析，并生成合理的减包建议报告文件HTML">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android减包小工具----gradle任务分析">
+<meta property="og:url" content="https://iskylove.github.io/2017/09/04/android_apk_size_reduce/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="导读 –android减包小工具projectFit.gradle,基于android  Gradle的打包配置任务以及APK包进行减包分析，并生成合理的减包建议报告文件HTML">
+<meta property="og:updated_time" content="2017-09-04T14:53:13.139Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android减包小工具----gradle任务分析">
+<meta name="twitter:description" content="导读 –android减包小工具projectFit.gradle,基于android  Gradle的打包配置任务以及APK包进行减包分析，并生成合理的减包建议报告文件HTML">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/all/">all</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-native/">react native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-android_apk_size_reduce" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/04/android_apk_size_reduce/" class="article-date">
+      <time datetime="2017-09-04T15:01:03.479Z" itemprop="datePublished">2017-09-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      android减包小工具----gradle任务分析
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/android/">android</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><strong><em>导读</em></strong> –android减包小工具projectFit.gradle,基于android  Gradle的打包配置任务以及APK包进行减包分析，并生成合理的减包建议报告文件HTML<a id="more"></a></p>
+<h5 id="1、分析指标"><a href="#1、分析指标" class="headerlink" title="1、分析指标"></a><strong>1、分析指标</strong></h5><p>1、混淆配置<br>2、资源优化配置<br>3、打包优化配置<br>4、微信资源混淆<br>5、检查支持的abi系列<br>6、查找没有任何引用的资源文件<br>7、检查aapt没有进行压缩优化的资源文件</p>
+<h4 id="2、使用方法"><a href="#2、使用方法" class="headerlink" title="2、使用方法"></a><strong>2、使用方法</strong></h4><p>(1)在项目主模块(一般是app modlue)引进<strong>projectfit.gradle</strong>文件<br>(2)在主模块<strong>build.gradle</strong>配置projectfit.gradle<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply from: <span class="string">'projectfit.gradle'</span></span><br></pre></td></tr></table></figure></p>
+<p>(3)修改projectfit.gradle的减包分析输出文件以及分析的APK包，默认项目根目录输出projectfit.html文件<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ext &#123;</span><br><span class="line">    <span class="comment">//输出的报告文件目录</span></span><br><span class="line">    reportPath = project.rootDir.path + File.separator + <span class="string">"projectfit.html"</span></span><br><span class="line">    <span class="comment">//build/output/apk下需要分析的应用包名，如需要配置绝对路径的APK包，可以直接修改函数getApkFile（）</span></span><br><span class="line">    apkName = <span class="string">"app-pushDev-debug.apk"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>(4)在Android Studio的Terminal 控制面板输入：gradlew projectfit 即可<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app&gt;gradlew projectfit</span><br></pre></td></tr></table></figure></p>
+<p><strong>建议</strong> 在分析减包前先编译一下项目可以达到更好的效果<br>维护：linzhenhua@ppmoney.com</p>
+<h4 id="3、附projectfit-gradle源码"><a href="#3、附projectfit-gradle源码" class="headerlink" title="3、附projectfit.gradle源码"></a><strong>3、附projectfit.gradle源码</strong></h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.regex.Matcher</span><br><span class="line"><span class="keyword">import</span> java.util.regex.Pattern</span><br><span class="line"></span><br><span class="line"><span class="comment">//apk 减包检查工具化  Lin</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ext &#123;</span><br><span class="line">    <span class="comment">//输出报告文件目录</span></span><br><span class="line">    reportPath = project.rootDir.path + File.separator + <span class="string">"projectfit.html"</span></span><br><span class="line">    <span class="comment">//build/output/apk下需要分析的应用包名，如需要配置绝对路径的APK包，可以直接修改函数getApkFile（）</span></span><br><span class="line">    apkName = <span class="string">"app-pushDev-debug.apk"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//输出报告的基本格式</span></span><br><span class="line">    TAG_TITLE_BEGIN = <span class="string">'&lt;p&gt;'</span></span><br><span class="line">    TAG_TITLE_END = <span class="string">'&lt;/p&gt;'</span></span><br><span class="line">    TAG_CONTENT_BEGIN = <span class="string">'&lt;H6&gt;&lt;p&gt;'</span></span><br><span class="line">    TAG_CONTENT_END = <span class="string">'&lt;/H6&gt;&lt;/p&gt;'</span></span><br><span class="line">    TAG_LIST_BEGIN = <span class="string">'&lt;p&gt;'</span></span><br><span class="line">    TAG_LIST_END = <span class="string">'&lt;/p&gt;'</span></span><br><span class="line">    TAG_SPECIAL_BEGIN = <span class="string">'&lt;span style="color: red;"&gt;'</span></span><br><span class="line">    TAG_SPECIAL_END = <span class="string">'&lt;/span&gt;'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">task projectFit &lt;&lt; &#123;</span><br><span class="line">    File reportFile = file(<span class="keyword">new</span> File(reportPath))</span><br><span class="line">    <span class="keyword">if</span> (!reportFile.exists()) &#123;</span><br><span class="line">        reportFile.createNewFile()</span><br><span class="line">    &#125;</span><br><span class="line">    FileWriter out = <span class="keyword">new</span> FileWriter(reportFile)</span><br><span class="line">    writeInfo(out, <span class="string">'&lt;!DOCTYPE html&gt;'</span>)</span><br><span class="line">    writeInfo(out, <span class="string">'&lt;html&gt;'</span>)</span><br><span class="line">    writeInfo(out, <span class="string">'&lt;head&gt;'</span>)</span><br><span class="line">    writeInfo(out, <span class="string">'&lt;title&gt;PP APK减包分析及建议工具 &lt;/title&gt;'</span>)</span><br><span class="line">    writeInfo(out, <span class="string">'&lt;body&gt;'</span>)</span><br><span class="line">    writeBaseInfo(out)</span><br><span class="line">    checkMinifyEnabled(out)</span><br><span class="line">    checkShrinkResources(out)</span><br><span class="line">    checkAndResGuardConfig(out)</span><br><span class="line">    checkZipAlignEnabled(out)</span><br><span class="line">    checkSoLibsSupport(out)</span><br><span class="line">    findunuseResourceFiles(out)</span><br><span class="line">    findUnDeflateFiles(out)</span><br><span class="line">    writeInfo(out, <span class="string">'&lt;/body&gt;'</span>)</span><br><span class="line">    writeInfo(out, <span class="string">'&lt;/html&gt;'</span>)</span><br><span class="line">    out.flush()</span><br><span class="line">    out.close()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">def <span class="title">writeBaseInfo</span><span class="params">(def out)</span> </span>&#123;</span><br><span class="line">    writeInfo(out, <span class="string">"&lt;h5&gt;&lt;p&gt;APK : $TAG_SPECIAL_BEGIN  $apkName  $TAG_SPECIAL_END &lt;/p&gt;&lt;/h5&gt;"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取分析的apk文件，默认取out/apk下面的-release.apk包</span></span><br><span class="line"><span class="function">def <span class="title">getApkFile</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    def apkPath = project.rootDir.path + File.separator + <span class="string">'app'</span> + File.separator + <span class="string">'build'</span> + File.separator + <span class="string">'outputs'</span> + File.separator + <span class="string">'apk'</span>;</span><br><span class="line">    def apkPathFinal = apkPath + File.separator + apkName</span><br><span class="line">    File apkFile = <span class="keyword">new</span> File(apkPathFinal)</span><br><span class="line">    <span class="keyword">return</span> apkFile</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//是否开启资源优化</span></span><br><span class="line"><span class="function">def <span class="title">checkShrinkResources</span><span class="params">(def out)</span> </span>&#123;</span><br><span class="line">    def begin = <span class="string">"$TAG_TITLE_BEGIN Begin check shrinkResources $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, begin)</span><br><span class="line">    def open = project.android.buildTypes.release.isShrinkResources();</span><br><span class="line">    def result = <span class="string">"$TAG_CONTENT_BEGIN 是否开启资源优化:  $open $TAG_CONTENT_END"</span></span><br><span class="line">    writeInfo(out, result)</span><br><span class="line">    <span class="keyword">if</span> (!open) &#123;</span><br><span class="line">        def range = getReduceMinAndMax(<span class="number">0.01</span>, <span class="number">0.05</span>)</span><br><span class="line">        writeInfo(out, <span class="string">"$TAG_CONTENT_BEGIN if set shrinkResources true,the package size will be reduced about $TAG_SPECIAL_BEGIN  $&#123;range['min']&#125;~$&#123;range['max']&#125; $TAG_SPECIAL_END  $TAG_CONTENT_END"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    def end = <span class="string">"$TAG_TITLE_BEGIN  End check shrinkResources $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, end)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//是否开启包优化</span></span><br><span class="line"><span class="function">def <span class="title">checkZipAlignEnabled</span><span class="params">(def out)</span> </span>&#123;</span><br><span class="line">    def begin = <span class="string">"$TAG_TITLE_BEGIN  Begin check ZipAlign  $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, begin)</span><br><span class="line">    def open = project.android.buildTypes.release.isZipAlignEnabled();</span><br><span class="line">    def result = <span class="string">"$TAG_CONTENT_BEGIN  是否开启包优化:  $open  $TAG_CONTENT_END"</span></span><br><span class="line">    writeInfo(out, result)</span><br><span class="line">    <span class="keyword">if</span> (!open) &#123;</span><br><span class="line">        def range = getReduceMinAndMax(<span class="number">0.01</span>, <span class="number">0.03</span>)</span><br><span class="line">        writeInfo(out, <span class="string">"$TAG_CONTENT_BEGIN if set shrinkResources true,the package size will be reduced about $TAG_SPECIAL_BEGIN  $&#123;range['min']&#125;~$&#123;range['max']&#125; $TAG_SPECIAL_END  $TAG_CONTENT_END"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    def end = <span class="string">"$TAG_TITLE_BEGIN End check ZipAlign  $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, end)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//是否开启混淆</span></span><br><span class="line"><span class="function">def <span class="title">checkMinifyEnabled</span><span class="params">(def out)</span> </span>&#123;</span><br><span class="line">    def begin = <span class="string">"$TAG_TITLE_BEGIN Begin check minifyEnabled $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, begin)</span><br><span class="line">    def open = project.android.buildTypes.release.isMinifyEnabled();</span><br><span class="line">    def result = <span class="string">"$TAG_CONTENT_BEGIN  是否开启混淆:  $open  $TAG_CONTENT_END"</span></span><br><span class="line">    writeInfo(out, result)</span><br><span class="line">    <span class="keyword">if</span> (open) &#123;</span><br><span class="line">        def range = getReduceMinAndMax(<span class="number">0.05</span>, <span class="number">0.10</span>)</span><br><span class="line">        writeInfo(out, <span class="string">"$TAG_CONTENT_BEGIN  if set shrinkResources true,the package size will be reduced about $TAG_SPECIAL_BEGIN  $&#123;range['min']&#125;~$&#123;range['max']&#125;  $TAG_SPECIAL_END  $TAG_CONTENT_END"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    def end = <span class="string">"$TAG_TITLE_BEGIN  End check minifyEnabled  $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, end)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//支持的SO库类型</span></span><br><span class="line"><span class="function">def <span class="title">checkSoLibsSupport</span><span class="params">(def out)</span> </span>&#123;</span><br><span class="line">    def begin = <span class="string">"$TAG_TITLE_BEGIN Begin check include So Libs $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, begin)</span><br><span class="line">    def suportAbiFilters = <span class="string">"$TAG_CONTENT_BEGIN  suport abi filter: $TAG_CONTENT_END"</span></span><br><span class="line">    writeInfo(out, suportAbiFilters)</span><br><span class="line">    def onlySupportArmeabi = <span class="number">0</span>  <span class="comment">//除了Armeabi外其他包的总大小</span></span><br><span class="line">    def hasOtherFilter = <span class="keyword">false</span>  <span class="comment">//是否支持除了Armeabi外其他的filter</span></span><br><span class="line">    def soLibs = [<span class="string">'armeabi'</span>, <span class="string">'armeabi-v7a'</span>, <span class="string">'x86'</span>, <span class="string">'x86_64'</span>, <span class="string">'mips'</span>, <span class="string">'arm64-v8a'</span>, <span class="string">'mips64'</span>]</span><br><span class="line">    soLibs.each &#123; key -&gt;</span><br><span class="line">        def libs = findApkAbiFilterFile(key)</span><br><span class="line">        def abiSize = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (!libs.empty) &#123;</span><br><span class="line">            writeInfo(out, <span class="string">"$TAG_CONTENT_BEGIN  $key -&gt; $TAG_CONTENT_END"</span>)</span><br><span class="line">            libs.each &#123; value -&gt;</span><br><span class="line">                writeInfo(out, TAG_LIST_BEGIN + value[<span class="string">'name'</span>] + <span class="string">'    size:'</span> + getUnitValue(value[<span class="string">'size'</span>]) + TAG_LIST_END)</span><br><span class="line">                abiSize += value[<span class="string">'size'</span>]</span><br><span class="line">            &#125;</span><br><span class="line">            writeInfo(out, TAG_CONTENT_BEGIN + TAG_SPECIAL_BEGIN + key + TAG_SPECIAL_END + <span class="string">' lib total size:'</span> + TAG_SPECIAL_BEGIN + getUnitValue(abiSize) + TAG_SPECIAL_END + TAG_CONTENT_END)</span><br><span class="line">            <span class="keyword">if</span> (!key.equalsIgnoreCase(<span class="string">'armeabi'</span>)) &#123;</span><br><span class="line">                hasOtherFilter = <span class="keyword">true</span></span><br><span class="line">                onlySupportArmeabi += abiSize</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (hasOtherFilter) &#123;</span><br><span class="line">        writeInfo(out, TAG_CONTENT_BEGIN + <span class="string">'if only support armeabi,you could reduce package size  '</span> + TAG_SPECIAL_BEGIN + getUnitValue(onlySupportArmeabi) + TAG_SPECIAL_END + TAG_CONTENT_END)</span><br><span class="line">    &#125;</span><br><span class="line">    def end = <span class="string">"$TAG_TITLE_BEGIN  End check include So Libs $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, end)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//查找apk里面的Lib文件,filter:armeabi,x86_64,armeabi-v7a</span></span><br><span class="line"><span class="function">def <span class="title">findApkAbiFilterFile</span><span class="params">(def filter)</span> </span>&#123;</span><br><span class="line">    def apkFile = getApkFile();</span><br><span class="line">    def aaptCmd = aaptExe() + <span class="string">' l -v '</span> + apkFile?.path</span><br><span class="line">    def filterStr = <span class="string">'lib/'</span> + filter</span><br><span class="line">    Set&lt;Map&gt; filterFiles = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    BufferedReader bf = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(aaptCmd.execute().inputStream))</span><br><span class="line">    <span class="function">String line</span><br><span class="line">    <span class="title">while</span> <span class="params">((line = bf.readLine()</span>) !</span>= <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (line.startsWith(filterStr, <span class="number">68</span>)) &#123;</span><br><span class="line">            def map = getAAPTLineInfo(line);</span><br><span class="line">            filterFiles.add(map)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    bf.close()</span><br><span class="line">    <span class="keyword">return</span> filterFiles</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//检查配置微信资源混淆</span></span><br><span class="line"><span class="function">def <span class="title">checkAndResGuardConfig</span><span class="params">(def out)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (out != <span class="keyword">null</span>) &#123;</span><br><span class="line">        def begin = <span class="string">"$TAG_TITLE_BEGIN  Begin check AndResGuard $TAG_TITLE_END"</span></span><br><span class="line">        writeInfo(out, begin)</span><br><span class="line">        def hasConfig = project.pluginManager.hasPlugin(<span class="string">'AndResGuard'</span>)</span><br><span class="line">        def result;</span><br><span class="line">        <span class="keyword">if</span> (hasConfig) &#123;</span><br><span class="line">            result = <span class="string">"$TAG_CONTENT_BEGIN 是否配置微信资源混淆: true $TAG_CONTENT_END"</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            def range = getReduceMinAndMax(<span class="number">0.10</span>, <span class="number">0.15</span>)</span><br><span class="line">            result = <span class="string">"$TAG_CONTENT_BEGIN Config AndResGuard could reduce package size $TAG_SPECIAL_BEGIN $&#123;range['min']&#125;~$&#123;range['max']&#125;  $TAG_SPECIAL_END,please consult https://github.com/shwenzhang/AndResGuard $TAG_CONTENT_END"</span></span><br><span class="line">        &#125;</span><br><span class="line">        writeInfo(out, result)</span><br><span class="line">        def End = <span class="string">"$TAG_TITLE_BEGIN  End check AndResGuard  $TAG_TITLE_END"</span></span><br><span class="line">        writeInfo(out, End)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//筛选没有用的资源文件</span></span><br><span class="line"><span class="function">def <span class="title">findunuseResourceFiles</span><span class="params">(def out)</span> </span>&#123;</span><br><span class="line">    def resRootPath = project.rootDir.path + File.separator + <span class="string">'app'</span> + File.separator + <span class="string">'build'</span> + File.separator + <span class="string">'outputs'</span> + File.separator + <span class="string">'mapping'</span></span><br><span class="line">    fileListFind(resRootPath, out)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">def <span class="title">fileListFind</span><span class="params">(String path, def out)</span> </span>&#123;</span><br><span class="line">    File root = <span class="keyword">new</span> File(path)</span><br><span class="line">    File[] files = root.listFiles()</span><br><span class="line">    files.each &#123; item -&gt;</span><br><span class="line">        <span class="keyword">if</span> (item.isDirectory()) &#123;</span><br><span class="line">            fileListFind(item.absolutePath, out)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">'resources.txt'</span>.equalsIgnoreCase(item.name)) &#123;</span><br><span class="line">                findUnuseResourceList(item.absolutePath, out)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">def <span class="title">findUnuseResourceList</span><span class="params">(def filePath, def out)</span> </span>&#123;</span><br><span class="line">    File resourceFile = <span class="keyword">new</span> File(filePath)</span><br><span class="line">    String line;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">    def totleNewSize = <span class="number">0</span>;</span><br><span class="line">    def totleOldSize = <span class="number">0</span>;</span><br><span class="line">    def begin = <span class="string">"$TAG_TITLE_BEGIN  Begin Find UnUse Resource Files  $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, begin)</span><br><span class="line">    <span class="keyword">if</span> (resourceFile.exists()) &#123;</span><br><span class="line">        BufferedReader bf = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(<span class="keyword">new</span> FileInputStream(resourceFile)))</span><br><span class="line">        <span class="keyword">while</span> ((line = bf.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (line.contains(<span class="string">'Skipped unused resource'</span>)) &#123;</span><br><span class="line">                def map = getResourceUnuseFileInfo(line)</span><br><span class="line">                writeInfo(out, TAG_LIST_BEGIN + map[<span class="string">'name'</span>] + TAG_LIST_END)</span><br><span class="line">                count++</span><br><span class="line">                totleNewSize += map[<span class="string">'newSize'</span>]</span><br><span class="line">                totleOldSize += map[<span class="string">'oldSize'</span>]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        def result = <span class="string">"$TAG_CONTENT_BEGIN  find   $TAG_SPECIAL_BEGIN  $count  $TAG_SPECIAL_END  resource files unUse,total size: $TAG_SPECIAL_BEGIN"</span> + getUnitValue(totleOldSize) + TAG_SPECIAL_END + <span class="function">TAG_CONTENT_END</span><br><span class="line">        <span class="title">writeInfo</span><span class="params">(out, result)</span></span><br><span class="line">        def advices </span>= <span class="string">"$TAG_CONTENT_BEGIN remove the unuses files could reduce the package size: $TAG_SPECIAL_BEGIN"</span> + getUnitValue(totleNewSize) + TAG_SPECIAL_END + <span class="function">TAG_CONTENT_END</span><br><span class="line">        <span class="title">writeInfo</span><span class="params">(out, advices)</span></span><br><span class="line">        bf.<span class="title">close</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> </span>&#123;</span><br><span class="line">        def advice = <span class="string">"$TAG_CONTENT_BEGIN please check the file /outputs/mapping/\$productFlavors/resources.txt $TAG_CONTENT_END"</span></span><br><span class="line">        writeInfo(out, advice)</span><br><span class="line">    &#125;</span><br><span class="line">    def End = <span class="string">"$TAG_TITLE_BEGIN   End  Find UnUse Resource Files  $TAG_TITLE_END "</span></span><br><span class="line">    writeInfo(out, End)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//筛选aapt没有压缩优化的文件</span></span><br><span class="line"><span class="function">def <span class="title">findUnDeflateFiles</span><span class="params">(def out)</span> </span>&#123;</span><br><span class="line">    def apkFile = getApkFile();</span><br><span class="line">    def aaptCmd = aaptExe() + <span class="string">' l -v  '</span> + apkFile?.path</span><br><span class="line">    BufferedReader bf = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(aaptCmd.execute().in))</span><br><span class="line">    String line;</span><br><span class="line">    def begin = <span class="string">" $TAG_TITLE_BEGIN  Begin Find UnDeflate Files $TAG_TITLE_END "</span></span><br><span class="line">    writeInfo(out, begin)</span><br><span class="line">    def count = <span class="number">0</span></span><br><span class="line">    def totalSize = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> ((line = bf.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (line.contains(<span class="string">'Stored'</span>)) &#123;</span><br><span class="line">            def map = getAAPTLineInfo(line)</span><br><span class="line">            writeInfo(out, TAG_LIST_BEGIN + map[<span class="string">'name'</span>] + <span class="string">'   size:'</span> + getUnitValue(map[<span class="string">'size'</span>]) + TAG_LIST_END)</span><br><span class="line">            <span class="keyword">if</span> (!map[<span class="string">'name'</span>].endsWith(<span class="string">'resources.arsc'</span>)) &#123;</span><br><span class="line">                count++;</span><br><span class="line">                totalSize += map[<span class="string">'size'</span>]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    def result = <span class="string">"$TAG_CONTENT_BEGIN  find $TAG_SPECIAL_BEGIN"</span> + count + <span class="string">" $TAG_SPECIAL_END files unDeflate(Except resources.arsc), total size: $TAG_SPECIAL_BEGIN "</span> + getUnitValue(totalSize) + TAG_SPECIAL_END + <span class="function">TAG_CONTENT_END</span><br><span class="line">    <span class="title">writeInfo</span><span class="params">(out, result)</span></span><br><span class="line">    def tinyReduce </span>= totalSize * <span class="number">0.2</span></span><br><span class="line">    def tinyPNGAdvice = <span class="string">"$TAG_CONTENT_BEGIN if use the Tiny PNG(https://tinypng.com/),could reduce package size  $TAG_SPECIAL_BEGIN "</span> + getUnitValue(tinyReduce) + TAG_SPECIAL_END + <span class="function">TAG_CONTENT_END</span><br><span class="line">    <span class="title">writeInfo</span><span class="params">(out, tinyPNGAdvice)</span></span><br><span class="line">    def webpReduce </span>= totalSize * <span class="number">0.5</span></span><br><span class="line">    def webpAdvice = <span class="string">"$TAG_CONTENT_BEGIN  if use webp(http://isparta.github.io/how.html | https://developers.google.com/speed/webp/docs/cwebp),could reduce package size  $TAG_SPECIAL_BEGIN"</span> + getUnitValue(webpReduce) + TAG_SPECIAL_END + <span class="function">TAG_CONTENT_END</span><br><span class="line">    <span class="title">writeInfo</span><span class="params">(out, webpAdvice)</span></span><br><span class="line">    def end </span>= <span class="string">" $TAG_TITLE_BEGIN  End Find UnDeflate Files  $TAG_TITLE_END"</span></span><br><span class="line">    writeInfo(out, end)</span><br><span class="line">    bf.close()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取aapt分析的数据</span></span><br><span class="line"><span class="function">def <span class="title">getAAPTLineInfo</span><span class="params">(String line)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> length = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">    def lstr;</span><br><span class="line">    def sstr</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        lstr = line.substring(<span class="number">0</span>, <span class="number">8</span>).replaceAll(<span class="string">"\\p&#123;Space&#125;"</span>, <span class="string">""</span>)</span><br><span class="line">        sstr = line.substring(<span class="number">18</span>, <span class="number">26</span>).replaceAll(<span class="string">"\\p&#123;Space&#125;"</span>, <span class="string">""</span>)</span><br><span class="line">        length = java.lang.Integer.valueOf(lstr)</span><br><span class="line">        size = java.lang.Integer.valueOf(sstr)</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        print line + <span class="string">'\n'</span></span><br><span class="line">        print lstr + <span class="string">'&lt;&lt;&lt;&lt;&lt;'</span> + sstr + <span class="string">'\n'</span></span><br><span class="line">    &#125;</span><br><span class="line">    String name = line.substring(<span class="number">68</span>).replaceAll(<span class="string">"\\p&#123;Space&#125;"</span>, <span class="string">""</span>)</span><br><span class="line">    Map lineMap = [<span class="string">'length'</span>: length, <span class="string">'size'</span>: size, <span class="string">'name'</span>: name]</span><br><span class="line">    <span class="keyword">return</span> lineMap</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取无用资源文件信息</span></span><br><span class="line"><span class="function">def <span class="title">getResourceUnuseFileInfo</span><span class="params">(String line)</span> </span>&#123;</span><br><span class="line">    def oldLength = <span class="number">0</span></span><br><span class="line">    def newLength = <span class="number">0</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Pattern p1 = Pattern.compile(<span class="string">":(.*)bytes \\(replaced with"</span>);</span><br><span class="line">        Matcher m1 = p1.matcher(line);</span><br><span class="line">        <span class="keyword">while</span> (m1.find()) &#123;</span><br><span class="line">            def size = m1.group(<span class="number">1</span>).replaceAll(<span class="string">"\\p&#123;Space&#125;"</span>, <span class="string">""</span>)</span><br><span class="line">            oldLength = Integer.valueOf(size)</span><br><span class="line">        &#125;</span><br><span class="line">        Pattern p2 = Pattern.compile(<span class="string">'size(.*)bytes'</span>);</span><br><span class="line">        Matcher m2 = p2.matcher(line);</span><br><span class="line">        <span class="keyword">while</span> (m2.find()) &#123;</span><br><span class="line">            def size = m2.group(<span class="number">1</span>).replaceAll(<span class="string">"\\p&#123;Space&#125;"</span>, <span class="string">""</span>)</span><br><span class="line">            newLength = Integer.valueOf(size)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        print line</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    String name = line.substring(<span class="number">24</span>)</span><br><span class="line">    Map lineMap = [<span class="string">'oldSize'</span>: oldLength, <span class="string">'newSize'</span>: newLength, <span class="string">'name'</span>: name]</span><br><span class="line">    <span class="keyword">return</span> lineMap</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">def <span class="title">getReduceMinAndMax</span><span class="params">(def minPercent, def maxPercent)</span> </span>&#123;</span><br><span class="line">    def size = getAPKSize()</span><br><span class="line">    def minValue = size * minPercent</span><br><span class="line">    def maxValue = size * maxPercent</span><br><span class="line">    def minStr = getUnitValue(minValue)</span><br><span class="line">    def maxStr = getUnitValue(maxValue)</span><br><span class="line">    <span class="keyword">return</span> [min: minStr, max: maxStr]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取apk大小</span></span><br><span class="line"><span class="function">def <span class="title">getAPKSize</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    File apkFile = getApkFile();</span><br><span class="line">    def size = apkFile.length()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//aapt</span></span><br><span class="line"><span class="function">def <span class="title">aaptExe</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    def sdkPath = getSDKEnvPath()</span><br><span class="line">    def androidVersion = getBuildVersion()</span><br><span class="line">    def aaptWin = sdkPath + File.separator + <span class="string">'build-tools'</span> + File.separator + androidVersion + File.separator + <span class="string">'aapt.exe'</span></span><br><span class="line">    def aaptUnit = sdkPath + File.separator + <span class="string">'build-tools'</span> + File.separator + androidVersion + File.separator + <span class="string">'aapt'</span></span><br><span class="line">    File aaptWinFile = <span class="keyword">new</span> File(aaptWin)</span><br><span class="line">    File aaptUnitFile = <span class="keyword">new</span> File(aaptUnit)</span><br><span class="line">    <span class="keyword">if</span> (aaptUnitFile.exists()) &#123;</span><br><span class="line">        <span class="keyword">return</span> aaptUnit</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (aaptWinFile.exists()) &#123;</span><br><span class="line">        <span class="keyword">return</span> aaptWin</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取编译版本</span></span><br><span class="line"><span class="function">def <span class="title">getBuildVersion</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    def version = project.android.buildToolsVersion</span><br><span class="line">    <span class="keyword">return</span> version</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取sdk位置</span></span><br><span class="line"><span class="function">def <span class="title">getSDKEnvPath</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    def sdkPath;</span><br><span class="line">    File localPropertyFile;</span><br><span class="line">    localPropertyFile = project.rootProject.file(<span class="string">'app/local.properties'</span>)</span><br><span class="line">    <span class="keyword">if</span> (localPropertyFile.exists()) &#123;</span><br><span class="line">        Properties properties = <span class="keyword">new</span> Properties()</span><br><span class="line">        InputStream inputStream = localPropertyFile.newDataInputStream();</span><br><span class="line">        properties.load(inputStream)</span><br><span class="line">        sdkPath = properties.getProperty(<span class="string">'sdk.dir'</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sdkPath == <span class="keyword">null</span> || sdkPath.length() &lt; <span class="number">3</span>) &#123;</span><br><span class="line">        localPropertyFile = project.rootProject.file(<span class="string">'local.properties'</span>)</span><br><span class="line">        <span class="keyword">if</span> (localPropertyFile.exists()) &#123;</span><br><span class="line">            Properties properties = <span class="keyword">new</span> Properties()</span><br><span class="line">            InputStream inputStream = localPropertyFile.newDataInputStream();</span><br><span class="line">            properties.load(inputStream)</span><br><span class="line">            sdkPath = properties.getProperty(<span class="string">'sdk.dir'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sdkPath;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">def <span class="title">getUnitValue</span><span class="params">(def value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (value &lt; <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">" $value B"</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        value = value / <span class="number">1024</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (value &lt; <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> getTwoDecimalValue(value, <span class="string">' KB'</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        value = value / <span class="number">1024</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (value &lt; <span class="number">1024</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> getTwoDecimalValue(value, <span class="string">' MB'</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        value = value / <span class="number">1024</span></span><br><span class="line">        <span class="keyword">return</span> getTwoDecimalValue(value, <span class="string">' GB'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">def <span class="title">getTwoDecimalValue</span><span class="params">(def value, def unit)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> String.format(<span class="string">"%.1f"</span>, value) + unit</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//写入报告文档</span></span><br><span class="line"><span class="function">def <span class="title">writeInfo</span><span class="params">(def out, def info)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (out != <span class="keyword">null</span>) &#123;</span><br><span class="line">        out.write(info)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/04/android_apk_size_reduce/">android减包小工具----gradle任务分析</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2017-09-04, 23:01:03</p>
+        <p><span>最后更新:</span>2017-09-04, 22:53:13</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/04/android_apk_size_reduce/" title="android减包小工具----gradle任务分析">https://iskylove.github.io/2017/09/04/android_apk_size_reduce/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2017/09/04/android_apk_size_reduce/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/04/react_native_optimize/">
+                    react-native 优化
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/04/android_tinker_andresguard_fit/">
+                    android tinker热更与AndResGuard混淆适配
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#1、分析指标"><span class="toc-number">1.</span> <span class="toc-text">1、分析指标</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2、使用方法"><span class="toc-number"></span> <span class="toc-text">2、使用方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3、附projectfit-gradle源码"><span class="toc-number"></span> <span class="toc-text">3、附projectfit.gradle源码</span></a>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"android减包小工具----gradle任务分析　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/04/react_native_optimize/" title="上一篇: react-native 优化">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/04/android_tinker_andresguard_fit/" title="下一篇: android tinker热更与AndResGuard混淆适配">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_jni_study_2/">android_jni_study_2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_jni_study_1/">JNI 初探----基本数据类型和开发配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_unsafe_and_cas/">java Unsafe与CAS 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_interface_callback_thinker/">对Java接口回调的一些内存泄漏优化的想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_freemarket/">(转)利用FreeMarker生成java源代码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_DynamicProxy/">java 动态代理DynamicProxy学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/react_native_upgrade/">react-native 升级日志----0.39.2版本升级到0.45.1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_gralde_shrinkResources_minifyEnabled/">android gradle配置minifyEnabled以及 shrinkResources踩坑记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/react_native_optimize/">react-native 优化</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_apk_size_reduce/">android减包小工具----gradle任务分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_tinker_andresguard_fit/">android tinker热更与AndResGuard混淆适配</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_sdk_moudle_debug_release/">(转)Android中使用BuildConfig.DEBUG必须知道的内幕</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_layoutinflater_setFactory/">android layoutinflater里面setFactory的探索</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_apollo_graphql/">graphql浅析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_leakcanary_androidwatchexecutor/">LeakCanary源码学习--内存泄露观察策略</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/android_addIdleHandler/">android addIdleHandler 空闲线程学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/android_Memory_Management_in_Android/">(转)Hunting Your Leaks, Memory Management in Android</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_rxjava/">Rxjava源码学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_reference/">java Reference 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_leakcanary/">LeakCanary源码学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_referencequeue/">深入理解ReferenceQueue GC finalize Reference</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_patch_fix/"><转>漫谈Android 增量更新</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/java_javassist/">(转)JAVA 字节码操作利器javassist</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_aop_des/">【翻译】Android中的AOP编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/android_drawable/">(转)领略千变万化的Android Drawable</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/website_share/">技术网站分享(持续更新中~~)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2017 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

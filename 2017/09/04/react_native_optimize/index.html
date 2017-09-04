@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>react-native 优化 | 剑客爱编程</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1、优化Component
+很多人在定义一个class时都会去继承Component，这并没有错，但是如果一个子组建也继承了Component，那么当父组建render时也会导致子组建的render，怎么解决呢？其实很简单只需要我们的子组建去继承PureComponent即可。个人建议自定义的class都可以去继承PureComponent从而避免不必要的render。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react-native 优化">
+<meta property="og:url" content="https://iskylove.github.io/2017/09/04/react_native_optimize/index.html">
+<meta property="og:site_name" content="剑客爱编程">
+<meta property="og:description" content="1、优化Component
+很多人在定义一个class时都会去继承Component，这并没有错，但是如果一个子组建也继承了Component，那么当父组建render时也会导致子组建的render，怎么解决呢？其实很简单只需要我们的子组建去继承PureComponent即可。个人建议自定义的class都可以去继承PureComponent从而避免不必要的render。">
+<meta property="og:updated_time" content="2017-09-04T14:55:37.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="react-native 优化">
+<meta name="twitter:description" content="1、优化Component
+很多人在定义一个class时都会去继承Component，这并没有错，但是如果一个子组建也继承了Component，那么当父组建render时也会导致子组建的render，怎么解决呢？其实很简单只需要我们的子组建去继承PureComponent即可。个人建议自定义的class都可以去继承PureComponent从而避免不必要的render。">
+  
+    <link rel="alternative" href="/atom.xml" title="剑客爱编程" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead_small.jpg">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/orange/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">剑客爱编程</a></h1>
+        </hgroup>
+
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">博客主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aath/">aath</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/adnroid/">adnroid</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/all/">all</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alogorithm/">alogorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animation/">animation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/animator/">animator</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/apktool/">apktool</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/broadcast/">broadcast</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/decompile/">decompile</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jd-gui/">jd-gui</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react-native/">react native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reflect/">reflect</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/svnchecker/">svnchecker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/心灵鸡汤/">心灵鸡汤</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://github.com/ISkyLove">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://www.cnblogs.com/jiankeaibiancheng/">博客园</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">武林至尊，宝刀屠龙，号令天下，莫敢不从，倚天不出，谁与争锋？</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">剑客爱编程</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="http://7xtazt.com1.z0.glb.clouddn.com/blog_headhead.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">剑客爱编程</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">博客主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-react_native_optimize" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/04/react_native_optimize/" class="article-date">
+      <time datetime="2017-09-04T15:01:03.479Z" itemprop="datePublished">2017-09-04</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      react-native 优化
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/react/">react</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/react-native/">react native</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>1、优化Component</p>
+<p>很多人在定义一个class时都会去继承Component，这并没有错，但是如果一个子组建也继承了Component，那么当父组建render时也会导致子组建的render，怎么解决呢？其实很简单只需要我们的子组建去继承PureComponent即可。个人建议自定义的class都可以去继承PureComponent从而避免不必要的render。<a id="more"></a><br>2、优化方法的创建</p>
+<p>内部方法的定义应该使用 onPress=()=&gt;{}. 调用直接this.onPress即可，避免创建多个fun<br>3、善于使用shouldComponentUpdate</p>
+<p>通过shouldComponentUpdate的返回结果我们可以去控制什么时候应该render，什么情况应该render。<br>4、listview代替scrollview</p>
+<p>使用listview我们可以设置首次render时要渲染的ui数量，这样一定程度上优化了首次进入页面时所需要的渲染时间（renderHeader/pagesize）<br>5、使用InteractionManager</p>
+<p>InteractionManager.runAfterInteractions(…)的官方文档说的很清楚，通过他可以处理一些耗时操作，所以我个人建议把网络请求放在次方法中去处理，这样很大程度上可以解决首次进入时的卡顿。<br>6、使用Animated去处理一些简单的动画</p>
+<p>我想应该会有很多小伙伴遇到这样的问题，切换不同的state改变某个view的height/width，是不是很多小伙伴都会用state去控制height/width。并不是说这样是完全不对，只是这样耗费性能，因为你的state的改变会触发render，而对于一个过程来说，这样的render次数是我们不愿意看到的，那该怎么解决呢？其实大家可以使用Animated去代替state，Animated封装了一系列优雅的处理函数，完全可以实现你想要的效果，使用方法官方有介绍。</p>
+<p>7、不要在render方法中去做一些层级很高的判断，去大操作的改变真实的DOM，这样非常浪费系统资源，尽量仅做一些数据呈现上的判断，减少对真实DOM结构无谓的增删。</p>
+<p>8、对于页面中结构比较固定的控件，尽量都设置上Key值，同样可以减少对DOM的操作。</p>
+<p>9、不要在render中做数据的处理，这样降低了系统创建Virtual DOM的效率，同时对于程序结构而言也会变的不清晰，我们可以根据需求把数据的处理放在  componentWillUpdate、componentDidMount、componentWillMount等函数中，这样提高了页面刷新效率也提高了开发效率。</p>
+<p>7、启动优化<br>准备工具：<br>(1)adb shell<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">am start -W -n com.awesomeproject/.MainActivity 应用启动时间</span><br></pre></td></tr></table></figure></p>
+<p>(2)DDMS 通过trace Method 分析<br>(3)react-native 打包:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">react-native bundle --entry-file index.android.js --bundle-output ./android/app/src/main/assets/main.bundle --platform android --assets-dest --dev <span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
+<p>开始分析:<br>(1)不同版本启动比较：0.39.2 vs  0.45.1(bundle包放在assert文件夹，大小：652kb)<br>0.45.1:首次安装启动：平均301ms   启动：平均201ms      (纯RN应用)<br>0.39.2:首次安装启动：平均317ms   启动：平均204ms      (纯RN应用)<br>不带有RN的首次安装启动：平均283ms  启动：平均185ms<br>版本升级对启动时间优化作用偏小</p>
+<p><strong>启动测试过程发现白屏的问题还是存在，react_native版本升级最高版本没有对白屏做优化</strong></p>
+<p>居于此做以下几方面优化：<br>白屏处理以及界面切换动画：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Base application theme. --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AppTheme"</span> <span class="attr">parent</span>=<span class="string">"Theme.AppCompat.Light.NoActionBar"</span>&gt;</span><span class="xml"></span><br><span class="line">    <span class="comment">&lt;!-- Customize your theme here. --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowAnimationStyle"</span>&gt;</span>@style/AnimationActivity<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimary"</span>&gt;</span>@color/primary<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimaryDark"</span>&gt;</span>@color/primary_dark<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- RN activity theme. --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"RNAppTheme"</span> <span class="attr">parent</span>=<span class="string">"Theme.AppCompat.Light.NoActionBar"</span>&gt;</span><span class="xml"></span><br><span class="line">    <span class="comment">&lt;!-- Customize your theme here. --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowBackground"</span>&gt;</span>@color/transparent<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowIsTranslucent"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:windowAnimationStyle"</span>&gt;</span>@style/AnimationActivity<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimary"</span>&gt;</span>@color/primary<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"colorPrimaryDark"</span>&gt;</span>@color/primary_dark<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">name</span>=<span class="string">"AnimationActivity"</span> <span class="attr">parent</span>=<span class="string">"@android:style/Animation.Translucent"</span>&gt;</span><span class="xml"></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:activityOpenEnterAnimation"</span>&gt;</span>@anim/push_left_in<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:activityOpenExitAnimation"</span>&gt;</span>@anim/push_left_out<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:activityCloseEnterAnimation"</span>&gt;</span>@anim/push_right_in<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">item</span> <span class="attr">name</span>=<span class="string">"android:activityCloseExitAnimation"</span>&gt;</span>@anim/push_right_out<span class="tag">&lt;/<span class="name">item</span>&gt;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> //push_right_in.xml</span><br><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;   </span><br><span class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">translate</span>   </span><br><span class="line"><span class="attr">android:fromXDelta</span>=<span class="string">"100%p"</span></span><br><span class="line"><span class="attr">android:toXDelta</span>=<span class="string">"0"</span>    </span><br><span class="line"><span class="attr">android:duration</span>=<span class="string">"300"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">alpha</span>   </span><br><span class="line"><span class="attr">android:fromAlpha</span>=<span class="string">"0.8"</span></span><br><span class="line"><span class="attr">android:toAlpha</span>=<span class="string">"1.0"</span>  </span><br><span class="line"><span class="attr">android:duration</span>=<span class="string">"300"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//push_right_out.xml</span><br><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;   </span><br><span class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">translate</span>   </span><br><span class="line"><span class="attr">android:fromXDelta</span>=<span class="string">"0"</span>    </span><br><span class="line"><span class="attr">android:toXDelta</span>=<span class="string">"100%p"</span>    </span><br><span class="line"><span class="attr">android:duration</span>=<span class="string">"300"</span>/&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">alpha</span>   </span><br><span class="line"><span class="attr">android:fromAlpha</span>=<span class="string">"1.0"</span>    </span><br><span class="line"><span class="attr">android:toAlpha</span>=<span class="string">"0.8"</span>  </span><br><span class="line"><span class="attr">android:duration</span>=<span class="string">"300"</span> /&gt;</span>   </span><br><span class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line"></span><br><span class="line">//push_left_out.xml</span><br><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;   </span><br><span class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">translate</span>   </span><br><span class="line"><span class="attr">android:fromXDelta</span>=<span class="string">"-100%p"</span></span><br><span class="line"><span class="attr">android:toXDelta</span>=<span class="string">"0"</span>    </span><br><span class="line"><span class="attr">android:duration</span>=<span class="string">"300"</span>/&gt;</span>   </span><br><span class="line"><span class="tag">&lt;<span class="name">alpha</span>   </span><br><span class="line"><span class="attr">android:fromAlpha</span>=<span class="string">"0.8"</span>    </span><br><span class="line"><span class="attr">android:toAlpha</span>=<span class="string">"1.0"</span>  </span><br><span class="line"><span class="attr">android:duration</span>=<span class="string">"300"</span> /&gt;</span>   </span><br><span class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//push_left_in.xml</span><br><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;   </span><br><span class="line"><span class="tag">&lt;<span class="name">set</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">translate</span></span><br><span class="line"><span class="attr">android:fromXDelta</span>=<span class="string">"100%p"</span></span><br><span class="line"><span class="attr">android:toXDelta</span>=<span class="string">"0%"</span></span><br><span class="line"><span class="attr">android:duration</span>=<span class="string">"300"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">alpha</span>   </span><br><span class="line"><span class="attr">android:fromAlpha</span>=<span class="string">"0.0"</span></span><br><span class="line"><span class="attr">android:toAlpha</span>=<span class="string">"1.0"</span></span><br><span class="line"><span class="attr">android:duration</span>=<span class="string">"300"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>预加载：在APP启动时调用init方法预先启动加载bundle引擎<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RNCacheInstanceManager</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> ReactInstanceManager mManager = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//init</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        mManager = createReactInstanceManager();</span><br><span class="line">        ReactRootView mRootView = <span class="keyword">new</span> ReactRootView(context);</span><br><span class="line">        mRootView.startReactApplication(mManager, <span class="string">"AwesomeProject"</span>, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ReactInstanceManager <span class="title">getReactInstanceManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mManager;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> ReactInstanceManager <span class="title">createReactInstanceManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ReactInstanceManager.builder()</span><br><span class="line">                .setApplication(MainApplication.getInstance())</span><br><span class="line">                .setBundleAssetName(<span class="string">"main.bundle"</span>)</span><br><span class="line">                .setJSMainModuleName(<span class="string">"index.android"</span>)</span><br><span class="line">                .addPackage(<span class="keyword">new</span> MainReactPackage())</span><br><span class="line">                .setUseDeveloperSupport(<span class="keyword">true</span>)               <span class="comment">//开发者支持,开发的时候要设置为true，不然无法使用开发者菜单</span></span><br><span class="line">                .setInitialLifecycleState(LifecycleState.RESUMED)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重写ReactRootView<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RNReactRootView</span> <span class="keyword">extends</span> <span class="title">FrameLayout</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ReactRootView mReactRootView;</span><br><span class="line">    <span class="keyword">private</span> ViewGroup mLoadingView;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RNReactRootView</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context);</span><br><span class="line">        init();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RNReactRootView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">        init();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RNReactRootView</span><span class="params">(Context context, AttributeSet attrs, <span class="keyword">int</span> defStyle)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs, defStyle);</span><br><span class="line">        init();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        setVisibility(View.INVISIBLE);</span><br><span class="line">        <span class="comment">//setBackgroundResource(R.color.white);</span></span><br><span class="line">        <span class="keyword">if</span> (mLoadingView == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mLoadingView = createDefaultLoadingView();</span><br><span class="line">            addView(mLoadingView, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (mReactRootView == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mReactRootView = createReactRootView();</span><br><span class="line">            addView(mReactRootView, <span class="number">1</span>);</span><br><span class="line">            mReactRootView.getViewTreeObserver().addOnWindowFocusChangeListener(<span class="keyword">new</span> ViewTreeObserver.OnWindowFocusChangeListener() &#123;</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onWindowFocusChanged</span><span class="params">(<span class="keyword">boolean</span> hasFocus)</span> </span>&#123;</span><br><span class="line"><span class="comment">//                    AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.rn_push_left_in);</span></span><br><span class="line"><span class="comment">//                    set.setTarget(mReactRootView);</span></span><br><span class="line"><span class="comment">//                    set.start();</span></span><br><span class="line">                    <span class="keyword">if</span>(hasFocus) &#123;</span><br><span class="line">                        mReactRootView.postDelayed(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">                            <span class="meta">@Override</span></span><br><span class="line">                            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                                setVisibility(View.VISIBLE);</span><br><span class="line">                                Animation aa = AnimationUtils.loadAnimation(getContext(), R.anim.rn_push_left_in);</span><br><span class="line">                                mReactRootView.startAnimation(aa);</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;, <span class="number">150</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    Log.i(<span class="string">"linzhenhua"</span>, <span class="string">"onWindowFocusChanged:"</span> + hasFocus + <span class="string">"  "</span> + System.currentTimeMillis());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</span><br><span class="line">        Log.i(<span class="string">"linzhenhua"</span>, <span class="string">"onMeasure:"</span> + <span class="string">"  "</span> + System.currentTimeMillis());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ReactRootView <span class="title">createReactRootView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ReactRootView reactRootView = <span class="keyword">new</span> ReactRootView(getContext());</span><br><span class="line">        LayoutParams loadingViewLp = <span class="keyword">new</span> LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);</span><br><span class="line">        reactRootView.setLayoutParams(loadingViewLp);</span><br><span class="line">        <span class="keyword">return</span> reactRootView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> ViewGroup <span class="title">createDefaultLoadingView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ViewGroup loadingView = <span class="keyword">new</span> RelativeLayout(getContext());</span><br><span class="line">        TextView mTextView = <span class="keyword">new</span> TextView(getContext());</span><br><span class="line">        mTextView.setText(<span class="string">"加载中..."</span>);</span><br><span class="line">        mTextView.setGravity(Gravity.CENTER);</span><br><span class="line">        RelativeLayout.LayoutParams lp = <span class="keyword">new</span> RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);</span><br><span class="line">        lp.addRule(RelativeLayout.CENTER_IN_PARENT);</span><br><span class="line">        mTextView.setLayoutParams(lp);</span><br><span class="line">        loadingView.addView(mTextView);</span><br><span class="line">        LayoutParams loadingViewLp = <span class="keyword">new</span> LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);</span><br><span class="line">        loadingView.setLayoutParams(loadingViewLp);</span><br><span class="line">        <span class="keyword">return</span> loadingView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addLoadView</span><span class="params">(ViewGroup loadingView)</span> </span>&#123;</span><br><span class="line">        destoryLoadingView();</span><br><span class="line">        mLoadingView = loadingView;</span><br><span class="line">        FrameLayout.LayoutParams lp = <span class="keyword">new</span> LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);</span><br><span class="line">        removeViewAt(<span class="number">0</span>);</span><br><span class="line">        addView(mLoadingView, <span class="number">0</span>, lp);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">destoryLoadingView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mLoadingView != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mLoadingView.removeAllViews();</span><br><span class="line">            removeViewAt(<span class="number">0</span>);</span><br><span class="line">            mLoadingView = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startReactApplication</span><span class="params">(ReactInstanceManager reactInstanceManager,</span><br><span class="line">                                      String moduleName,</span><br><span class="line">                                      @Nullable Bundle initialProperties)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mReactRootView != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mReactRootView.startReactApplication(reactInstanceManager, moduleName, initialProperties);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unmountReactApplication</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mReactRootView != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mReactRootView.unmountReactApplication();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重写ReactActivity<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RNReactActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> <span class="keyword">implements</span> <span class="title">DefaultHardwareBackBtnHandler</span>, <span class="title">PermissionAwareActivity</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RNReactActivityDelegate mDelegate;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">RNReactActivity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mDelegate = createReactActivityDelegate();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * Returns the name of the main component registered from JavaScript.</span><br><span class="line">     * This is used to schedule rendering of the component.</span><br><span class="line">     * e.g. "MoviesApp"</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function">String <span class="title">getMainComponentName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * Called at construction time, override if you have a custom delegate implementation.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> RNReactActivityDelegate <span class="title">createReactActivityDelegate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RNReactActivityDelegate(<span class="keyword">this</span>, getMainComponentName());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        mDelegate.onCreate(savedInstanceState);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onPause();</span><br><span class="line">        mDelegate.onPause();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onResume();</span><br><span class="line">        mDelegate.onResume();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onDestroy();</span><br><span class="line">        mDelegate.onDestroy();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</span><br><span class="line">        mDelegate.onActivityResult(requestCode, resultCode, data);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyUp</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mDelegate.onKeyUp(keyCode, event) || <span class="keyword">super</span>.onKeyUp(keyCode, event);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBackPressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!mDelegate.onBackPressed()) &#123;</span><br><span class="line">            <span class="keyword">super</span>.onBackPressed();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invokeDefaultOnBackPressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onBackPressed();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNewIntent</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!mDelegate.onNewIntent(intent)) &#123;</span><br><span class="line">            <span class="keyword">super</span>.onNewIntent(intent);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestPermissions</span><span class="params">(</span><br><span class="line">            String[] permissions,</span><br><span class="line">            <span class="keyword">int</span> requestCode,</span><br><span class="line">            PermissionListener listener)</span> </span>&#123;</span><br><span class="line">        mDelegate.requestPermissions(permissions, requestCode, listener);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRequestPermissionsResult</span><span class="params">(</span><br><span class="line">            <span class="keyword">int</span> requestCode,</span><br><span class="line">            String[] permissions,</span><br><span class="line">            <span class="keyword">int</span>[] grantResults)</span> </span>&#123;</span><br><span class="line">        mDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> ReactNativeHost <span class="title">getReactNativeHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mDelegate.getReactNativeHost();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> ReactInstanceManager <span class="title">getReactInstanceManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mDelegate.getReactInstanceManager();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">loadApp</span><span class="params">(String appKey)</span> </span>&#123;</span><br><span class="line">        mDelegate.loadApp(appKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重写ReactActivityDelegate<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RNReactActivityDelegate</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> REQUEST_OVERLAY_PERMISSION_CODE = <span class="number">1111</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String REDBOX_PERMISSION_GRANTED_MESSAGE =</span><br><span class="line">            <span class="string">"Overlay permissions have been granted."</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String REDBOX_PERMISSION_MESSAGE =</span><br><span class="line">            <span class="string">"Overlay permissions needs to be granted in order for react native apps to run in dev mode"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="meta">@Nullable</span></span><br><span class="line">    Activity mActivity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="meta">@Nullable</span></span><br><span class="line">    FragmentActivity mFragmentActivity;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="meta">@Nullable</span> String mMainComponentName;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="meta">@Nullable</span></span><br><span class="line">    RNReactRootView mReactRootView;</span><br><span class="line">    <span class="keyword">private</span> <span class="meta">@Nullable</span></span><br><span class="line">    DoubleTapReloadRecognizer mDoubleTapReloadRecognizer;</span><br><span class="line">    <span class="keyword">private</span> <span class="meta">@Nullable</span></span><br><span class="line">    PermissionListener mPermissionListener;</span><br><span class="line">    <span class="keyword">private</span> <span class="meta">@Nullable</span></span><br><span class="line">    Callback mPermissionsCallback;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RNReactActivityDelegate</span><span class="params">(Activity activity, @Nullable String mainComponentName)</span> </span>&#123;</span><br><span class="line">        mActivity = activity;</span><br><span class="line">        mMainComponentName = mainComponentName;</span><br><span class="line">        mFragmentActivity = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">RNReactActivityDelegate</span><span class="params">(</span><br><span class="line">            FragmentActivity fragmentActivity,</span><br><span class="line">            @Nullable String mainComponentName)</span> </span>&#123;</span><br><span class="line">        mFragmentActivity = fragmentActivity;</span><br><span class="line">        mMainComponentName = mainComponentName;</span><br><span class="line">        mActivity = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">protected</span> <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function">Bundle <span class="title">getLaunchOptions</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> RNReactRootView <span class="title">createRootView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RNReactRootView(getContext());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * Get the &#123;<span class="doctag">@link</span> ReactNativeHost&#125; used by this app. By default, assumes</span><br><span class="line">     * &#123;<span class="doctag">@link</span> Activity#getApplication()&#125; is an instance of &#123;<span class="doctag">@link</span> ReactApplication&#125; and calls</span><br><span class="line">     * &#123;<span class="doctag">@link</span> ReactApplication#getReactNativeHost()&#125;. Override this method if your application class</span><br><span class="line">     * does not implement &#123;<span class="doctag">@code</span> ReactApplication&#125; or you simply have a different mechanism for</span><br><span class="line">     * storing a &#123;<span class="doctag">@code</span> ReactNativeHost&#125;, e.g. as a static field somewhere.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> ReactNativeHost <span class="title">getReactNativeHost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ((ReactApplication) getPlainActivity().getApplication()).getReactNativeHost();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ReactInstanceManager <span class="title">getReactInstanceManager</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getReactNativeHost().getReactInstanceManager();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">boolean</span> needsOverlayPermission = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">if</span> (getReactNativeHost().getUseDeveloperSupport() &amp;&amp; Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) &#123;</span><br><span class="line">            <span class="comment">// Get permission to show redbox in dev builds.</span></span><br><span class="line">            <span class="keyword">if</span> (!Settings.canDrawOverlays(getContext())) &#123;</span><br><span class="line">                needsOverlayPermission = <span class="keyword">true</span>;</span><br><span class="line">                Intent serviceIntent = <span class="keyword">new</span> Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse(<span class="string">"package:"</span> + getContext().getPackageName()));</span><br><span class="line">                FLog.w(ReactConstants.TAG, REDBOX_PERMISSION_MESSAGE);</span><br><span class="line">                Toast.makeText(getContext(), REDBOX_PERMISSION_MESSAGE, Toast.LENGTH_LONG).show();</span><br><span class="line">                ((Activity) getContext()).startActivityForResult(serviceIntent, REQUEST_OVERLAY_PERMISSION_CODE);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mMainComponentName != <span class="keyword">null</span> &amp;&amp; !needsOverlayPermission) &#123;</span><br><span class="line">            loadApp(mMainComponentName);</span><br><span class="line">        &#125;</span><br><span class="line">        mDoubleTapReloadRecognizer = <span class="keyword">new</span> DoubleTapReloadRecognizer();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">loadApp</span><span class="params">(String appKey)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mReactRootView != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Cannot loadApp while app is already running."</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mReactRootView = createRootView();</span><br><span class="line">        mReactRootView.startReactApplication(</span><br><span class="line">                getReactNativeHost().getReactInstanceManager(),</span><br><span class="line">                appKey,</span><br><span class="line">                getLaunchOptions());</span><br><span class="line">        getPlainActivity().setContentView(mReactRootView);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPause</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (getReactNativeHost().hasInstance()) &#123;</span><br><span class="line">            getReactNativeHost().getReactInstanceManager().onHostPause(getPlainActivity());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onResume</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (getReactNativeHost().hasInstance()) &#123;</span><br><span class="line">            getReactNativeHost().getReactInstanceManager().onHostResume(</span><br><span class="line">                    getPlainActivity(),</span><br><span class="line">                    (DefaultHardwareBackBtnHandler) getPlainActivity());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mPermissionsCallback != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mPermissionsCallback.invoke();</span><br><span class="line">            mPermissionsCallback = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mReactRootView != <span class="keyword">null</span>) &#123;</span><br><span class="line">            mReactRootView.unmountReactApplication();</span><br><span class="line">            mReactRootView = <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (getReactNativeHost().hasInstance()) &#123;</span><br><span class="line">            getReactNativeHost().getReactInstanceManager().onHostDestroy(getPlainActivity());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (getReactNativeHost().hasInstance()) &#123;</span><br><span class="line">            getReactNativeHost().getReactInstanceManager()</span><br><span class="line">                    .onActivityResult(getPlainActivity(), requestCode, resultCode, data);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Did we request overlay permissions?</span></span><br><span class="line">            <span class="keyword">if</span> (requestCode == REQUEST_OVERLAY_PERMISSION_CODE &amp;&amp; Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) &#123;</span><br><span class="line">                <span class="keyword">if</span> (Settings.canDrawOverlays(getContext())) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (mMainComponentName != <span class="keyword">null</span>) &#123;</span><br><span class="line">                        loadApp(mMainComponentName);</span><br><span class="line">                    &#125;</span><br><span class="line">                    Toast.makeText(getContext(), REDBOX_PERMISSION_GRANTED_MESSAGE, Toast.LENGTH_LONG).show();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKeyUp</span><span class="params">(<span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (getReactNativeHost().hasInstance() &amp;&amp; getReactNativeHost().getUseDeveloperSupport()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (keyCode == KeyEvent.KEYCODE_MENU) &#123;</span><br><span class="line">                getReactNativeHost().getReactInstanceManager().showDevOptionsDialog();</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">boolean</span> didDoubleTapR = Assertions.assertNotNull(mDoubleTapReloadRecognizer)</span><br><span class="line">                    .didDoubleTapR(keyCode, getPlainActivity().getCurrentFocus());</span><br><span class="line">            <span class="keyword">if</span> (didDoubleTapR) &#123;</span><br><span class="line">                getReactNativeHost().getReactInstanceManager().getDevSupportManager().handleReloadJS();</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onBackPressed</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (getReactNativeHost().hasInstance()) &#123;</span><br><span class="line">            getReactNativeHost().getReactInstanceManager().onBackPressed();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onNewIntent</span><span class="params">(Intent intent)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (getReactNativeHost().hasInstance()) &#123;</span><br><span class="line">            getReactNativeHost().getReactInstanceManager().onNewIntent(intent);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TargetApi</span>(Build.VERSION_CODES.M)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">requestPermissions</span><span class="params">(</span><br><span class="line">            String[] permissions,</span><br><span class="line">            <span class="keyword">int</span> requestCode,</span><br><span class="line">            PermissionListener listener)</span> </span>&#123;</span><br><span class="line">        mPermissionListener = listener;</span><br><span class="line">        getPlainActivity().requestPermissions(permissions, requestCode);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onRequestPermissionsResult</span><span class="params">(</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> requestCode,</span><br><span class="line">            <span class="keyword">final</span> String[] permissions,</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span>[] grantResults)</span> </span>&#123;</span><br><span class="line">        mPermissionsCallback = <span class="keyword">new</span> Callback() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">invoke</span><span class="params">(Object... args)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (mPermissionListener != <span class="keyword">null</span> &amp;&amp; mPermissionListener.onRequestPermissionsResult(requestCode, permissions, grantResults)) &#123;</span><br><span class="line">                    mPermissionListener = <span class="keyword">null</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Context <span class="title">getContext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mActivity != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> mActivity;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> Assertions.assertNotNull(mFragmentActivity);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Activity <span class="title">getPlainActivity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> ((Activity) getContext());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>注意RNActivity状态栏的颜色还有待解决，目前默认是黑色</strong></p>
+<p><a href="http://reactnative.cn/post/754" target="_blank" rel="external">http://reactnative.cn/post/754</a> ReactNative安卓首屏白屏优化<br><a href="http://web.jobbole.com/85451/" target="_blank" rel="external">http://web.jobbole.com/85451/</a> 探索react native首屏渲染最佳实践<br><a href="https://sanwen8.cn/p/129FTGW.html" target="_blank" rel="external">https://sanwen8.cn/p/129FTGW.html</a> 途牛原创 | React-Native 的优化进阶之旅<br><a href="http://www.open-open.com/lib/view/open1479108118077.html" target="_blank" rel="external">http://www.open-open.com/lib/view/open1479108118077.html</a> 携程是如何做 React Native 优化的<br><a href="https://yq.aliyun.com/articles/3208" target="_blank" rel="external">https://yq.aliyun.com/articles/3208</a> React Native JS Module 加载性能优化</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/09/04/react_native_optimize/">react-native 优化</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">剑客爱编程</a></p>
+        <p><span>发布时间:</span>2017-09-04, 23:01:03</p>
+        <p><span>最后更新:</span>2017-09-04, 22:55:37</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/09/04/react_native_optimize/" title="react-native 优化">https://iskylove.github.io/2017/09/04/react_native_optimize/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://iskylove.github.io/2017/09/04/react_native_optimize/　　作者: 剑客爱编程" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/04/android_gralde_shrinkResources_minifyEnabled/">
+                    android gradle配置minifyEnabled以及 shrinkResources踩坑记
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/04/android_apk_size_reduce/">
+                    android减包小工具----gradle任务分析
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"react-native 优化　| 剑客爱编程　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/04/android_gralde_shrinkResources_minifyEnabled/" title="上一篇: android gradle配置minifyEnabled以及 shrinkResources踩坑记">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/04/android_apk_size_reduce/" title="下一篇: android减包小工具----gradle任务分析">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_jni_study_2/">android_jni_study_2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_jni_study_1/">JNI 初探----基本数据类型和开发配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_unsafe_and_cas/">java Unsafe与CAS 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_interface_callback_thinker/">对Java接口回调的一些内存泄漏优化的想法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_freemarket/">(转)利用FreeMarker生成java源代码</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/java_DynamicProxy/">java 动态代理DynamicProxy学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/react_native_upgrade/">react-native 升级日志----0.39.2版本升级到0.45.1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_gralde_shrinkResources_minifyEnabled/">android gradle配置minifyEnabled以及 shrinkResources踩坑记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/react_native_optimize/">react-native 优化</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_apk_size_reduce/">android减包小工具----gradle任务分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_tinker_andresguard_fit/">android tinker热更与AndResGuard混淆适配</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_sdk_moudle_debug_release/">(转)Android中使用BuildConfig.DEBUG必须知道的内幕</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_layoutinflater_setFactory/">android layoutinflater里面setFactory的探索</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/04/android_apollo_graphql/">graphql浅析</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_leakcanary_androidwatchexecutor/">LeakCanary源码学习--内存泄露观察策略</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/android_addIdleHandler/">android addIdleHandler 空闲线程学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/android_Memory_Management_in_Android/">(转)Hunting Your Leaks, Memory Management in Android</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_rxjava/">Rxjava源码学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_reference/">java Reference 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_leakcanary/">LeakCanary源码学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/05/java_referencequeue/">深入理解ReferenceQueue GC finalize Reference</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_patch_fix/"><转>漫谈Android 增量更新</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/java_javassist/">(转)JAVA 字节码操作利器javassist</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/11/05/android_aop_des/">【翻译】Android中的AOP编程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/android_drawable/">(转)领略千变万化的Android Drawable</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/website_share/">技术网站分享(持续更新中~~)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_viewpager/">android ViewPager控件深入了解</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/24/android_material_design/">android material design 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/09/java_datastructures_alogorithm_3/">(数据结构与算法分析笔记])第四章  树</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_2/">(数据结构与算法分析笔记)第三章  表  栈  队列</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/08/java_datastructures_alogorithm_1/">(数据结构与算法分析笔记)第二章  算法分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/07/java_inner_nested_class/">java嵌套类，内部类，匿名类学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/06/java_lang_1/">java object 类wait() notify() 以及Thread类 join() yile学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/07/04/java_methohandler/">java.lanf.invoke.MethodHandles 学习（深入理解Java虚拟机 学习笔记）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/30/android_build_apk/">(转)手把手教你AndroidStudio多渠道打包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/24/android_view_measure/">android view measure方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/19/android_surface/">(转)android SurfaceView, GLSurfaceView, SurfaceTexture,TextureView</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/12/android_file_cache/">android getCacheDir()、getFilesDir()、getExternalFilesDir()、getExternalCacheDir()</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/11/java_Introspector/">(转)深入理解Java：内省(Introspector)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/06/android_appopsmanager/">android AppOpsManager 检查应用权限</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_broadcast/">android broadcast 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/android_animator_favor/">android动画研究</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/05/java_reflect/">java反射机制学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/04/android_mobile_apk_decompile/">android引导用户开启应用权限及系统apk反编译分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/27/svnchecker_install/">svnchecker 适配安装以及踩过的坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/hexo_install/">hexo + github + 七牛运存储搭建简单的博客</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/26/begin_blog/">剑客爱编程--启动篇</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 2017 剑客爱编程
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
